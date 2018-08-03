@@ -1,0 +1,2 @@
+# generator-scaffolder
+scaffolder
