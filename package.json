@@ -27,17 +27,17 @@
     "prettier": "^1.11.1",
     "husky": "^0.14.3",
     "lint-staged": "^6.1.1",
+    "babel-eslint": "^8.2.6",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "eslint-config-xo": "^0.20.1",
     "jest": "^22.0.6"
   },
   "engines": {
     "npm": ">= 4.0.0"
   },
   "dependencies": {
-    "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
+    "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
   "jest": {
@@ -51,6 +51,7 @@
   },
   "lint-staged": {
     "*.js": [
+      "prettier --write",
       "eslint --fix",
       "git add"
     ],
@@ -60,25 +61,53 @@
     ]
   },
   "eslintConfig": {
-    "extends": [
-      "xo",
-      "prettier"
-    ],
+    "parser": "babel-eslint",
     "env": {
-      "jest": true,
+      "browser": true,
       "node": true
-    },
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "singleQuote": true,
-          "printWidth": 90
-        }
-      ]
     },
     "plugins": [
       "prettier"
+    ],
+    "rules": {
+      "no-undef": 1,
+      "no-unused-vars": 1,
+      "eqeqeq": [
+        2,
+        "smart"
+      ],
+      "no-floating-decimal": 2,
+      "no-multi-spaces": [
+        2,
+        {
+          "exceptions": {
+            "ImportDeclaration": true,
+            "VariableDeclarator": true
+          }
+        }
+      ],
+      "no-multi-str": 2,
+      "camelcase": 1,
+      "eol-last": 1,
+      "quotes": [
+        2,
+        "single",
+        "avoid-escape"
+      ],
+      "semi": [
+        2,
+        "always"
+      ],
+      "space-before-blocks": 2,
+      "space-before-function-paren": [
+        2,
+        "never"
+      ],
+      "arrow-spacing": 2,
+      "prettier/prettier": "error"
+    },
+    "extends": [
+      "plugin:prettier/recommended"
     ]
   },
   "repository": "mrlss/generator-p2h",
