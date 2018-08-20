@@ -1,10 +1,10 @@
-import _ from 'lodash';
+'use strict';
 
 function component() {
   var element = document.createElement('div');
 
   // Lodash, now imported by this script
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+  element.innerHTML = 'Hello';
 
   return element;
 }

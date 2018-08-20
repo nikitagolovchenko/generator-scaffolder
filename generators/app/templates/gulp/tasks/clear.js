@@ -1,9 +1,12 @@
-var config = require('../gulpConfig');
-var gulp = require('gulp');  
-var del = require('del');
+'use strict';
 
-gulp.task('clear', function (cb) {  
+const config = require('../config');
+const gulp = require('gulp');
+const chalk = require('chalk');
+const del = require('del');
+
+gulp.task('clear', cb => {
   return del(config.dest.root).then(paths => {
-    console.log('Deleted files and folders:\n', paths.join('\n'));
+    console.log(chalk.bgCyan.bold(' Deleted: '), chalk.magenta.bold(paths.join(' ')));
   });
 });

@@ -1,13 +1,12 @@
-var config      = require('../gulpConfig.js');
-var gulp        = require('gulp');
-// var browserSync = require('browser-sync');
+'use strict';
 
-gulp.task('html', ['clean:rootfiles'], function() {
-  return gulp.src(config.src.root + '/*.html')
-     .pipe(gulp.dest(config.dest.root));
-     // .pipe(browserSync.reload({stream: true}));
+const config = require('../config');
+const gulp = require('gulp');
+
+gulp.task('html', ['clean:rootfiles'], () => {
+  return gulp.src(config.src.root + '/*.html').pipe(gulp.dest(config.dest.root));
 });
 
-gulp.task('html:watch', function() {
-    gulp.watch(config.src.root + '/*.html', ['html']);
+gulp.task('html:watch', () => {
+  gulp.watch(config.src.root + '/*.html', ['html']);
 });

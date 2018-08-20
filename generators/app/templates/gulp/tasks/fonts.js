@@ -1,13 +1,12 @@
-var config      = require('../gulpConfig.js');
-var gulp        = require('gulp');
-// var browserSync = require('browser-sync');
+'use strict';
 
-gulp.task('fonts', ['clean:fonts'], function() {
-  return gulp.src(config.src.fonts + '/**/*.*')
-     .pipe(gulp.dest(config.dest.fonts));
-     // .pipe(browserSync.reload({stream: true}));
+const config = require('../config');
+const gulp = require('gulp');
+
+gulp.task('fonts', ['clean:fonts'], () => {
+  return gulp.src(config.src.fonts + '/**/*.*').pipe(gulp.dest(config.dest.fonts));
 });
 
-gulp.task('fonts:watch', function() {
-    gulp.watch(config.src.fonts + '/**/*.*', ['fonts']);
+gulp.task('fonts:watch', () => {
+  gulp.watch(config.src.fonts + '/**/*.*', ['fonts']);
 });
