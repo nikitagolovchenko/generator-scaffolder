@@ -1,4 +1,4 @@
-# generator-p-2-h [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-p2h [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > scaffolding tool for projects
 
 ## Installation
@@ -7,13 +7,13 @@ First, install [Yeoman](http://yeoman.io) and generator-p-2-h using [npm](https:
 
 ```bash
 npm install -g yo
-npm install -g generator-p-2-h
+npm install -g generator-p2h
 ```
 
 Then generate your new project:
 
 ```bash
-yo p-2-h
+yo p2h
 ```
 
 ## Getting To Know Yeoman
@@ -28,9 +28,9 @@ yo p-2-h
 MIT © [P2H](https://www.psd2html.com/)
 
 
-[npm-image]: https://badge.fury.io/js/generator-p-2-h.svg
-[npm-url]: https://npmjs.org/package/generator-p-2-h
-[travis-image]: https://travis-ci.org/mrlss/generator-p-2-h.svg?branch=master
-[travis-url]: https://travis-ci.org/mrlss/generator-p-2-h
-[daviddm-image]: https://david-dm.org/mrlss/generator-p-2-h.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/mrlss/generator-p-2-h
+[npm-image]: https://badge.fury.io/js/generator-p2h.svg
+[npm-url]: https://npmjs.org/package/generator-p2h
+[travis-image]: https://travis-ci.org/mrlss/generator-p2h.svg?branch=master
+[travis-url]: https://travis-ci.org/mrlss/generator-p2h
+[daviddm-image]: https://david-dm.org/mrlss/generator-p2h.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/mrlss/generator-p2h
