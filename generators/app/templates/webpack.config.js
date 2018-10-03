@@ -1,15 +1,13 @@
-'use strict';
+const ErrorsPlugin = require('friendly-errors-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TimeFixPlugin = require('time-fix-plugin');
+const notifier = require('node-notifier');
+const webpack = require('webpack');
+const gulpif = require('gulp-if');
+const path = require('path');
+const config = require('./gulp/config');
 
-let config = require('./gulp/gulpConfig');
-let errorsPlugin = require('friendly-errors-webpack-plugin');
-let UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-let TimeFixPlugin = require('time-fix-plugin');
-let notifier = require('node-notifier');
-let webpack = require('webpack');
-let gulpif = require('gulp-if');
-let path = require('path');
-
-let pluginsConfiguration = {
+const pluginsConfiguration = {
   ProvidePlugin: {
     $: 'jquery',
     jQuery: 'jquery',
@@ -23,7 +21,7 @@ let pluginsConfiguration = {
     moduleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
     fallbackModuleFilenameTemplate: '[resource-path]'
   },
-  errorsPlugin: {
+  ErrorsPlugin: {
     onErrors: (severity, errors) => {
       if (severity !== 'error') {
         return;
@@ -31,7 +29,7 @@ let pluginsConfiguration = {
       const error = errors[0];
       notifier.notify({
         title: 'Webpack error',
-        message: severity + ': ' + error.name,
+        message: `${severity}:${error.name}`,
         subtitle: error.file || ''
       });
     },
@@ -39,7 +37,7 @@ let pluginsConfiguration = {
   }
 };
 
-let webpackConfig = {
+const webpackConfig = {
   mode: 'development',
   context: path.join(__dirname, config.src.js),
   entry: {
@@ -59,14 +57,14 @@ let webpackConfig = {
         new TimeFixPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
-        new errorsPlugin(pluginsConfiguration.errorsPlugin)
+        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin)
       ]
     : [
         new TimeFixPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
         new webpack.SourceMapDevToolPlugin(pluginsConfiguration.SourceMapDevToolPlugin),
-        new errorsPlugin(pluginsConfiguration.errorsPlugin)
+        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin)
       ],
   resolve: {
     extensions: ['.js'],
@@ -86,7 +84,10 @@ let webpackConfig = {
       ScrollMagic: path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
       TimelineLite: path.resolve('node_modules', 'gsap/src/uncompressed/TimelineLite.js'),
       'animation.gsap': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
-      'debug.addIndicators': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js')
+      'debug.addIndicators': path.resolve(
+        'node_modules',
+        'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
+      )
     }
   },
   optimization: gulpif(

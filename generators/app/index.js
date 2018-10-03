@@ -1,5 +1,3 @@
-'use strict';
-
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
@@ -26,18 +24,19 @@ module.exports = class extends Generator {
     });
   }
 
-  configuring() {}
+  // configuring() {
+  // }
 
-  default() {}
+  // default() {}
 
   writing() {
     writing.call(this);
   }
 
-  conflicts() {}
+  // conflicts() {}
 
   install() {
-    // This.installDependencies();
+    this.installDependencies();
   }
 
   end() {

@@ -1,19 +1,17 @@
-'use strict';
-
-const config = require('../config');
 const gulp = require('gulp');
 const imagemin = require('gulp-imagemin');
 const changed = require('gulp-changed');
 const plumber = require('gulp-plumber');
-const runSequence = require('run-sequence');
+const config = require('../config');
 
 gulp.task('imagemin', ['clean:images'], () => {
   gulp
-    .src(config.src.images + '/**/*.*')
+    .src(`${config.src.images}/**/*.*`)
     .pipe(changed(config.dest.images))
     .pipe(
       plumber({
         handleError: err => {
+          // eslint-disable-next-line no-console
           console.log(err);
           this.emit('end');
         }
@@ -34,5 +32,5 @@ gulp.task('imagemin', ['clean:images'], () => {
 });
 
 gulp.task('imagemin:watch', () => {
-  gulp.watch(config.src.images + '/**/*', ['imagemin']);
+  gulp.watch(`${config.src.images}/**/*`, ['imagemin']);
 });

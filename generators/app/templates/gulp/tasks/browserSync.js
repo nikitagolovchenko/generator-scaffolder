@@ -1,31 +1,31 @@
-'use strict';
-
-var config = require('../config');
-var gulp = require('gulp');
-var browserSync = require('browser-sync').create();
+const gulp = require('gulp');
+const browserSync = require('browser-sync').create();
+const config = require('../config');
 
 // Static server
-gulp.task('browserSync', function() {
+gulp.task('browserSync', () =>
   browserSync.init({
     server: {
-      baseDir: './' + config.dest.root,
+      baseDir: `./${config.dest.root}`,
       index: 'index.html',
-      directory: true
+      directory: false
     },
-    files: [config.dest.root + '/*.html', config.dest.css + '/*.css', config.dest.js + '/*.js', config.dest.img + '/**/*'],
+    files: [
+      `${config.dest.root}/*.html`,
+      `${config.dest.css}/*.css`,
+      `${config.dest.js}/*.js`,
+      `${config.dest.img}/**/*`
+    ],
     logFileChanges: true,
-    // Port: 8080,
     logLevel: 'info',
-    ghost: false,
-    // Online: true,
-    // open: "local",
+    ghost: false
 
     // if need to take a look from outside
-    tunnel: false
+    // tunnel: true
 
     // Append '.xip.io' to the hostname. (eg: http://192.168.0.4.xip.io:3002). useful for services such as Typekit as it allows you to configure domains such as *.xip.io in your kit settings
     // xip: true
-  });
-});
+  })
+);
 
 module.exports = browserSync;

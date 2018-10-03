@@ -1,12 +1,10 @@
-'use strict';
-
-const config = require('../config');
 const gulp = require('gulp');
-const chalk = require('chalk');
 const del = require('del');
+const showDeletedFiles = require('./util/message--deleted');
+const config = require('../config');
 
-gulp.task('clear', cb => {
-  return del(config.dest.root).then(paths => {
-    console.log(chalk.bgCyan.bold(' Deleted: '), chalk.magenta.bold(paths.join(' ')));
-  });
-});
+gulp.task('clear', () =>
+  del(config.dest.root).then(paths => {
+    showDeletedFiles(paths);
+  })
+);

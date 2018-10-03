@@ -1,40 +1,35 @@
-'use strict';
-
-const config = require('../../config');
-const gulp = require('gulp');
 const del = require('del');
-const chalk = require('chalk');
 const globby = require('globby');
+const showDeletedFiles = require('./message--deleted');
+const showError = require('./message--error');
 
-module.exports = (source, destination) => {
-  return Promise.all([globby(source), globby(destination)])
+module.exports = (source, destination) =>
+  Promise.all([globby(source), globby(destination)])
     .then(paths => {
-      let srcPaths = paths[0];
-      let destPaths = paths[1];
-      let srcInnerDirectories = srcPaths;
-      let destInnerDirectories = destPaths;
-      let unusedFiles = [];
+      const srcPaths = paths[0];
+      const destPaths = paths[1];
+      const unusedFiles = [];
       let folderIsExist = false;
 
-      // Check for folders
-      destPaths.map(destPath => {
-        let directory = destPath.replace(/dist\//, '').replace(/images\//, '');
-        let tempName = 'folder';
+      // check for folders
+      destPaths.forEach(destPath => {
+        const directory = destPath.replace(/dist\//, '').replace(/images\//, '');
+        const tempName = 'folder';
         let matchFolder;
 
         if (/^([A-Za-z\d]*\/w*)/.test(directory) && !folderIsExist) {
-          directory.replace(/^([A-Za-z\d]*\/w*)/, 'folder');
+          directory.replace(/^([A-Za-z\d]*\/w*)/, tempName);
           matchFolder = directory.substr(0, tempName.length);
-          srcPaths.push('src/' + matchFolder);
-          destPaths.push('dist/' + matchFolder);
+          srcPaths.push(`src/${matchFolder}`);
+          destPaths.push(`dist/${matchFolder}`);
           folderIsExist = true;
         }
       });
 
-      // @TODO: folder deleting
+      // todo: folder deleting
 
-      destPaths.map(destPath => {
-        let unusedFilesFiltered = destPath.replace(/dist/, 'src');
+      destPaths.forEach(destPath => {
+        const unusedFilesFiltered = destPath.replace(/dist/, 'src');
 
         if (srcPaths.indexOf(unusedFilesFiltered) === -1) {
           unusedFiles.push(destPath);
@@ -47,9 +42,8 @@ module.exports = (source, destination) => {
       if (!unusedFiles.length) return;
 
       del.sync(unusedFiles);
-      console.log(chalk.bgCyan.bold(' Deleted: '), chalk.magenta.bold(unusedFiles.join('\n')));
+      showDeletedFiles(unusedFiles);
     })
     .catch(error => {
-      console.log(chalk.bgRed.white.bold(error));
+      showError(error);
     });
-};

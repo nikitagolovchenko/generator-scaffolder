@@ -2,7 +2,7 @@
   "generator-node": {
     "promptValues": {
       "authorName": "P2H",
-      "authorEmail": "test@p2h.com",
+      "authorEmail": "support@p2h.com",
       "authorUrl": "https://www.psd2html.com/"
     }
   },
@@ -48,10 +48,7 @@
               }
             ]
           },
-          "plugins": [
-            "new UglifyJSPlugin()",
-            "new MiniCssExtractPlugin({ filename:'style.css' })"
-          ],
+          "plugins": ["new UglifyJSPlugin()", "new MiniCssExtractPlugin({ filename:'style.css' })"],
           "entry": "",
           "mode": "'production'",
           "optimization": {

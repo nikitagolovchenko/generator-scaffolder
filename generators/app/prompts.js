@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = [
   {
     type: 'list',
@@ -65,4 +63,4 @@ module.exports = [
     ],
     default: 0
   }
-]
+];
