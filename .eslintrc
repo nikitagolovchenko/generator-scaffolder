@@ -7,6 +7,8 @@
   "extends": ["airbnb", "plugin:prettier/recommended"],
   "plugins": ["prettier"],
   "rules": {
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "prettier/prettier": "error"
   },

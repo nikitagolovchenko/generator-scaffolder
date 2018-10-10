@@ -10,46 +10,56 @@
 Sound = {
   tracks: {},
   _enabled: true,
-  template:
-    new Template('<embed style="height:0" id="sound_#{track}_#{id}" src="#{url}" loop="false" autostart="true" hidden="true"/>'),
-  enable: function(){
+  template: new Template(
+    '<embed style="height:0" id="sound_#{track}_#{id}" src="#{url}" loop="false" autostart="true" hidden="true"/>'
+  ),
+  enable() {
     Sound._enabled = true;
   },
-  disable: function(){
+  disable() {
     Sound._enabled = false;
   },
-  play: function(url){
-    if(!Sound._enabled) return;
-    var options = Object.extend({
-      track: 'global', url: url, replace: false
-    }, arguments[1] || {});
+  play(url) {
+    if (!Sound._enabled) return;
+    const options = Object.extend(
+      {
+        track: 'global',
+        url,
+        replace: false
+      },
+      arguments[1] || {}
+    );
 
-    if(options.replace && this.tracks[options.track]) {
-      $R(0, this.tracks[options.track].id).each(function(id){
-        var sound = $('sound_'+options.track+'_'+id);
+    if (options.replace && this.tracks[options.track]) {
+      $R(0, this.tracks[options.track].id).each(id => {
+        const sound = $(`sound_${options.track}_${id}`);
         sound.Stop && sound.Stop();
         sound.remove();
       });
       this.tracks[options.track] = null;
     }
 
-    if(!this.tracks[options.track])
-      this.tracks[options.track] = { id: 0 };
-    else
-      this.tracks[options.track].id++;
+    if (!this.tracks[options.track]) this.tracks[options.track] = { id: 0 };
+    else this.tracks[options.track].id++;
 
     options.id = this.tracks[options.track].id;
     $$('body')[0].insert(
-      Prototype.Browser.IE ? new Element('bgsound',{
-        id: 'sound_'+options.track+'_'+options.id,
-        src: options.url, loop: 1, autostart: true
-      }) : Sound.template.evaluate(options));
+      Prototype.Browser.IE
+        ? new Element('bgsound', {
+            id: `sound_${options.track}_${options.id}`,
+            src: options.url,
+            loop: 1,
+            autostart: true
+          })
+        : Sound.template.evaluate(options)
+    );
   }
 };
 
-if(Prototype.Browser.Gecko && navigator.userAgent.indexOf("Win") > 0){
-  if(navigator.plugins && $A(navigator.plugins).detect(function(p){ return p.name.indexOf('QuickTime') != -1 }))
-    Sound.template = new Template('<object id="sound_#{track}_#{id}" width="0" height="0" type="audio/mpeg" data="#{url}"/>');
-  else
-    Sound.play = function(){};
+if (Prototype.Browser.Gecko && navigator.userAgent.indexOf('Win') > 0) {
+  if (navigator.plugins && $A(navigator.plugins).detect(p => p.name.indexOf('QuickTime') != -1))
+    Sound.template = new Template(
+      '<object id="sound_#{track}_#{id}" width="0" height="0" type="audio/mpeg" data="#{url}"/>'
+    );
+  else Sound.play = function() {};
 }

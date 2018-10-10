@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 dropdown = function() {
-    var ele = document.getElementById("nav").getElementsByTagName("LI");
-    for (var i=0; i<ele.length; i++) {
-        ele[i].onmouseover=function() {
-            this.className+=" over";
-        }
-        ele[i].onmouseout=function() {
-            this.className=this.className.replace(new RegExp(" over\\b"), "");
-        }
-    }
-}
-if (window.attachEvent) window.attachEvent("onload", dropdown);
+  const ele = document.getElementById('nav').getElementsByTagName('LI');
+  for (let i = 0; i < ele.length; i++) {
+    ele[i].onmouseover = function() {
+      this.className += ' over';
+    };
+    ele[i].onmouseout = function() {
+      this.className = this.className.replace(new RegExp(' over\\b'), '');
+    };
+  }
+};
+if (window.attachEvent) window.attachEvent('onload', dropdown);

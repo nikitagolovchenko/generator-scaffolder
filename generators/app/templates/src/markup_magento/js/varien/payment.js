@@ -22,47 +22,44 @@
  * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-var paymentForm = Class.create();
+const paymentForm = Class.create();
 paymentForm.prototype = {
-    initialize: function(formId){
-        this.formId = formId;
-        this.validator = new Validation(this.formId);
-        var elements = Form.getElements(formId);
+  initialize(formId) {
+    this.formId = formId;
+    this.validator = new Validation(this.formId);
+    const elements = Form.getElements(formId);
 
-        var method = null;
-        for (var i=0; i<elements.length; i++) {
-            if (elements[i].name=='payment[method]') {
-                if (elements[i].checked) {
-                    method = elements[i].value;
-                }
-            } else {
-                if((elements[i].type) && ('submit' != elements[i].type.toLowerCase())) {
-                    elements[i].disabled = true;
-                }
-            }
-            elements[i].setAttribute('autocomplete','off');
+    let method = null;
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i].name == 'payment[method]') {
+        if (elements[i].checked) {
+          method = elements[i].value;
         }
-        if (method) this.switchMethod(method);
-    },
-
-    switchMethod: function(method){
-        if (this.currentMethod && $('payment_form_'+this.currentMethod)) {
-            var form = $('payment_form_'+this.currentMethod);
-            form.style.display = 'none';
-            var elements = form.getElementsByTagName('input');
-            for (var i=0; i<elements.length; i++) elements[i].disabled = true;
-            var elements = form.getElementsByTagName('select');
-            for (var i=0; i<elements.length; i++) elements[i].disabled = true;
-
-        }
-        if ($('payment_form_'+method)){
-            var form = $('payment_form_'+method);
-            form.style.display = '';
-            var elements = form.getElementsByTagName('input');
-            for (var i=0; i<elements.length; i++) elements[i].disabled = false;
-            var elements = form.getElementsByTagName('select');
-            for (var i=0; i<elements.length; i++) elements[i].disabled = false;
-            this.currentMethod = method;
-        }
+      } else if (elements[i].type && elements[i].type.toLowerCase() != 'submit') {
+        elements[i].disabled = true;
+      }
+      elements[i].setAttribute('autocomplete', 'off');
     }
-}
+    if (method) this.switchMethod(method);
+  },
+
+  switchMethod(method) {
+    if (this.currentMethod && $(`payment_form_${this.currentMethod}`)) {
+      var form = $(`payment_form_${this.currentMethod}`);
+      form.style.display = 'none';
+      var elements = form.getElementsByTagName('input');
+      for (var i = 0; i < elements.length; i++) elements[i].disabled = true;
+      var elements = form.getElementsByTagName('select');
+      for (var i = 0; i < elements.length; i++) elements[i].disabled = true;
+    }
+    if ($(`payment_form_${method}`)) {
+      var form = $(`payment_form_${method}`);
+      form.style.display = '';
+      var elements = form.getElementsByTagName('input');
+      for (var i = 0; i < elements.length; i++) elements[i].disabled = false;
+      var elements = form.getElementsByTagName('select');
+      for (var i = 0; i < elements.length; i++) elements[i].disabled = false;
+      this.currentMethod = method;
+    }
+  }
+};

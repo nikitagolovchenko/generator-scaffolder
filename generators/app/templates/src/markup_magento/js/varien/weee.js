@@ -23,14 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-/**************************** WEEE STUFF ********************************/
-function taxToggle(details, switcher, expandedClassName)
-{
-    if ($(details).style.display == 'none') {
-        $(details).show();
-        $(switcher).addClassName(expandedClassName);
-    } else {
-        $(details).hide();
-        $(switcher).removeClassName(expandedClassName);
-    }
+/** ************************** WEEE STUFF ******************************* */
+function taxToggle(details, switcher, expandedClassName) {
+  if ($(details).style.display == 'none') {
+    $(details).show();
+    $(switcher).addClassName(expandedClassName);
+  } else {
+    $(details).hide();
+    $(switcher).removeClassName(expandedClassName);
+  }
 }
