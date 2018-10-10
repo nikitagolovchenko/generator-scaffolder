@@ -1,0 +1,10 @@
+
+@mixin single-text-shadow($hoff: false, $voff: false, $blur: false, $spread: false, $color: false) {
+  
+  text-shadow: $hoff $voff $blur $spread $color;
+}
+
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  filter: unquote("alpha(opacity=#{round($opacity * 100)})");
+}

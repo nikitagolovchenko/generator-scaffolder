@@ -1,0 +1,11 @@
+// =============================================
+// Mixin - Not Selectable
+// =============================================
+
+@mixin not-selectable {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

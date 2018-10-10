@@ -1,0 +1,66 @@
+/* ============================================ *
+ * Billing Agreements
+ * ============================================ */
+
+.billing-agreements {
+    .info-box {
+        margin-bottom: $trim;
+
+        &:after {
+            @include clearfix;
+        }
+
+        .form-list {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .box-title {
+            margin-top: $box-spacing-large;
+            margin-bottom: $element-spacing;
+        }
+
+        .button {
+            float: right;
+            margin-top: $element-spacing;
+
+            @include bp(max-width, $bp-xsmall) {
+                width: 100%;
+                float: none;
+            }
+        }
+    }
+
+    #payment_method {
+        width: 100%;
+        margin-top: $element-spacing;
+        margin-bottom: $element-spacing;
+    }
+}
+
+.billing-agreement-view-header-wrapper {
+    .heading {
+        max-width: 80%;
+
+        @include bp(max-width, $bp-xsmall) {
+            max-width: 100%;
+        }
+    }
+}
+
+.billing-agreement-details {
+    td, th {
+        padding: $element-spacing/2;
+    }
+}
+
+@include bp(max-width, $bp-large) {
+    .billing-agreements {
+        .data-table {
+            .created-at,
+            .updated-at {
+                display: none;
+            }
+        }
+    }
+}

@@ -1,7 +1,5 @@
-'use strict';
-
 function component() {
-  var element = document.createElement('div');
+  const element = document.createElement('div');
 
   // Lodash, now imported by this script
   element.innerHTML = 'Hello';

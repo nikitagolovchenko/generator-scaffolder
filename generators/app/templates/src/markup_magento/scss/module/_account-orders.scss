@@ -1,0 +1,20 @@
+/* ============================================ *
+ * Account - Orders, Invoices, Credit Memos.
+ * ============================================ */
+
+@include bp (max-width, $bp-xsmall) {
+    .sales-order-invoice,
+    .sales-order-creditmemo,
+    .sales-order-shipment {
+        .sub-title {
+            float: left;
+            font-size: $f-size-l;
+            text-align: center;
+            width: 100%;
+        }
+        .order-links {
+            text-align: center;
+            width: 100%;
+        }
+    }
+}

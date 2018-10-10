@@ -1,5 +1,3 @@
-import test from './vendors/vendorTest';
-
-test();
+import './vendors/vendorTest';
 
 console.log('test1');

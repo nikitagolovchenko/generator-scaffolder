@@ -1,48 +1,53 @@
 const chalk = require('chalk');
+const paths = require('./tasks/util/paths');
 
-const srcPath = 'src';
-const destPath = 'dist';
 const prod = 'production';
 const dev = 'development';
+let env = process.env.NODE_ENV;
 
 const config = {
   environment: 'development',
+  cssOutput: 'expanded',
   src: {
-    root: srcPath,
-    sass: `${srcPath}/scss`,
-    js: `${srcPath}/js`,
-    images: `${srcPath}/images`,
-    fonts: `${srcPath}/fonts`,
-    video: `${srcPath}/video`,
-    ajaxIncludes: `${srcPath}/inc`
+    root: paths.src.root,
+    sass: paths.src.sass,
+    js: paths.src.js,
+    images: paths.src.images,
+    fonts: paths.src.fonts,
+    video: paths.src.video,
+    ajaxIncludes: paths.src.ajaxIncludes
   },
   dest: {
-    root: destPath,
-    css: `${destPath}/css`,
-    js: `${destPath}/js`,
-    images: `${destPath}/images`,
-    fonts: `${destPath}/fonts`,
-    video: `${destPath}/video`,
-    ajaxIncludes: `${destPath}/inc`
+    root: paths.dest.root,
+    css: paths.dest.css,
+    js: paths.dest.js,
+    images: paths.dest.images,
+    fonts: paths.dest.fonts,
+    video: paths.dest.video,
+    ajaxIncludes: paths.dest.ajaxIncludes
   },
+  setCssOutput: output => {
+    this.cssOutput = output;
+  },
+  getCssOutput: () => this.cssOutput,
   setEnvironment: environment => {
     this.environment = environment;
-    process.env.NODE_ENV = environment;
-    return this.environment;
+    env = environment;
   },
+  getEnvironment: () => this.environment,
   development: () => this.environment === dev,
   production: () => this.environment === prod,
   showEnvironment: () => {
-    if (process.env.NODE_ENV === dev) {
+    if (env === dev) {
       /* eslint-disable no-console */
       console.log(chalk.red('------------------------------------------'));
-      console.log(chalk.yellow('Environment: ') + chalk.white.bgRed.bold(process.env.NODE_ENV));
+      console.log(chalk.yellow('Environment: ') + chalk.white.bgRed.bold(env));
       console.log(chalk.red('------------------------------------------'));
     }
 
-    if (process.env.NODE_ENV === prod) {
+    if (env === prod) {
       console.log(chalk.green('------------------------------------------'));
-      console.log(chalk.green('Environment: ') + chalk.white.bgGreen.bold(process.env.NODE_ENV));
+      console.log(chalk.green('Environment: ') + chalk.white.bgGreen.bold(`${env}--${this.cssOutput}`));
       console.log(chalk.green('------------------------------------------'));
     }
   }

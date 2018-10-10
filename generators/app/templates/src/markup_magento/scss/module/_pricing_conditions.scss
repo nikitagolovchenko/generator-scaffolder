@@ -1,0 +1,32 @@
+/* ============================================ *
+ * Pricing Conditions
+ * ============================================ */
+
+.price-box {
+    .minimal-price-link {
+        .label {
+            color: $c-red;
+            font-family: $f-stack-special;
+            font-size: $f-size-xs;
+            text-transform: uppercase;
+        }
+    }
+}
+
+.map-info {
+    white-space: nowrap;
+}
+
+.catalog-product-view {
+    .map-info {
+        white-space: normal;
+        > span {
+            float: right;
+            margin-bottom: 5px;
+        }
+        .price-box.map-info > a {
+            float: right;
+            width: 100%;
+        }
+    }
+}
