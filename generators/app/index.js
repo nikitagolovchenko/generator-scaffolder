@@ -51,6 +51,12 @@ function frameworkCopy(self) {
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
+      self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`));
+      self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/_vendors`));
+      self.fs.copy(
+        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
+        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
+      );
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
       break;

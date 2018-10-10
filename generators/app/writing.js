@@ -31,6 +31,14 @@ const additionalPackages = {
           'popper.js': '^1.14.1'
         }
       }
+    },
+    zurb: {
+      name: 'generator-p2h-zurb-foundation',
+      description: 'Gulp build for Zurb Foundation',
+      dependencies: {
+        'foundation-sites': '^6.5.0-rc.3',
+        'what-input': '^5.1.2'
+      }
     }
   }
 };
@@ -171,8 +179,12 @@ module.exports = function writeFiles() {
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
-      // this.fs.copy(this.templatePath('src/markup_wp'), `${VALUES.MARKUP}/src`);
-      // this.fs.copy(this.templatePath('gulp/tasks/util/paths/paths_wp.js'), `${VALUES.MARKUP}/gulp/tasks/util/paths.js`);
+      this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.frameworks.zurb);
+      if (this.props.cms_type === PROMPTS_VALUES.cms_type.cms_wp) {
+        this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_zurb/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+      } else {
+        this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_zurb/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+      }
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
       break;
