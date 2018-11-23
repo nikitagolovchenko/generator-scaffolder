@@ -56,6 +56,7 @@ module.exports = function writeFiles() {
   this.fs.copy(this.templatePath('.gitignore'), `${VALUES.MARKUP}/.gitignore`);
   this.fs.copy(this.templatePath('.editorconfig'), `${VALUES.MARKUP}/.editorconfig`);
   this.fs.copy(this.templatePath('.travis.yml'), `${VALUES.MARKUP}/.travis.yml`);
+  this.fs.copy(this.templatePath('.htmlhintrc'), `${VALUES.MARKUP}/.htmlhintrc`);
   this.fs.copy(this.templatePath('.sass-lint.yml'), `${VALUES.MARKUP}/.sass-lint.yml`);
   this.fs.copy(this.templatePath('package.json'), `${VALUES.MARKUP}/package.json`);
 
@@ -84,16 +85,21 @@ module.exports = function writeFiles() {
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/browserSync.js`),
     `${VALUES.GULP_TASKS_MARKUP}/browserSync.js`
   );
-  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/imagemin.js`), `${VALUES.GULP_TASKS_MARKUP}/imagemin.js`);
-  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/default.js`), `${VALUES.GULP_TASKS_MARKUP}/default.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/clean.js`), `${VALUES.GULP_TASKS_MARKUP}/clean.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/clear.js`), `${VALUES.GULP_TASKS_MARKUP}/clear.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/copy.js`), `${VALUES.GULP_TASKS_MARKUP}/copy.js`);
+  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/default.js`), `${VALUES.GULP_TASKS_MARKUP}/default.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/fonts.js`), `${VALUES.GULP_TASKS_MARKUP}/fonts.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/html.js`), `${VALUES.GULP_TASKS_MARKUP}/html.js`);
+  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/imagemin.js`), `${VALUES.GULP_TASKS_MARKUP}/imagemin.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass.js`), `${VALUES.GULP_TASKS_MARKUP}/sass.js`);
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/video.js`), `${VALUES.GULP_TASKS_MARKUP}/video.js`);
+
+  // linters
   this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/eslint.js`), `${VALUES.GULP_TASKS_MARKUP}/eslint.js`);
+  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/htmlhint.js`), `${VALUES.GULP_TASKS_MARKUP}/htmlhint.js`);
+  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass-lint.js`), `${VALUES.GULP_TASKS_MARKUP}/sass-lint.js`);
+  this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/linters.js`), `${VALUES.GULP_TASKS_MARKUP}/linters.js`);
 
   if (this.props.cms_type === PROMPTS_VALUES.cms_type.cms_magento) {
     this.fs.copy(
@@ -107,7 +113,7 @@ module.exports = function writeFiles() {
     this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/js.js`), `${VALUES.GULP_TASKS_MARKUP}/js.js`);
     this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.cms.magento);
   } else {
-    this.fs.copy(this.templatePath(VALUES.SRC_IMAGES), `${VALUES.MARKUP}/${VALUES.SRC_IMAGES}`);
+    // this.fs.copy(this.templatePath(VALUES.SRC_IMAGES), `${VALUES.MARKUP}/${VALUES.SRC_IMAGES}`);
     this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/build.js`), `${VALUES.GULP_TASKS_MARKUP}/build.js`);
     this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/watch.js`), `${VALUES.GULP_TASKS_MARKUP}/watch.js`);
     this.fs.copy(this.templatePath(`${VALUES.GULP_TASKS_ROOT}/webpack.js`), `${VALUES.GULP_TASKS_MARKUP}/webpack.js`);
