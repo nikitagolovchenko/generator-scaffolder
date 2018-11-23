@@ -2,6 +2,8 @@ const gulp = require('gulp');
 const imagemin = require('gulp-imagemin');
 const changed = require('gulp-changed');
 const plumber = require('gulp-plumber');
+const imageminJpegRecompress = require('imagemin-jpeg-recompress');
+const imageminPngquant = require('imagemin-pngquant');
 const config = require('../config');
 
 gulp.task('imagemin', ['clean:images'], () => {
@@ -14,19 +16,20 @@ gulp.task('imagemin', ['clean:images'], () => {
           // eslint-disable-next-line no-console
           console.log(err);
           this.emit('end');
-        }
+        },
       })
     )
     .pipe(
-      imagemin(
-        {
+      imagemin([
+        imagemin.gifsicle({interlaced: true}),
+        imageminJpegRecompress({
           progressive: true,
-          svgoPlugins: [{ removeViewBox: false }]
-        },
-        {
-          verbose: true
-        }
-      )
+          max: 80,
+          min: 70,
+        }),
+        imageminPngquant({quality: '80'}),
+        imagemin.svgo({plugins: [{removeViewBox: true}]}),
+      ])
     )
     .pipe(gulp.dest(config.dest.images));
 });

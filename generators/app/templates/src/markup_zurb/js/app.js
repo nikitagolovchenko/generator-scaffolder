@@ -1,7 +1,7 @@
-jQuery(function() {
-	initFoundation();
+jQuery(() => {
+  initFoundation();
 });
 
 function initFoundation() {
-	jQuery(document).foundation();
+  jQuery(document).foundation();
 }

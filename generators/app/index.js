@@ -5,16 +5,10 @@ const yosay = require('yosay');
 const PROMPTS = require('./prompts');
 const WRITING = require('./writing');
 const VALUES = require('./globals');
-const { PROMPTS_VALUES } = require('./globals');
-
-console.log(PROMPTS_VALUES);
-
-// const destFolder = 'markup';
+const {PROMPTS_VALUES} = require('./globals');
 
 function frameworkCopy(self) {
   self.log(chalk.green(`Copying ${self.props.frontend_framework} source files`));
-
-  // console.log(PROMPTS_VALUES.frontend_framework);
 
   switch (self.props.frontend_framework) {
     case PROMPTS_VALUES.frontend_framework.bootstrap:
@@ -22,7 +16,10 @@ function frameworkCopy(self) {
         case PROMPTS_VALUES.bootstrap_version.bootstrap_3:
           switch (self.props.bootstrap_css_preprocessor) {
             case PROMPTS_VALUES.bootstrap_css_preprocessor.less:
-              self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js`), self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`));
+              self.fs.copy(
+                self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js`),
+                self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
+              );
               self.fs.copy(
                 self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/less`),
                 self.destinationPath(`${VALUES.MARKUP_SRC}/less/vendors/bootstrap`)
@@ -43,19 +40,35 @@ function frameworkCopy(self) {
           }
           break;
         case PROMPTS_VALUES.bootstrap_version.bootstrap_4:
-          self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/scss`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`));
-          self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js/src`), self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`));
+          self.fs.copy(
+            self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/scss`),
+            self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`)
+          );
+          self.fs.copy(
+            self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js/src`),
+            self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
+          );
           break;
         default:
           break;
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
-      self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`));
-      self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/_vendors`));
       self.fs.copy(
-        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
-        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
+        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`),
+        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`)
+      );
+      self.fs.copy(
+        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`),
+        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor`)
+      );
+      // self.fs.copy(
+      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
+      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
+      // );
+      self.fs.copy(
+        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/vendor/normalize.scss`),
+        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor/normalize.scss`)
       );
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
@@ -96,21 +109,23 @@ module.exports = class extends Generator {
   // conflicts() {}
 
   install() {
-    if (this.props.dependencies_install === true || this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
+    if (
+      this.props.dependencies_install === true ||
+      this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none
+    ) {
       if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`))) return;
 
       process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
 
       this.installDependencies({
         bower: false,
-        npm: true
+        npm: true,
       });
     }
   }
 
   end() {
     this.log(chalk.green('🙌 🙌 🙌 Installation done! 🙌 🙌 🙌'));
-
     if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
       frameworkCopy(this);
     }

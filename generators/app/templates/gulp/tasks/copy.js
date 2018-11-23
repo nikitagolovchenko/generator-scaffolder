@@ -37,6 +37,12 @@ gulp.task('copy:video', () => {
     .pipe(gulp.dest(config.dest.video));
 });
 
-gulp.task('copy:watch', ['copy']);
-
 gulp.task('copy', ['copy:images', 'copy:rootfiles', 'copy:fonts', 'copy:video', 'copy:ajaxIncludes']);
+
+gulp.task('copy:watch', () => {
+  gulp.watch(`${config.src.images}/**/*.{jpg,png,jpeg,svg,gif}`, ['copy:images']);
+  gulp.watch(`${config.src.fonts}/**/*.{ttf,svg,eot,woff,woff2}`, ['copy:fonts']);
+  gulp.watch(`${config.src.ajaxIncludes}/*.*`, ['copy:ajaxIncludes']);
+  gulp.watch(`${config.src.root}/*.*`, ['copy:rootfiles']);
+  gulp.watch(`${config.src.video}/**/*.*`, ['copy:video']);
+});

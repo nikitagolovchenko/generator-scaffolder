@@ -2,7 +2,7 @@ const gulp = require('gulp');
 const runSequence = require('run-sequence');
 const config = require('../config');
 
-const build = cb => runSequence('clear', 'copy', 'js', 'imagemin', 'sass', cb);
+const build = cb => runSequence('clear', 'copy', 'js', 'imagemin', 'sass', 'serve', cb);
 
 gulp.task('build', cb => {
   config.setEnvironment('development');

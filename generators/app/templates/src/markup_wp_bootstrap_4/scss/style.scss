@@ -1,3 +1,16 @@
+/*
+Theme Name:
+Author: Anonymous
+Author URI:
+Version: 1
+Description: Base theme for Wordpress
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: base
+Tags: one-column, two-columns
+Theme URI:
+*/
+
 $breakpoints: (
   'xs-phone': 320px,
   'phone': 576px,
@@ -30,6 +43,9 @@ $media-expressions: (
 @import 'base/functions';
 @import 'base/mixins';
 @import 'base/helpers';
+
+@import 'base/cms-reset';
+@import 'base/wp-reset';
 
 @import 'layout/common';
 @import 'layout/header';

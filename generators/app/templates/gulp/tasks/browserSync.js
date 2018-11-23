@@ -3,22 +3,22 @@ const browserSync = require('browser-sync').create();
 const config = require('../config');
 
 // Static server
-gulp.task('browserSync', () =>
+gulp.task('serve', () =>
   browserSync.init({
     server: {
       baseDir: `./${config.dest.root}`,
       index: 'index.html',
-      directory: false
+      directory: true,
     },
     files: [
       `${config.dest.root}/*.html`,
       `${config.dest.css}/*.css`,
       `${config.dest.js}/*.js`,
-      `${config.dest.img}/**/*`
+      `${config.dest.img}/**/*`,
     ],
     logFileChanges: true,
     logLevel: 'info',
-    ghost: false
+    ghost: false,
 
     // if need to take a look from outside
     // tunnel: true

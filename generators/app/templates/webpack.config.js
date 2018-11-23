@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TimeFixPlugin = require('time-fix-plugin');
@@ -11,7 +13,7 @@ const pluginsConfiguration = {
   ProvidePlugin: {
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
+    'window.jQuery': 'jquery',
   },
   SourceMapDevToolPlugin: {
     test: [/\.js$/],
@@ -19,7 +21,7 @@ const pluginsConfiguration = {
     exclude: path.resolve(__dirname, 'node_modules'),
     append: '//# sourceMappingURL=[url]',
     moduleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
-    fallbackModuleFilenameTemplate: '[resource-path]'
+    fallbackModuleFilenameTemplate: '[resource-path]',
   },
   ErrorsPlugin: {
     onErrors: (severity, errors) => {
@@ -30,41 +32,41 @@ const pluginsConfiguration = {
       notifier.notify({
         title: 'Webpack error',
         message: `${severity}:${error.name}`,
-        subtitle: error.file || ''
+        subtitle: error.file || '',
       });
     },
-    clearConsole: false
-  }
+    clearConsole: false,
+  },
 };
 
 const webpackConfig = {
   mode: 'development',
   context: path.join(__dirname, config.src.js),
   entry: {
-    app: ['babel-polyfill', './app.js']
+    app: ['./app.js'],
   },
   output: {
     path: path.resolve(__dirname, config.dest.js),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   watch: true,
   watchOptions: {
     aggregateTimeout: 300,
-    poll: 1000
+    poll: 1000,
   },
   plugins: config.production()
     ? [
         new TimeFixPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
-        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin)
+        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
       ]
     : [
         new TimeFixPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
         new webpack.SourceMapDevToolPlugin(pluginsConfiguration.SourceMapDevToolPlugin),
-        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin)
+        new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
       ],
   resolve: {
     extensions: ['.js'],
@@ -78,17 +80,17 @@ const webpackConfig = {
       'jcf.scrollable': path.resolve('node_modules', 'jcf/js/jcf.scrollable.js'),
       'jcf.select': path.resolve('node_modules', 'jcf/js/jcf.select.js'),
       jquery: path.resolve('node_modules', 'jquery'),
-      TweenMax: path.resolve('node_modules', 'gsap/src/uncompressed/TweenMax.js'),
-      TweenLite: path.resolve('node_modules', 'gsap/src/uncompressed/TweenLite.js'),
-      TimelineMax: path.resolve('node_modules', 'gsap/src/uncompressed/TimelineMax.js'),
+      TweenMax: path.resolve('node_modules', 'gsap/TweenMax.js'),
+      TweenLite: path.resolve('node_modules', 'gsap/TweenLite.js'),
+      TimelineMax: path.resolve('node_modules', 'gsap/TimelineMax.js'),
       ScrollMagic: path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
-      TimelineLite: path.resolve('node_modules', 'gsap/src/uncompressed/TimelineLite.js'),
+      TimelineLite: path.resolve('node_modules', 'gsap/TimelineLite.js'),
       'animation.gsap': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
       'debug.addIndicators': path.resolve(
         'node_modules',
         'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
-      )
-    }
+      ),
+    },
   },
   optimization: gulpif(
     config.production(),
@@ -101,34 +103,31 @@ const webpackConfig = {
               inline: false,
               warnings: false,
               drop_console: true,
-              unsafe: true
-            }
-          }
-        })
-      ]
+              unsafe: true,
+            },
+          },
+        }),
+      ],
     },
     {
       minimizer: [
         new UglifyJsPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true
-        })
-      ]
+          sourceMap: true,
+        }),
+      ],
     }
   ),
   module: {
     rules: [
       {
+        enforce: 'pre',
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-runtime']
-          }
-        }
+        },
       },
       {
         enforce: 'pre',
@@ -136,15 +135,11 @@ const webpackConfig = {
         loader: 'prettier-loader',
         exclude: /node_modules/,
         options: {
-          parser: 'flow'
-        }
+          parser: 'flow',
+        },
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
-  }
+    ],
+  },
 };
 
 module.exports = webpackConfig;

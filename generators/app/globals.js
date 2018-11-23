@@ -3,37 +3,37 @@ const PROMPTS_VALUES = {
     name: 'project_type',
     markup_only: 'markup_only',
     markup_cms: 'markup_cms',
-    markup_banner: 'markup_banner'
+    markup_banner: 'markup_banner',
   },
   cms_type: {
     name: 'cms_type',
     cms_wp: 'cms_wp',
     cms_magento: 'cms_magento',
-    cms_other: 'cms_other'
+    cms_other: 'cms_other',
   },
   frontend_framework: {
     name: 'frontend_framework',
     none: 'none',
     bootstrap: 'bootstrap',
     zurb: 'zurb',
-    materialize: 'materialize'
+    materialize: 'materialize',
   },
   bootstrap_version: {
     name: 'bootstrap_version',
     bootstrap_4: 'bootstrap_4',
-    bootstrap_3: 'bootstrap_3'
+    bootstrap_3: 'bootstrap_3',
   },
   bootstrap_css_preprocessor: {
     name: 'bootstrap_css_preprocessor',
     scss: 'scss',
-    less: 'less'
+    less: 'less',
   },
   html_preprocessor: {
     name: 'html_preprocessor',
     none: 'none',
     haml: 'haml',
-    jade: 'jade'
-  }
+    jade: 'jade',
+  },
 };
 
 const SRC = 'src';

@@ -9,7 +9,6 @@ const mqpacker = require('css-mqpacker');
 const perfectionist = require('perfectionist');
 const csso = require('postcss-csso');
 const gulpif = require('gulp-if');
-const sassLint = require('gulp-sass-lint');
 const cssDeclarationSorter = require('css-declaration-sorter');
 const browserSync = require('./browserSync');
 const config = require('../config');
@@ -17,47 +16,40 @@ const config = require('../config');
 const processors = [
   autoprefixer({
     cascade: false,
-    browsers: ['last 2 versions', 'IE 11']
+    browsers: ['last 2 versions', 'IE 11'],
   }),
   mqpacker({
-    sort: true
-  })
+    sort: true,
+  }),
 ];
 
-gulp.task('sass', () =>
+gulp.task('sass', ['sass-lint'], () =>
   gulp
     .src([
       `${config.src.sass}/*.{scss,sass}`,
       `!${config.src.sass}/vendors/*.scss`,
-      `!${config.src.sass}/_bootstrap-custom.scss`
+      `!${config.src.sass}/_bootstrap-custom.scss`,
     ])
     .pipe(gulpif(config.development(), sourcemaps.init()))
-    .pipe(
-      sassLint({
-        configFile: './.sass-lint.yml',
-        'cache-config': true
-      })
-    )
-    .pipe(sassLint.format())
-    .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
     .pipe(
       sass({
-        outputStyle: config.getCssOutput()
+        outputStyle: config.getCssOutput(),
       })
     )
     .pipe(
       gulpif(
         config.getCssOutput() === 'expanded',
         postcss([
-          cssDeclarationSorter({ order: 'smacss' }),
+          cssDeclarationSorter({order: 'smacss'}),
           perfectionist({
             cascade: false,
             colorShorthand: false,
             indentSize: 2,
             maxSelectorLength: false,
             maxAtRuleLength: false,
-            maxValueLength: false
-          })
+            maxValueLength: false,
+          }),
         ])
       )
     )

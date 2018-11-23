@@ -4,7 +4,7 @@ const browserSync = require('./browserSync');
 const config = require('../config');
 const webpackConfig = require('../../webpack.config');
 
-gulp.task('webpack', () => {
+gulp.task('webpack', ['eslint'], () => {
   webpackConfig.mode = config.getEnvironment();
   browserSync.reload();
   webpack(webpackConfig, () => {

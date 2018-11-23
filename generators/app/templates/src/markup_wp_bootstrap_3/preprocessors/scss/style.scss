@@ -1,3 +1,16 @@
+/*
+Theme Name:
+Author: Anonymous
+Author URI:
+Version: 1
+Description: Base theme for Wordpress
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: base
+Tags: one-column, two-columns
+Theme URI:
+*/
+
 $breakpoints: (
   'xs-phone': 320px,
   'phone': 480px,
@@ -20,13 +33,16 @@ $media-expressions: (
 // ligatured operators ≥ ≤
 
 @import 'vendors/include-media';
+@import 'vendors/bootstrap/functions';
 
+@import 'vendors/bootstrap/variables';
 @import 'bootstrap-custom';
 
 @import 'vendors/bootstrap/mixins';
-
 @import 'base/functions';
 @import 'base/mixins';
+@import 'base/functions-rebuild';
+@import 'base/mixin-rebuild';
 @import 'base/helpers';
 
 @import 'layout/header';
