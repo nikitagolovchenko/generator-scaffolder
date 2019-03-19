@@ -1,4 +1,4 @@
-const { PROMPTS_VALUES } = require('./globals');
+const {PROMPTS_VALUES} = require('./globals');
 
 module.exports = [
   {
@@ -8,18 +8,18 @@ module.exports = [
     choices: [
       {
         name: 'Markup only',
-        value: PROMPTS_VALUES.project_type.markup_only
+        value: PROMPTS_VALUES.project_type.markup_only,
       },
       {
         name: 'Markup + CMS',
-        value: PROMPTS_VALUES.project_type.markup_cms
+        value: PROMPTS_VALUES.project_type.markup_cms,
       },
       {
         name: 'HTML5 Banner',
-        value: PROMPTS_VALUES.project_type.markup_banner
-      }
+        value: PROMPTS_VALUES.project_type.markup_banner,
+      },
     ],
-    default: 0
+    default: 0,
   },
   {
     when: answers => answers.project_type === PROMPTS_VALUES.project_type.markup_cms,
@@ -29,18 +29,18 @@ module.exports = [
     choices: [
       {
         name: 'Wordpress',
-        value: PROMPTS_VALUES.cms_type.cms_wp
+        value: PROMPTS_VALUES.cms_type.cms_wp,
       },
       {
         name: 'Magento',
-        value: PROMPTS_VALUES.cms_type.cms_magento
+        value: PROMPTS_VALUES.cms_type.cms_magento,
       },
       {
         name: 'Other CMS',
-        value: PROMPTS_VALUES.cms_type.cms_other
-      }
+        value: PROMPTS_VALUES.cms_type.cms_other,
+      },
     ],
-    default: 0
+    default: 0,
   },
   {
     type: 'list',
@@ -49,22 +49,22 @@ module.exports = [
     choices: [
       {
         name: 'No framework',
-        value: PROMPTS_VALUES.frontend_framework.none
+        value: PROMPTS_VALUES.frontend_framework.none,
       },
       {
         name: 'Bootstrap',
-        value: PROMPTS_VALUES.frontend_framework.bootstrap
+        value: PROMPTS_VALUES.frontend_framework.bootstrap,
       },
       {
         name: 'Zurb Foundation',
-        value: PROMPTS_VALUES.frontend_framework.zurb
+        value: PROMPTS_VALUES.frontend_framework.zurb,
       },
       {
         name: 'Materialize',
-        value: PROMPTS_VALUES.frontend_framework.materialize
-      }
+        value: PROMPTS_VALUES.frontend_framework.materialize,
+      },
     ],
-    default: 0
+    default: 0,
   },
   {
     when: answers => answers.frontend_framework === PROMPTS_VALUES.frontend_framework.bootstrap,
@@ -74,14 +74,14 @@ module.exports = [
     choices: [
       {
         name: 'Bootstrap 4',
-        value: PROMPTS_VALUES.bootstrap_version.bootstrap_4
+        value: PROMPTS_VALUES.bootstrap_version.bootstrap_4,
       },
       {
         name: 'Bootstrap 3',
-        value: PROMPTS_VALUES.bootstrap_version.bootstrap_3
-      }
+        value: PROMPTS_VALUES.bootstrap_version.bootstrap_3,
+      },
     ],
-    default: 0
+    default: 0,
   },
   {
     when: answers => answers.bootstrap_version === PROMPTS_VALUES.bootstrap_version.bootstrap_3,
@@ -91,50 +91,29 @@ module.exports = [
     choices: [
       {
         name: 'SCSS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.scss
+        value: PROMPTS_VALUES.bootstrap_css_preprocessor.scss,
       },
       {
         name: 'LESS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.less
-      }
+        value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
+      },
     ],
-    default: 0
+    default: 0,
   },
   {
     type: 'list',
-    name: PROMPTS_VALUES.html_preprocessor.name,
-    message: 'Select HTML preprocessor:',
+    name: PROMPTS_VALUES.js_bundler.name,
+    message: 'Do you want to use Webpack?:',
     choices: [
       {
-        name: 'Pure HTML',
-        value: PROMPTS_VALUES.html_preprocessor.none
+        name: 'Yes, lets use it!',
+        value: PROMPTS_VALUES.js_bundler.webpack,
       },
       {
-        name: 'HAML',
-        value: PROMPTS_VALUES.html_preprocessor.haml
-      },
-      {
-        name: 'PUG(JADE)',
-        value: PROMPTS_VALUES.html_preprocessor.jade
+        name: 'No',
+        value: PROMPTS_VALUES.js_bundler.no_webpack,
       }
     ],
-    default: 0
-  },
-  {
-    when: answers => answers.frontend_framework === PROMPTS_VALUES.frontend_framework.none,
-    type: 'confirm',
-    name: 'dependencies_install',
-    message: 'Do you want to install all dependencies right now?',
-    choices: [
-      {
-        name: 'Of course!',
-        value: 'true'
-      },
-      {
-        name: 'No, i dont want to code now.',
-        value: 'false'
-      }
-    ],
-    default: 0
+    default: 0,
   }
 ];

@@ -4,7 +4,7 @@ const config = require('../config');
 
 gulp.task('htmlhint', () => {
   gulp
-    .src(`${config.src.root}/*.html`)
-    .pipe(htmlhint('.htmlhintrc'))
+    .src([`${config.src.root}/*.html`, `!${config.src.root}/wp-test.html`])
+    .pipe(htmlhint('htmlhint.config.js'))
     .pipe(htmlhint.reporter());
 });

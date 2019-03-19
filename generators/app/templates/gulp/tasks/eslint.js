@@ -6,11 +6,13 @@ gulp.task('eslint', () => {
   gulp
     .src([
       `${config.src.js}/**/*.js`,
-      '!node_modules/**',
-      `!${config.src.js}/ES5/*.js`,
-      `!${config.src.js}/vendors/*.js`,
+      `!node_modules/**`,
+      `!${config.src.js}/ES5/**/*.js`,
+      `!${config.src.js}/vendors/**/*.js`,
     ])
-    .pipe(eslint())
+    .pipe(eslint({
+      configFile: 'eslintrc.js'
+    }))
     .pipe(eslint.format());
 });
 

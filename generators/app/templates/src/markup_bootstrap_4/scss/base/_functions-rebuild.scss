@@ -1,0 +1,7 @@
+// rebuilded bootstrap mixins can be used here, example:
+//
+// @if $enable-bg-gradients {
+//   @each $color, $value in $theme-colors {
+//     @include bg-gradient-variant(".bg-gradient-#{$color}", $value);
+//   }
+// }

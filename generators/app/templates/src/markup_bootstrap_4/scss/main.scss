@@ -1,9 +1,14 @@
+@import 'vendors/include-media';
+@import 'vendors/bootstrap/functions';
+@import 'vendors/bootstrap/variables';
+@import 'bootstrap-custom';
+
 $breakpoints: (
-  'xs-phone': 320px,
-  'phone': 576px,
-  'tablet': 768px,
-  'desktop': 992px,
-  'widescreen': 1200px
+  'xs-phone': map-get($grid-breakpoints, 'xs'),
+  'phone': map-get($grid-breakpoints, 'sm'),
+  'tablet': map-get($grid-breakpoints, 'md'),
+  'desktop': map-get($grid-breakpoints, 'lg'),
+  'widescreen': map-get($grid-breakpoints, 'xl')
 );
 
 // keywords
@@ -19,16 +24,12 @@ $media-expressions: (
 
 // ligatured operators ≥ ≤
 
-@import 'vendors/include-media';
-
-@import 'vendors/bootstrap/functions';
-@import 'vendors/bootstrap/variables';
 @import 'vendors/bootstrap/mixins';
-
-@import 'bootstrap-custom';
 
 @import 'base/functions';
 @import 'base/mixins';
+@import 'base/functions-rebuild';
+@import 'base/mixin-rebuild';
 @import 'base/helpers';
 
 @import 'layout/common';

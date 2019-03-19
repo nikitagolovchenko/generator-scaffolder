@@ -7,5 +7,6 @@ gulp.task('watch', [
   'html:watch',
   'ajaxIncludes:watch',
   'video:watch',
-  'sass:watch'
+  'sass:watch',
+  'eslint:watch'
 ]);

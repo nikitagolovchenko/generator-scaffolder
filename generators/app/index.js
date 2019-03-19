@@ -16,20 +16,20 @@ function frameworkCopy(self) {
         case PROMPTS_VALUES.bootstrap_version.bootstrap_3:
           switch (self.props.bootstrap_css_preprocessor) {
             case PROMPTS_VALUES.bootstrap_css_preprocessor.less:
-              self.fs.copy(
-                self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js`),
-                self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-              );
+              // self.fs.copy(
+              //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js`),
+              //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
+              // );
               self.fs.copy(
                 self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/less`),
                 self.destinationPath(`${VALUES.MARKUP_SRC}/less/vendors/bootstrap`)
               );
               break;
             case PROMPTS_VALUES.bootstrap_css_preprocessor.scss:
-              self.fs.copy(
-                self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-sass/assets/javascripts/bootstrap`),
-                self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-              );
+              // self.fs.copy(
+              //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-sass/assets/javascripts/bootstrap`),
+              //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
+              // );
               self.fs.copy(
                 self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-sass/assets/stylesheets/bootstrap`),
                 self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`)
@@ -44,32 +44,32 @@ function frameworkCopy(self) {
             self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/scss`),
             self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`)
           );
-          self.fs.copy(
-            self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js/src`),
-            self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-          );
+          // self.fs.copy(
+          //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js/src`),
+          //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
+          // );
           break;
         default:
           break;
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
-      self.fs.copy(
-        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`),
-        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`)
-      );
-      self.fs.copy(
-        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`),
-        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor`)
-      );
       // self.fs.copy(
-      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
-      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
+      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`),
+      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`)
       // );
-      self.fs.copy(
-        self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/vendor/normalize.scss`),
-        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor/normalize.scss`)
-      );
+      // self.fs.copy(
+      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`),
+      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor`)
+      // );
+      // // self.fs.copy(
+      // //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
+      // //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
+      // // );
+      // self.fs.copy(
+      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/vendor/normalize.scss`),
+      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/normalize.scss`)
+      // );
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
       break;
@@ -109,19 +109,14 @@ module.exports = class extends Generator {
   // conflicts() {}
 
   install() {
-    if (
-      this.props.dependencies_install === true ||
-      this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none
-    ) {
-      if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`))) return;
+    if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`))) return;
 
-      process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
+    process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
 
-      this.installDependencies({
-        bower: false,
-        npm: true,
-      });
-    }
+    this.installDependencies({
+      bower: false,
+      npm: true,
+    });
   }
 
   end() {

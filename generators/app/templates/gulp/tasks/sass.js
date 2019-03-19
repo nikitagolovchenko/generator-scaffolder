@@ -10,7 +10,7 @@ const perfectionist = require('perfectionist');
 const csso = require('postcss-csso');
 const gulpif = require('gulp-if');
 const cssDeclarationSorter = require('css-declaration-sorter');
-const browserSync = require('./browserSync');
+const tildeImporter = require('node-sass-tilde-importer');
 const config = require('../config');
 
 const processors = [
@@ -35,6 +35,7 @@ gulp.task('sass', ['sass-lint'], () =>
     .pipe(
       sass({
         outputStyle: config.getCssOutput(),
+        importer: tildeImporter,
       })
     )
     .pipe(
@@ -60,5 +61,5 @@ gulp.task('sass', ['sass-lint'], () =>
 );
 
 gulp.task('sass:watch', () => {
-  gulp.watch(`${config.src.sass}/**/*.{scss,sass}`, ['sass']).on('change', browserSync.reload);
+  gulp.watch(`${config.src.sass}/**/*.{scss,sass}`, ['sass']);
 });

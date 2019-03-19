@@ -28,6 +28,11 @@ const PROMPTS_VALUES = {
     scss: 'scss',
     less: 'less',
   },
+  js_bundler: {
+    name: 'js_bundler',
+    webpack: 'webpack',
+    no_webpack: 'no_webpack'
+  },
   html_preprocessor: {
     name: 'html_preprocessor',
     none: 'none',
@@ -37,22 +42,27 @@ const PROMPTS_VALUES = {
 };
 
 const SRC = 'src';
-const SRC_IMAGES = `${SRC}/images`;
-const SRC_FONTS = `${SRC}/fonts`;
-const SRC_JS = `${SRC}/js`;
 const DEST = 'dist';
 const MARKUP = 'markup';
-const MARKUP_SRC = `${MARKUP}/${SRC}`;
 const GULP = 'gulp';
+const ROOT_MODULES = 'node_modules';
+
+const SRC_IMAGES = `${SRC}/images`;
+const SRC_FONTS = `${SRC}/fonts`;
+const SRC_GENERAL_FILES = `${SRC}/general_files`;
+const SRC_JS = `${SRC}/js`;
+const SRC_JS_DEFAULT = `${SRC}/js_no-webpack`;
 const GULP_TASKS_ROOT = `${GULP}/tasks`;
 const GULP_TASKS_MARKUP = `${MARKUP}/${GULP_TASKS_ROOT}`;
-const ROOT_MODULES = 'node_modules';
+const MARKUP_SRC = `${MARKUP}/${SRC}`;
 const MARKUP_MODULES = `${MARKUP}/${ROOT_MODULES}`;
 
 exports.SRC = SRC;
 exports.SRC_IMAGES = SRC_IMAGES;
 exports.SRC_FONTS = SRC_FONTS;
+exports.SRC_GENERAL_FILES = SRC_GENERAL_FILES;
 exports.SRC_JS = SRC_JS;
+exports.SRC_JS_DEFAULT = SRC_JS_DEFAULT;
 exports.DEST = DEST;
 exports.MARKUP = MARKUP;
 exports.MARKUP_SRC = MARKUP_SRC;

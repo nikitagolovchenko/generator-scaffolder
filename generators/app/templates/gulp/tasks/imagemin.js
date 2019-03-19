@@ -15,25 +15,57 @@ gulp.task('imagemin', ['clean:images'], () => {
         handleError: err => {
           // eslint-disable-next-line no-console
           console.log(err);
-          this.emit('end');
+          // this.emit('end');
         },
       })
     )
     .pipe(
-      imagemin([
-        imagemin.gifsicle({interlaced: true}),
-        imageminJpegRecompress({
-          progressive: true,
-          max: 80,
-          min: 70,
-        }),
-        imageminPngquant({quality: '80'}),
-        imagemin.svgo({plugins: [{removeViewBox: true}]}),
-      ])
+      imagemin(
+        [
+          imagemin.gifsicle({interlaced: true}),
+          imageminJpegRecompress({
+            progressive: true,
+            max: 80,
+            min: 70,
+          }),
+          imageminPngquant({quality: '80'}),
+          imagemin.svgo({
+            plugins: [{
+                removeDesc: true
+              }, {
+                cleanupIDs: true
+              }, {
+                mergePaths: false
+              }, {
+                removeComments: true
+              }, {
+                removeEmptyAttrs: true
+              }, {
+                removeEmptyContainers: true
+              }, {
+                removeEmptyText: true
+              },, {
+                removeUselessDefs: true
+              }, {
+                collapseGroups: true
+              }, {
+                convertTransform: true
+              }, {
+                minifyStyles: true
+              }, {
+                moveGroupAttrsToElems: true
+              }
+            ]
+          })
+        ],
+        {
+          verbose: true,
+        }
+      )
     )
     .pipe(gulp.dest(config.dest.images));
 });
 
 gulp.task('imagemin:watch', () => {
-  gulp.watch(`${config.src.images}/**/*`, ['imagemin']);
+  gulp.watch(`${config.src.images}/**/*.*`, ['imagemin']);
 });

@@ -13,7 +13,7 @@ const pluginsConfiguration = {
   ProvidePlugin: {
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery',
+    'window.jQuery': 'jquery'
   },
   SourceMapDevToolPlugin: {
     test: [/\.js$/],
@@ -39,15 +39,19 @@ const pluginsConfiguration = {
   },
 };
 
+const ASSET_PATH = 'js/';
+
 const webpackConfig = {
   mode: 'development',
   context: path.join(__dirname, config.src.js),
   entry: {
-    app: ['./app.js'],
+    app: ['@babel/polyfill', './app.js'],
   },
   output: {
     path: path.resolve(__dirname, config.dest.js),
     filename: '[name].js',
+    chunkFilename: '[name].[contenthash].bundle.js',
+    publicPath: ASSET_PATH,
   },
   watch: true,
   watchOptions: {
@@ -60,6 +64,7 @@ const webpackConfig = {
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
         new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
+        // new BundleAnalyzerPlugin()
       ]
     : [
         new TimeFixPlugin(),
@@ -67,58 +72,39 @@ const webpackConfig = {
         new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
         new webpack.SourceMapDevToolPlugin(pluginsConfiguration.SourceMapDevToolPlugin),
         new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
+        // new BundleAnalyzerPlugin()
       ],
   resolve: {
     extensions: ['.js'],
     alias: {
-      jcf: path.resolve('node_modules', 'jcf/js/jcf.js'),
-      'jcf.checkbox': path.resolve('node_modules', 'jcf/js/jcf.checkbox.js'),
-      'jcf.file': path.resolve('node_modules', 'jcf/js/jcf.file.js'),
-      'jcf.number': path.resolve('node_modules', 'jcf/js/jcf.number.js'),
-      'jcf.radio': path.resolve('node_modules', 'jcf/js/jcf.radio.js'),
-      'jcf.range': path.resolve('node_modules', 'jcf/js/jcf.range.js'),
-      'jcf.scrollable': path.resolve('node_modules', 'jcf/js/jcf.scrollable.js'),
-      'jcf.select': path.resolve('node_modules', 'jcf/js/jcf.select.js'),
       jquery: path.resolve('node_modules', 'jquery'),
-      TweenMax: path.resolve('node_modules', 'gsap/TweenMax.js'),
-      TweenLite: path.resolve('node_modules', 'gsap/TweenLite.js'),
-      TimelineMax: path.resolve('node_modules', 'gsap/TimelineMax.js'),
-      ScrollMagic: path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
-      TimelineLite: path.resolve('node_modules', 'gsap/TimelineLite.js'),
-      'animation.gsap': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
-      'debug.addIndicators': path.resolve(
-        'node_modules',
-        'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
-      ),
     },
   },
-  optimization: gulpif(
-    config.production(),
-    {
-      minimizer: [
-        new UglifyJsPlugin({
-          sourceMap: false,
-          uglifyOptions: {
-            compress: {
-              inline: false,
-              warnings: false,
-              drop_console: true,
-              unsafe: true,
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin(
+        gulpif(
+          config.production(),
+          {
+            sourceMap: false,
+            uglifyOptions: {
+              compress: {
+                inline: false,
+                warnings: false,
+                drop_console: true,
+                unsafe: true,
+              },
             },
           },
-        }),
-      ],
-    },
-    {
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: true,
-        }),
-      ],
-    }
-  ),
+          {
+            cache: true,
+            parallel: true,
+            sourceMap: true,
+          }
+        )
+      ),
+    ],
+  },
   module: {
     rules: [
       {

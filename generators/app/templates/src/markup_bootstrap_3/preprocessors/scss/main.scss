@@ -1,9 +1,12 @@
+@import 'vendors/include-media';
+@import 'bootstrap-custom';
+
 $breakpoints: (
   'xs-phone': 320px,
-  'phone': 480px,
-  'tablet': 768px,
-  'desktop': 992px,
-  'widescreen': 1200px
+  'phone': $screen-xs,
+  'tablet': $screen-sm,
+  'desktop': $screen-md,
+  'widescreen': $screen-lg
 );
 
 // keywords
@@ -19,11 +22,6 @@ $media-expressions: (
 
 // ligatured operators ≥ ≤
 
-@import 'vendors/include-media';
-
-@import 'bootstrap-custom';
-
-@import 'vendors/bootstrap/variables';
 @import 'vendors/bootstrap/mixins';
 
 @import 'base/functions';
