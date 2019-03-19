@@ -30,33 +30,45 @@ gulp.task('imagemin', ['clean:images'], () => {
           }),
           imageminPngquant({quality: '80'}),
           imagemin.svgo({
-            plugins: [{
-                removeDesc: true
-              }, {
-                cleanupIDs: true
-              }, {
-                mergePaths: false
-              }, {
-                removeComments: true
-              }, {
-                removeEmptyAttrs: true
-              }, {
-                removeEmptyContainers: true
-              }, {
-                removeEmptyText: true
-              },, {
-                removeUselessDefs: true
-              }, {
-                collapseGroups: true
-              }, {
-                convertTransform: true
-              }, {
-                minifyStyles: true
-              }, {
-                moveGroupAttrsToElems: true
-              }
-            ]
-          })
+            plugins: [
+              {
+                removeDesc: true,
+              },
+              {
+                cleanupIDs: true,
+              },
+              {
+                mergePaths: false,
+              },
+              {
+                removeComments: true,
+              },
+              {
+                removeEmptyAttrs: true,
+              },
+              {
+                removeEmptyContainers: true,
+              },
+              {
+                removeEmptyText: true,
+              },
+              {
+                removeUselessDefs: true,
+              },
+              {
+                collapseGroups: true,
+              },
+              {
+                convertTransform: true,
+              },
+              {
+                minifyStyles: true,
+              },
+              {
+                moveGroupAttrsToElems: true,
+              },
+            ],
+          }),
         ],
         {
           verbose: true,

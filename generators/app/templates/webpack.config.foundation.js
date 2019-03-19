@@ -13,7 +13,7 @@ const pluginsConfiguration = {
   ProvidePlugin: {
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
+    'window.jQuery': 'jquery',
   },
   SourceMapDevToolPlugin: {
     test: [/\.js$/],
@@ -38,6 +38,8 @@ const pluginsConfiguration = {
     clearConsole: false,
   },
 };
+
+const ASSET_PATH = 'js/';
 
 const webpackConfig = {
   mode: 'development',
@@ -110,7 +112,7 @@ const webpackConfig = {
         test: /\.js$/,
         include: [path.resolve('node_modules/foundation-sites')],
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         },
       },
       {

@@ -1,6 +1,6 @@
 import Foundation from 'foundation-sites';
 
-jQuery(function() {
+jQuery(() => {
   jQuery(document).foundation();
 });
 

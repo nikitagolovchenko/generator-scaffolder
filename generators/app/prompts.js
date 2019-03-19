@@ -1,4 +1,4 @@
-const {PROMPTS_VALUES} = require('./globals');
+const { PROMPTS_VALUES } = require('./globals');
 
 module.exports = [
   {
@@ -22,7 +22,8 @@ module.exports = [
     default: 0,
   },
   {
-    when: answers => answers.project_type === PROMPTS_VALUES.project_type.markup_cms,
+    when: answers =>
+      answers.project_type === PROMPTS_VALUES.project_type.markup_cms,
     type: 'list',
     name: PROMPTS_VALUES.cms_type.name,
     message: 'Select CMS:',
@@ -67,7 +68,9 @@ module.exports = [
     default: 0,
   },
   {
-    when: answers => answers.frontend_framework === PROMPTS_VALUES.frontend_framework.bootstrap,
+    when: answers =>
+      answers.frontend_framework ===
+      PROMPTS_VALUES.frontend_framework.bootstrap,
     type: 'list',
     name: PROMPTS_VALUES.bootstrap_version.name,
     message: 'Select Bootstrap version:',
@@ -84,7 +87,9 @@ module.exports = [
     default: 0,
   },
   {
-    when: answers => answers.bootstrap_version === PROMPTS_VALUES.bootstrap_version.bootstrap_3,
+    when: answers =>
+      answers.bootstrap_version ===
+      PROMPTS_VALUES.bootstrap_version.bootstrap_3,
     type: 'list',
     name: PROMPTS_VALUES.bootstrap_css_preprocessor.name,
     message: 'Select CSS preprocessor:',
@@ -112,8 +117,8 @@ module.exports = [
       {
         name: 'No',
         value: PROMPTS_VALUES.js_bundler.no_webpack,
-      }
+      },
     ],
     default: 0,
-  }
+  },
 ];

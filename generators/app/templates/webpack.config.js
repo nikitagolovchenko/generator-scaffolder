@@ -13,7 +13,7 @@ const pluginsConfiguration = {
   ProvidePlugin: {
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
+    'window.jQuery': 'jquery',
   },
   SourceMapDevToolPlugin: {
     test: [/\.js$/],

@@ -31,7 +31,7 @@ const PROMPTS_VALUES = {
   js_bundler: {
     name: 'js_bundler',
     webpack: 'webpack',
-    no_webpack: 'no_webpack'
+    no_webpack: 'no_webpack',
   },
   html_preprocessor: {
     name: 'html_preprocessor',
