@@ -1,7 +1,7 @@
 {
   "name": "generator-p2h",
-  "version": "1.0.1",
-  "description": "scaffolding tool for projects",
+  "version": "1.0.3",
+  "description": "Build for common types of projects using gulp, webpack",
   "homepage": "https://www.p2h.com/",
   "author": {
     "name": "P2H",
@@ -27,9 +27,7 @@
     "eslint-config-prettier": "^2.10.0",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.7.0",
-    "eslint-plugin-react": "^7.11.1",
     "husky": "^0.14.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.1.1",
