@@ -99,7 +99,7 @@ module.exports = class extends Generator {
 
   prompting() {
     // Have Yeoman greet the user.
-    this.log(yosay('2005-2018 All rights Reserved. P2H, Inc.'));
+    this.log(yosay('2005-2019 All rights Reserved. P2H, Inc.'));
 
     return this.prompt(PROMPTS).then(props => {
       // To access props later use this.props.someAnswer;

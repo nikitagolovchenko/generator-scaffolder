@@ -57,7 +57,6 @@ module.exports = function writeFiles() {
   mkDir(path.join(`${VALUES.MARKUP_SRC}/images`));
   mkDir(path.join(`${VALUES.MARKUP_SRC}/scss/base`));
 
-  this.fs.copy(this.templatePath('.gitignore'), `${VALUES.MARKUP}/.gitignore`);
   this.fs.copy(
     this.templatePath('.editorconfig'),
     `${VALUES.MARKUP}/.editorconfig`

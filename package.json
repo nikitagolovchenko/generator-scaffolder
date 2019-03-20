@@ -1,6 +1,6 @@
 {
-  "name": "yo-p2h",
-  "version": "1.0.0",
+  "name": "generator-p2h",
+  "version": "1.0.1",
   "description": "scaffolding tool for projects",
   "homepage": "https://www.p2h.com/",
   "author": {

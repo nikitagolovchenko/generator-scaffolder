@@ -8,7 +8,7 @@ First, install [Yeoman](http://yeoman.io) and yo-p2h using [npm](https://www.npm
 
 ```bash
 npm install -g yo
-npm install -g yo-p2h
+npm install -g generator-p2h
 ```
 
 Then generate your new project:
