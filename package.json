@@ -1,12 +1,12 @@
 {
-  "name": "generator-p2h",
-  "version": "0.0.0",
+  "name": "yo-p2h",
+  "version": "1.0.0",
   "description": "scaffolding tool for projects",
-  "homepage": "https://www.psd2html.com/",
+  "homepage": "https://www.p2h.com/",
   "author": {
     "name": "P2H",
-    "email": "test@p2h.com",
-    "url": "https://www.psd2html.com/"
+    "email": "support@p2h.com",
+    "url": "https://www.p2h.com/"
   },
   "files": [
     "generators"
@@ -51,7 +51,6 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "prepublishOnly": "nsp check",
     "pretest": "eslint .",
     "precommit": "lint-staged",
     "test": "jest"
@@ -67,6 +66,6 @@
       "git add"
     ]
   },
-  "repository": "mrlss/generator-p2h",
+  "repository": "mrlss/generator-scaffolder",
   "license": "MIT"
 }
