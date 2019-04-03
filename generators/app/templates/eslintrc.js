@@ -26,6 +26,7 @@ module.exports = {
         "message": "The comma operator is confusing and a common mistake. Don’t use it!"
       }
     ],
+    "linebreak-style": ["off"],
     "lines-around-comment": ["off"],
     "prefer-destructuring": [
       "off",

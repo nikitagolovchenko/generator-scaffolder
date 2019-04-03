@@ -3,7 +3,7 @@ const deleteUnused = require('./util/watchDeletedFiles');
 const config = require('../config');
 
 gulp.task('clean:rootfiles', () => {
-  deleteUnused(`${config.src.root}/*.*`, `${config.dest.root}/*.*`);
+  deleteUnused(`${config.src.root}/*.html`, `${config.dest.root}/*.html`);
 });
 
 gulp.task('clean:fonts', () => {

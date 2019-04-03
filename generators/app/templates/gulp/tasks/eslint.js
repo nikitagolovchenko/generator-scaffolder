@@ -17,7 +17,3 @@ gulp.task('eslint', () => {
     )
     .pipe(eslint.format());
 });
-
-gulp.task('eslint:watch', () => {
-  gulp.watch(`${config.src.js}/**/*.js`, ['eslint']);
-});

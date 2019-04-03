@@ -246,6 +246,10 @@ module.exports = function writeFiles() {
       `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`
     );
     this.fs.copy(
+      this.templatePath(VALUES.SRC_JS_PUBLIC_PATH),
+      `${VALUES.MARKUP}/${VALUES.SRC_JS}`
+    );
+    this.fs.copy(
       this.templatePath(
         `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_wp-reset.scss`
       ),

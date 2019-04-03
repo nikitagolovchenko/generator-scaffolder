@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const TimeFixPlugin = require('time-fix-plugin');
 const notifier = require('node-notifier');
 const webpack = require('webpack');
@@ -50,13 +50,8 @@ const webpackConfig = {
   output: {
     path: path.resolve(__dirname, config.dest.js),
     filename: '[name].js',
-    chunkFilename: '[name].[contenthash].bundle.js',
-    publicPath: ASSET_PATH,
-  },
-  watch: true,
-  watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000,
+    chunkFilename: '[name].bundle.js',
+    publicPath: ASSET_PATH
   },
   plugins: config.production()
     ? [
@@ -82,17 +77,27 @@ const webpackConfig = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin(
+      new TerserPlugin(
         gulpif(
           config.production(),
           {
-            sourceMap: false,
-            uglifyOptions: {
+            chunkFilter: chunk => {
+              if (chunk.name === 'vendor') {
+                return false;
+              }
+
+              return true;
+            },
+            sourceMap: true,
+            terserOptions: {
               compress: {
                 inline: false,
                 warnings: false,
                 drop_console: true,
                 unsafe: true,
+              },
+              output: {
+                comments: false,
               },
             },
           },
