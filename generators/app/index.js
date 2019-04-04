@@ -18,10 +18,6 @@ function frameworkCopy(self) {
         case PROMPTS_VALUES.bootstrap_version.bootstrap_3:
           switch (self.props.bootstrap_css_preprocessor) {
             case PROMPTS_VALUES.bootstrap_css_preprocessor.less:
-              // self.fs.copy(
-              //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js`),
-              //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-              // );
               self.fs.copy(
                 self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/less`),
                 self.destinationPath(
@@ -30,20 +26,7 @@ function frameworkCopy(self) {
               );
               break;
             case PROMPTS_VALUES.bootstrap_css_preprocessor.scss:
-              // self.fs.copy(
-              //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-sass/assets/javascripts/bootstrap`),
-              //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-              // );
-              self.fs.copy(
-                self.destinationPath(
-                  `${
-                    VALUES.MARKUP_MODULES
-                  }/bootstrap-sass/assets/stylesheets/bootstrap`
-                ),
-                self.destinationPath(
-                  `${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`
-                )
-              );
+              self.fs.copy(self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-sass/assets/stylesheets/bootstrap`), self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`));
               break;
             default:
               break;
@@ -54,32 +37,12 @@ function frameworkCopy(self) {
             self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/scss`),
             self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/bootstrap`)
           );
-          // self.fs.copy(
-          //   self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/js/src`),
-          //   self.destinationPath(`${VALUES.MARKUP_SRC}/js/vendors/bootstrap`)
-          // );
           break;
         default:
           break;
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
-      // self.fs.copy(
-      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss`),
-      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/zurb`)
-      // );
-      // self.fs.copy(
-      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/_vendor`),
-      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/_vendor`)
-      // );
-      // // self.fs.copy(
-      // //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/foundation.scss`),
-      // //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/foundation.scss`)
-      // // );
-      // self.fs.copy(
-      //   self.destinationPath(`${VALUES.MARKUP_MODULES}/foundation-sites/scss/vendor/normalize.scss`),
-      //   self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/normalize.scss`)
-      // );
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
       break;

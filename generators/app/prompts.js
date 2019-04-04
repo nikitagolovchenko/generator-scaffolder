@@ -32,10 +32,10 @@ module.exports = [
         name: 'Wordpress',
         value: PROMPTS_VALUES.cms_type.cms_wp,
       },
-      {
-        name: 'Magento',
-        value: PROMPTS_VALUES.cms_type.cms_magento,
-      },
+      // {
+      //   name: 'Magento',
+      //   value: PROMPTS_VALUES.cms_type.cms_magento,
+      // },
       {
         name: 'Other CMS',
         value: PROMPTS_VALUES.cms_type.cms_other,
@@ -98,10 +98,10 @@ module.exports = [
         name: 'SCSS',
         value: PROMPTS_VALUES.bootstrap_css_preprocessor.scss,
       },
-      {
-        name: 'LESS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
-      },
+      // {
+      //   name: 'LESS',
+      //   value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
+      // },
     ],
     default: 0,
   },

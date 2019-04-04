@@ -1,6 +1,6 @@
 {
   "name": "generator-p2h",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Build for common types of projects using gulp, webpack",
   "homepage": "https://www.p2h.com/",
   "author": {
@@ -50,7 +50,6 @@
   },
   "scripts": {
     "pretest": "eslint .",
-    "precommit": "lint-staged",
     "test": "jest"
   },
   "lint-staged": {
