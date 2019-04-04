@@ -1,6 +1,6 @@
 {
   "name": "generator-p2h",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Build for common types of projects using gulp, webpack",
   "homepage": "https://www.p2h.com/",
   "author": {
