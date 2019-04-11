@@ -29,6 +29,7 @@ gulp.task('sass', ['sass-lint'], () =>
       `${config.src.sass}/*.{scss,sass}`,
       `!${config.src.sass}/vendors/*.scss`,
       `!${config.src.sass}/_bootstrap-custom.scss`,
+      `!${config.src.sass}/_materialize-custom.scss`,
     ])
     .pipe(gulpif(config.development(), sourcemaps.init()))
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))

@@ -1,0 +1,47 @@
+//sass-lint:disable no-css-comments
+
+/*
+Theme Name:
+Author: Anonymous
+Author URI:
+Version: 1
+Description: Base theme for Wordpress
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: base
+Tags: one-column, two-columns
+Theme URI:
+*/
+
+@import 'vendors/include-media';
+@import 'materialize-custom';
+
+$breakpoints: (
+  'xs-phone': 320px,
+  'phone': 480px,
+  'tablet': $small-screen,
+  'desktop': $medium-screen,
+  'widescreen': $large-screen
+);
+
+// keywords
+$media-expressions: (
+  'screen': 'screen',
+  'print': 'print',
+  'handheld': 'handheld',
+  'landscape': '(orientation: landscape)',
+  'portrait': '(orientation: portrait)',
+  'retina2x': '(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)',
+  'retina3x': '(-webkit-min-device-pixel-ratio: 2.5), (min-resolution: 240dpi)'
+);
+
+@import 'base/functions';
+@import 'base/mixins';
+@import 'base/helpers';
+
+// @import 'base/cms-reset';
+// @import 'base/wp-reset';
+
+@import 'layout/header';
+@import 'layout/common';
+@import 'layout/footer';

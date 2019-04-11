@@ -45,6 +45,10 @@ function frameworkCopy(self) {
     case PROMPTS_VALUES.frontend_framework.zurb:
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
+      self.fs.copy(
+        self.destinationPath(`${VALUES.MARKUP_MODULES}/materialize-css/sass/components`),
+        self.destinationPath(`${VALUES.MARKUP_SRC}/scss/vendors/materialize`)
+      );
       break;
     default:
       break;
@@ -82,8 +86,7 @@ module.exports = class extends Generator {
   // conflicts() {}
 
   install() {
-    if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`)))
-      return;
+    if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`))) return;
 
     process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
 
@@ -95,9 +98,7 @@ module.exports = class extends Generator {
 
   end() {
     this.log(chalk.green('🙌 🙌 🙌 Installation done! 🙌 🙌 🙌'));
-    if (
-      this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none
-    ) {
+    if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
       frameworkCopy(this);
     }
   }

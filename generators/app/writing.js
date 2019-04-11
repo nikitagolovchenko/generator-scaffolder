@@ -50,6 +50,13 @@ const additionalPackages = {
         'what-input': '^5.1.2',
       },
     },
+    materialize: {
+      name: 'generator-p2h-materialize',
+      description: 'Gulp build for Materialize',
+      dependencies: {
+        'materialize-css': '^1.0.0-rc.2'
+      },
+    }
   },
 };
 
@@ -135,7 +142,10 @@ module.exports = function writeFiles() {
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/imagemin.js`),
     `${VALUES.GULP_TASKS_MARKUP}/imagemin.js`
   );
-  
+  this.fs.copy(
+    this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass.js`),
+    `${VALUES.GULP_TASKS_MARKUP}/sass.js`
+  );
   this.fs.copy(
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/video.js`),
     `${VALUES.GULP_TASKS_MARKUP}/video.js`
@@ -174,61 +184,62 @@ module.exports = function writeFiles() {
 
   this.fs.copy(this.templatePath(VALUES.SRC_JS), `${VALUES.MARKUP}/${VALUES.SRC_JS}`);
 
-  switch (this.props.project_type) {
-    case PROMPTS_VALUES.project_type.markup_cms:
-      switch (this.props.cms_type) {
-        case PROMPTS_VALUES.cms_type.cms_wp:
-          switch (this.props.js_bundler) {
-            case PROMPTS_VALUES.js_bundler.no_webpack:
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-              break;
-            default:
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-              break;
-          }
-          break;
-        case PROMPTS_VALUES.cms_type.cms_magento:
-          this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_magento`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          break;
-        default:
-          switch (this.props.js_bundler) {
-            case PROMPTS_VALUES.js_bundler.no_webpack:
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-              break;
-            default:
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-              break;
-          }
-          // this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          break;
-      }
-      break;
-    case PROMPTS_VALUES.project_type.markup_banner:
-      break;
-    case PROMPTS_VALUES.project_type.markup_only:
-      switch (this.props.js_bundler) {
-        case PROMPTS_VALUES.js_bundler.no_webpack:
-          this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-          break;
-        default:
-          this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
-          this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
-          break;
-      }
-      break;
-    default:
-      break;
+  if (this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none) {
+    switch (this.props.project_type) {
+      case PROMPTS_VALUES.project_type.markup_cms:
+        switch (this.props.cms_type) {
+          case PROMPTS_VALUES.cms_type.cms_wp:
+            switch (this.props.js_bundler) {
+              case PROMPTS_VALUES.js_bundler.no_webpack:
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+                break;
+              default:
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+                break;
+            }
+            break;
+          case PROMPTS_VALUES.cms_type.cms_magento:
+            this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_magento`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+            break;
+          default:
+            switch (this.props.js_bundler) {
+              case PROMPTS_VALUES.js_bundler.no_webpack:
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+                break;
+              default:
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_other_cms/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+                this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+                break;
+            }
+            break;
+        }
+        break;
+      case PROMPTS_VALUES.project_type.markup_banner:
+        break;
+      case PROMPTS_VALUES.project_type.markup_only:
+        switch (this.props.js_bundler) {
+          case PROMPTS_VALUES.js_bundler.no_webpack:
+            this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+            this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+            this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+            break;
+          default:
+            this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+            this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_only/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+            this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+            break;
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   switch (this.props.frontend_framework) {
@@ -346,29 +357,77 @@ module.exports = function writeFiles() {
       }
       break;
     case PROMPTS_VALUES.frontend_framework.zurb:
-      this.fs.copy(
-        this.templatePath('webpack.config.foundation.js'),
-        `${VALUES.MARKUP}/webpack.config.js`
-      );
-      this.fs.extendJSON(
-        this.destinationPath(`${VALUES.MARKUP}/package.json`),
-        additionalPackages.frameworks.zurb
-      );
-      if (this.props.cms_type === PROMPTS_VALUES.cms_type.cms_wp) {
-        this.fs.copy(
-          this.templatePath(`${VALUES.SRC}/markup_wp_zurb/`),
-          `${VALUES.MARKUP}/${VALUES.SRC}`
-        );
-      } else {
-        this.fs.copy(
-          this.templatePath(`${VALUES.SRC}/markup_zurb/`),
-          `${VALUES.MARKUP}/${VALUES.SRC}`
-        );
+      this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.frameworks.zurb);
+      switch (this.props.js_bundler) {
+        case PROMPTS_VALUES.js_bundler.no_webpack:
+
+          switch (this.props.cms_type) {
+            case PROMPTS_VALUES.cms_type.cms_wp:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_zurb`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_zurb/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+            default:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_zurb`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_zurb/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+          }
+          this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC_JS}/vendors`);
+          break;
+        case PROMPTS_VALUES.js_bundler.webpack:
+          switch (this.props.cms_type) {
+            case PROMPTS_VALUES.cms_type.cms_wp:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_zurb`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_zurb/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+            default:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_zurb`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_zurb/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+          }
+          break;
+        default:
+          break;
       }
-
-
       break;
     case PROMPTS_VALUES.frontend_framework.materialize:
+      this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.frameworks.materialize);
+      switch (this.props.js_bundler) {
+        case PROMPTS_VALUES.js_bundler.no_webpack:
+
+          switch (this.props.cms_type) {
+            case PROMPTS_VALUES.cms_type.cms_wp:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_materialize`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_materialize/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+            default:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_materialize`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_materialize/html/no_webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+          }
+          break;
+        case PROMPTS_VALUES.js_bundler.webpack:
+          switch (this.props.cms_type) {
+            case PROMPTS_VALUES.cms_type.cms_wp:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_materialize`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_wp_materialize/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+            default:
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_materialize`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.copy(this.templatePath(`${VALUES.SRC}/markup_materialize/html/webpack/`), `${VALUES.MARKUP}/${VALUES.SRC}`);
+              this.fs.delete(`${VALUES.MARKUP}/${VALUES.SRC}/html`);
+              break;
+          }
+          break;
+        default:
+          break;
+      }
       break;
     default:
       break;
