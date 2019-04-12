@@ -1,2 +1,2 @@
-import 'what-input';
-import './vendors/foundation';
+import(/* webpackChunkName: "what-input" */ 'what-input');
+import(/* webpackChunkName: "foundation" */ './vendors/foundation');

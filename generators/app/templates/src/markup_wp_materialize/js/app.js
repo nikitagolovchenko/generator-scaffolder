@@ -1,1 +1,1 @@
-import (/* webpackChunkName: "materialize" */ 'materialize-css');
+import(/* webpackChunkName: "materialize" */ 'materialize-css');

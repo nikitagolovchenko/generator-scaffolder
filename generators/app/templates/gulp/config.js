@@ -11,6 +11,7 @@ const config = {
   src: {
     root: paths.src.root,
     sass: paths.src.sass,
+    less: paths.src.less,
     js: paths.src.js,
     images: paths.src.images,
     fonts: paths.src.fonts,

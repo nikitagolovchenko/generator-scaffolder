@@ -98,10 +98,10 @@ module.exports = [
         name: 'SCSS',
         value: PROMPTS_VALUES.bootstrap_css_preprocessor.scss,
       },
-      // {
-      //   name: 'LESS',
-      //   value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
-      // },
+      {
+        name: 'LESS',
+        value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
+      },
     ],
     default: 0,
   },

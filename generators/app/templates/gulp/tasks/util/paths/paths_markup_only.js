@@ -5,6 +5,7 @@ const basePaths = {
   src: {
     root: srcPath,
     sass: `${srcPath}/scss`,
+    less: `${srcPath}/less`,
     js: `${srcPath}/js`,
     images: `${srcPath}/images`,
     fonts: `${srcPath}/fonts`,

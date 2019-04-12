@@ -63,7 +63,7 @@ const additionalPackages = {
 module.exports = function writeFiles() {
   mkDir(path.join(`${VALUES.MARKUP_SRC}/fonts`));
   mkDir(path.join(`${VALUES.MARKUP_SRC}/images`));
-  mkDir(path.join(`${VALUES.MARKUP_SRC}/scss/base`));
+  // mkDir(path.join(`${VALUES.MARKUP_SRC}/scss/base`));
 
   this.fs.copy(this.templatePath('README.md'), `${VALUES.MARKUP}/README.md`);
   this.fs.copy(
@@ -74,10 +74,7 @@ module.exports = function writeFiles() {
     this.templatePath('htmlhint.config.js'),
     `${VALUES.MARKUP}/htmlhint.config.js`
   );
-  this.fs.copy(
-    this.templatePath('sass-lint.yml'),
-    `${VALUES.MARKUP}/sass-lint.yml`
-  );
+  
   this.fs.copy(
     this.templatePath('package.json'),
     `${VALUES.MARKUP}/package.json`
@@ -142,13 +139,14 @@ module.exports = function writeFiles() {
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/imagemin.js`),
     `${VALUES.GULP_TASKS_MARKUP}/imagemin.js`
   );
-  this.fs.copy(
-    this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass.js`),
-    `${VALUES.GULP_TASKS_MARKUP}/sass.js`
-  );
+  
   this.fs.copy(
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/video.js`),
     `${VALUES.GULP_TASKS_MARKUP}/video.js`
+  );
+  this.fs.copy(
+    this.templatePath(`${VALUES.GULP_TASKS_ROOT}/zip.js`),
+    `${VALUES.GULP_TASKS_MARKUP}/zip.js`
   );
 
   // linters
@@ -159,27 +157,6 @@ module.exports = function writeFiles() {
   this.fs.copy(
     this.templatePath(`${VALUES.GULP_TASKS_ROOT}/htmlhint.js`),
     `${VALUES.GULP_TASKS_MARKUP}/htmlhint.js`
-  );
-  this.fs.copy(
-    this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass-lint.js`),
-    `${VALUES.GULP_TASKS_MARKUP}/sass-lint.js`
-  );
-  this.fs.copy(
-    this.templatePath(`${VALUES.GULP_TASKS_ROOT}/linters.js`),
-    `${VALUES.GULP_TASKS_MARKUP}/linters.js`
-  );
-
-  this.fs.copy(
-    this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_functions.scss`),
-    `${VALUES.MARKUP_SRC}/scss/base/_functions.scss`
-  );
-  this.fs.copy(
-    this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_helpers.scss`),
-    `${VALUES.MARKUP_SRC}/scss/base/_helpers.scss`
-  );
-  this.fs.copy(
-    this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_mixins.scss`),
-    `${VALUES.MARKUP_SRC}/scss/base/_mixins.scss`
   );
 
   this.fs.copy(this.templatePath(VALUES.SRC_JS), `${VALUES.MARKUP}/${VALUES.SRC_JS}`);
@@ -440,18 +417,20 @@ module.exports = function writeFiles() {
         `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`
       );
       
-      this.fs.copy(
-        this.templatePath(
-          `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_wp-reset.scss`
-        ),
-        `${VALUES.MARKUP_SRC}/scss/base/_wp-reset.scss`
-      );
-      this.fs.copy(
-        this.templatePath(
-          `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`
-        ),
-        `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`
-      );
+      if (this.props.bootstrap_css_preprocessor != PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
+        this.fs.copy(
+          this.templatePath(
+            `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_wp-reset.scss`
+          ),
+          `${VALUES.MARKUP_SRC}/scss/base/_wp-reset.scss`
+        );
+        this.fs.copy(
+          this.templatePath(
+            `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`
+          ),
+          `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`
+        );
+      }
 
       if (this.props.js_bundler === PROMPTS_VALUES.js_bundler.webpack) {
         this.fs.copy(
@@ -461,12 +440,14 @@ module.exports = function writeFiles() {
       }
       break;
     case PROMPTS_VALUES.cms_type.cms_other:
-      this.fs.copy(
-        this.templatePath(
-          `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`
-        ),
-        `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`
-      );
+      if (this.props.bootstrap_css_preprocessor != PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
+        this.fs.copy(
+          this.templatePath(
+            `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`
+          ),
+          `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`
+        );
+      }
       break;
     case PROMPTS_VALUES.cms_type.cms_magento:
       this.fs.copy(this.templatePath('sass-lint.magento.yml'), `${VALUES.MARKUP}/sass-lint.yml`);
@@ -533,6 +514,64 @@ module.exports = function writeFiles() {
       break;
   }
 
+  if (this.props.bootstrap_css_preprocessor === PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
+    this.fs.copy(
+      this.templatePath(`${VALUES.GULP_TASKS_ROOT}/less.js`),
+      `${VALUES.GULP_TASKS_MARKUP}/less.js`
+    );
+    
+    switch (this.props.js_bundler) {
+      case PROMPTS_VALUES.js_bundler.no_webpack:
+        this.fs.copy(
+          this.templatePath(`${VALUES.GULP_TASKS_ROOT}/build_less_no_webpack.js`),
+          `${VALUES.GULP_TASKS_MARKUP}/build.js`
+        );
+        this.fs.copy(
+          this.templatePath(`${VALUES.GULP_TASKS_ROOT}/watch_less_no_webpack.js`),
+          `${VALUES.GULP_TASKS_MARKUP}/watch.js`
+        );
+        break;
+      default:
+        this.fs.copy(
+          this.templatePath(`${VALUES.GULP_TASKS_ROOT}/build_less.js`),
+          `${VALUES.GULP_TASKS_MARKUP}/build.js`
+        );
+        this.fs.copy(
+          this.templatePath(`${VALUES.GULP_TASKS_ROOT}/watch_less.js`),
+          `${VALUES.GULP_TASKS_MARKUP}/watch.js`
+        );
+        break;
+    }
+  } else {
+    this.fs.copy(
+      this.templatePath('sass-lint.yml'),
+      `${VALUES.MARKUP}/sass-lint.yml`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass-lint.js`),
+      `${VALUES.GULP_TASKS_MARKUP}/sass-lint.js`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.GULP_TASKS_ROOT}/linters.js`),
+      `${VALUES.GULP_TASKS_MARKUP}/linters.js`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.GULP_TASKS_ROOT}/sass.js`),
+      `${VALUES.GULP_TASKS_MARKUP}/sass.js`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_functions.scss`),
+      `${VALUES.MARKUP_SRC}/scss/base/_functions.scss`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_helpers.scss`),
+      `${VALUES.MARKUP_SRC}/scss/base/_helpers.scss`
+    );
+    this.fs.copy(
+      this.templatePath(`${VALUES.SRC_GENERAL_FILES}/scss/base/_mixins.scss`),
+      `${VALUES.MARKUP_SRC}/scss/base/_mixins.scss`
+    );
+  }
 
   if (this.props.cms_type !== PROMPTS_VALUES.cms_type.cms_magento) {
     if (this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none) {
