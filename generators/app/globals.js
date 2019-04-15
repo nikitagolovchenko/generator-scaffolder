@@ -1,31 +1,31 @@
 const PROMPTS_VALUES = {
   project_type: {
     name: 'project_type',
-    markup_only: 'markup_only',
-    markup_cms: 'markup_cms',
+    markup: 'markup',
+    markup_cms: 'markup',
     markup_banner: 'markup_banner',
   },
   cms_type: {
     name: 'cms_type',
-    cms_wp: 'cms_wp',
-    cms_magento: 'cms_magento',
-    cms_other: 'cms_other',
+    cms_wp: 'wp',
+    cms_magento: 'magento',
+    cms_other: 'other',
   },
   frontend_framework: {
     name: 'frontend_framework',
-    none: 'none',
+    none: '',
     bootstrap: 'bootstrap',
     zurb: 'zurb',
     materialize: 'materialize',
   },
   bootstrap_version: {
     name: 'bootstrap_version',
-    bootstrap_4: 'bootstrap_4',
-    bootstrap_3: 'bootstrap_3',
+    bootstrap_4: '4',
+    bootstrap_3: '3',
   },
   bootstrap_css_preprocessor: {
     name: 'bootstrap_css_preprocessor',
-    scss: 'scss',
+    sass: 'sass',
     less: 'less',
   },
   js_bundler: {
@@ -51,7 +51,7 @@ const SRC_IMAGES = `${SRC}/images`;
 const SRC_FONTS = `${SRC}/fonts`;
 const SRC_GENERAL_FILES = `${SRC}/general_files`;
 const SRC_JS = `${SRC}/js`;
-const SRC_JS_DEFAULT = `${SRC}/js_no-webpack`;
+const SRC_JS_NO_WEBPACK = `${SRC}/js_no-webpack`;
 const SRC_JS_PUBLIC_PATH = `${SRC}/js_publicPath_wp`;
 const GULP_TASKS_ROOT = `${GULP}/tasks`;
 const GULP_TASKS_MARKUP = `${MARKUP}/${GULP_TASKS_ROOT}`;
@@ -63,7 +63,7 @@ exports.SRC_IMAGES = SRC_IMAGES;
 exports.SRC_FONTS = SRC_FONTS;
 exports.SRC_GENERAL_FILES = SRC_GENERAL_FILES;
 exports.SRC_JS = SRC_JS;
-exports.SRC_JS_DEFAULT = SRC_JS_DEFAULT;
+exports.SRC_JS_NO_WEBPACK = SRC_JS_NO_WEBPACK;
 exports.SRC_JS_PUBLIC_PATH = SRC_JS_PUBLIC_PATH;
 exports.DEST = DEST;
 exports.MARKUP = MARKUP;

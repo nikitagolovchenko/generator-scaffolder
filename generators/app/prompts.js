@@ -8,7 +8,7 @@ module.exports = [
     choices: [
       {
         name: 'Markup only',
-        value: PROMPTS_VALUES.project_type.markup_only,
+        value: PROMPTS_VALUES.project_type.markup,
       },
       {
         name: 'Markup + CMS',
@@ -96,7 +96,7 @@ module.exports = [
     choices: [
       {
         name: 'SCSS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.scss,
+        value: PROMPTS_VALUES.bootstrap_css_preprocessor.sass,
       },
       {
         name: 'LESS',

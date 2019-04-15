@@ -1,7 +1,10 @@
 const Generator = require('yeoman-generator');
+const updateNotifier = require('update-notifier');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const fsNode = require('fs');
 
+const pkg = require('../../package.json');
 const PROMPTS = require('./prompts');
 const WRITING = require('./writing');
 const VALUES = require('./globals');
@@ -62,6 +65,7 @@ module.exports = class extends Generator {
 
     // Next, add your custom code
     this.option('babel'); // This method adds support for a `--babel` flag
+    updateNotifier({pkg}).notify();
   }
 
   prompting() {
@@ -83,10 +87,12 @@ module.exports = class extends Generator {
     WRITING.call(this);
   }
 
+  
+
   // conflicts() {}
 
   install() {
-    if (this.fs.exists(this.destinationPath(`${VALUES.MARKUP_MODULES}`))) return;
+    if (this.checkModulesFolder()) return;
 
     process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
 
@@ -96,9 +102,13 @@ module.exports = class extends Generator {
     });
   }
 
+  checkModulesFolder() {
+    return fsNode.existsSync(this.destinationPath(VALUES.MARKUP_MODULES));
+  }
+
   end() {
-    this.log(chalk.green('🙌 🙌 🙌 Installation done! 🙌 🙌 🙌'));
-    if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
+    this.log(chalk.green(`🙌 🙌 🙌 Installation done! Run command ${chalk.red('gulp')} from markup folder 🙌 🙌 🙌`));
+    if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none && !this.checkModulesFolder()) {
       frameworkCopy(this);
     }
   }
