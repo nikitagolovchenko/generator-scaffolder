@@ -7,8 +7,9 @@
     "email": "support@p2h.com",
     "url": "https://www.p2h.com/"
   },
+  "repository": "mrlss/generator-scaffolder",
   "url": "https://www.p2h.com/",
-  "license": "MIT License",
+  "license": "MIT",
   "keywords": [
     "gulp",
     "webpack",
@@ -33,9 +34,7 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.11.1",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "globby": "^8.0.1",
     "gulp": "3.9.1",
