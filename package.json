@@ -27,7 +27,9 @@
     "eslint-config-prettier": "^2.10.0",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-react": "^7.12.4",
     "husky": "^0.14.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.1.1",
@@ -41,8 +43,17 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "bootstrap-less": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
     "chalk": "^2.1.0",
+    "foundation-sites": "^6.5.3",
+    "fs-extra": "^7.0.1",
+    "materialize-css": "^1.0.0",
+    "mocha": "^6.1.3",
+    "popper.js": "^1.15.0",
     "update-notifier": "^2.5.0",
+    "what-input": "^5.2.1",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
@@ -50,8 +61,8 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "pretest": "eslint .",
-    "test": "jest"
+    "lint": "eslint --ignore-path .gitignore ./test/a.js --fix",
+    "test": "mocha -S --timeout infinite"
   },
   "lint-staged": {
     "*.js": [
