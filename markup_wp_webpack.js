@@ -16,10 +16,10 @@ const expectedFiles = [`${VALUES.SRC_SCSS}/vendors/_normalize.scss`].concat(
 const nonExpectedFiles = [].concat(VALUES.nonWebpackFiles);
 
 const expectedContent = [
-  [`${VALUES.SRC_SCSS}/style.scss`, 'vendors/normalize'],
-].concat(VALUES.cmsSpecificContent_WP);
+  [`${VALUES.SRC_SCSS}/main.scss`, 'vendors/normalize'],
+].concat(VALUES.generalExpectedContent);
 
-const nonExpectedContent = [].concat(VALUES.generalExpectedContent);
+const nonExpectedContent = [];
 
 describe(chalk.blue('Markup + WP + webpack'), () => {
   const AppFolderPath = path.join(VALUES.INIT_CWD, 'generators/app');
@@ -51,7 +51,11 @@ describe(chalk.blue('Markup + WP + webpack'), () => {
         `${VALUES.DEST}`,
         `${VALUES.GULP}`,
         `!${VALUES.ROOT_MODULES}`,
-      ].concat(expectedFiles)
+      ].concat(
+        VALUES.generalExpectedFiles,
+        VALUES.webpackFiles,
+        VALUES.sassFiles
+      )
     );
     process.chdir(VALUES.INIT_CWD);
   });

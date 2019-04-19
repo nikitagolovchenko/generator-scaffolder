@@ -180,7 +180,7 @@ exports.cmsSpecificFiles_WP = [
 ];
 
 exports.cmsSpecificContent_WP = [
-  [`${GULP_TASKS}/util/paths.js`, 'css: `${destPath}`'],
+  [`${GULP_TASKS}/util/paths.js`, 'css: destPath'],
   [`${SRC}/index.html`, `<link rel="stylesheet" href="style.css">`],
 ];
 

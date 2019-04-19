@@ -52,11 +52,7 @@ describe(chalk.blue('Static markup + webpack'), () => {
         `${VALUES.DEST}`,
         `${VALUES.GULP}`,
         `!${VALUES.ROOT_MODULES}`,
-      ].concat(
-        VALUES.generalExpectedFiles,
-        VALUES.webpackFiles,
-        VALUES.sassFiles
-      )
+      ].concat(expectedFiles)
     );
     process.chdir(VALUES.INIT_CWD);
   });

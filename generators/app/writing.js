@@ -20,11 +20,13 @@ module.exports = function writeFiles() {
     let bootstrapVersion = '';
     let bootstrapPreprocessor = '';
 
+    console.log(this.props);
+
     if (!!this.props.project_type) {
       projectName = `${this.props.project_type}`;
     }
     if (this.props.project_type === PROMPTS_VALUES.project_type.markup_cms) {
-      projectName = VALUES.project_type.markup;
+      projectName = PROMPTS_VALUES.project_type.markup;
     }
     if (this.props.cms_type === PROMPTS_VALUES.cms_type.wp) {
       cmsName = `_${this.props.cms_type}`;
@@ -41,6 +43,8 @@ module.exports = function writeFiles() {
 
     let folderName = `${projectName}${cmsName}${frameworkName}${bootstrapVersion}${bootstrapPreprocessor}`;
     let frameworkPackage = `${frameworkName}${bootstrapVersion}${bootstrapPreprocessor}`;
+
+    console.log(folderName);
 
     while (frameworkPackage.charAt(0) === '_') {
       frameworkPackage = frameworkPackage.substr(1);
@@ -164,7 +168,7 @@ module.exports = function writeFiles() {
   generateFiles();
 
   switch (this.props.cms_type) {
-    case PROMPTS_VALUES.cms_type.cms_wp:
+    case PROMPTS_VALUES.cms_type.wp:
       copyFiles([
         {
           from: `${VALUES.GULP_TASKS_ROOT}/util/paths/paths_wp.js`,
@@ -200,7 +204,7 @@ module.exports = function writeFiles() {
         ]);
       }
       break;
-    case PROMPTS_VALUES.cms_type.cms_other:
+    case PROMPTS_VALUES.cms_type.other:
       if (
         this.props.bootstrap_css_preprocessor !=
         PROMPTS_VALUES.bootstrap_css_preprocessor.less
@@ -219,7 +223,7 @@ module.exports = function writeFiles() {
         ]);
       }
       break;
-    case PROMPTS_VALUES.cms_type.cms_magento:
+    case PROMPTS_VALUES.cms_type.magento:
       copyFiles([
         {
           from: 'sass-lint.magento.yml',
