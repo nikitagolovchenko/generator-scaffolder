@@ -3,15 +3,14 @@ const fs = require('fs');
 const child_process = require('child_process');
 const VALUES = require('../generators/app/globals');
 
-const expectedFiles = [];
-const testModules = item =>
-  `${VALUES.TEST_FOLDER}/${VALUES.MARKUP_MODULES}/${item}`;
+const testModules = item => `${VALUES.TEST_FOLDER}/${VALUES.MARKUP_MODULES}/${item}`;
 
 let generateDependencies = (arr, cb) => {
   arr.forEach((item, num) => {
     cb(item, num);
   });
 };
+let expectedFiles = [];
 
 describe(chalk.blue('Installing frameworks dependencides'), () => {
   beforeEach(async () => {
@@ -30,13 +29,10 @@ describe(chalk.blue('Installing frameworks dependencides'), () => {
     }
     await generateDependencies(expectedFiles, (item, num) => {
       if (!fs.existsSync(testModules(item.name))) {
-        child_process.execSync(
-          `npm install ${item.name}@${item.version} --force`,
-          {
-            cwd: testModules(item.name),
-            stdio: ['inherit', 'inherit', 'inherit'],
-          }
-        );
+        child_process.execSync(`npm install ${item.name}@${item.version} --force`, {
+          cwd: testModules(item.name),
+          stdio: ['inherit', 'inherit', 'inherit'],
+        });
       }
     });
   });

@@ -4,7 +4,7 @@ const del = require('del');
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
 const VALUES = require('../generators/app/globals');
-const { PROMPTS_VALUES } = require('../generators/app/globals');
+const {PROMPTS_VALUES} = require('../generators/app/globals');
 
 const expectedFiles = [`${VALUES.SRC_SCSS}/vendors/_normalize.scss`].concat(
   VALUES.generalExpectedFiles,
@@ -15,9 +15,7 @@ const expectedFiles = [`${VALUES.SRC_SCSS}/vendors/_normalize.scss`].concat(
 
 const nonExpectedFiles = [].concat(VALUES.nonWebpackFiles);
 
-const expectedContent = [
-  [`${VALUES.SRC_SCSS}/style.scss`, 'vendors/normalize'],
-].concat(VALUES.cmsSpecificContent_WP);
+const expectedContent = [[`${VALUES.SRC_SCSS}/style.scss`, 'vendors/normalize']].concat(VALUES.cmsSpecificContent_WP);
 
 const nonExpectedContent = [].concat(VALUES.generalExpectedContent);
 
@@ -45,14 +43,7 @@ describe(chalk.blue('Markup + WP + webpack'), () => {
     done();
   });
   afterEach(async () => {
-    await del(
-      [
-        `${VALUES.SRC}`,
-        `${VALUES.DEST}`,
-        `${VALUES.GULP}`,
-        `!${VALUES.ROOT_MODULES}`,
-      ].concat(expectedFiles)
-    );
+    await del([`${VALUES.SRC}`, `${VALUES.DEST}`, `${VALUES.GULP}`, `!${VALUES.ROOT_MODULES}`].concat(expectedFiles));
     process.chdir(VALUES.INIT_CWD);
   });
 });

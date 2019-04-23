@@ -2,8 +2,8 @@ const path = require('path');
 const mkDir = require('mkdirp');
 
 const VALUES = require('./globals');
-const { PROMPTS_VALUES } = require('./globals');
-const { additionalPackages } = require('./globals');
+const {PROMPTS_VALUES} = require('./globals');
+const {additionalPackages} = require('./globals');
 
 module.exports = function writeFiles() {
   mkDir(path.join(`${VALUES.MARKUP_SRC}/fonts`));
@@ -19,8 +19,6 @@ module.exports = function writeFiles() {
     let frameworkName = '';
     let bootstrapVersion = '';
     let bootstrapPreprocessor = '';
-
-    console.log(this.props);
 
     if (!!this.props.project_type) {
       projectName = `${this.props.project_type}`;
@@ -43,8 +41,6 @@ module.exports = function writeFiles() {
 
     let folderName = `${projectName}${cmsName}${frameworkName}${bootstrapVersion}${bootstrapPreprocessor}`;
     let frameworkPackage = `${frameworkName}${bootstrapVersion}${bootstrapPreprocessor}`;
-
-    console.log(folderName);
 
     while (frameworkPackage.charAt(0) === '_') {
       frameworkPackage = frameworkPackage.substr(1);
@@ -175,21 +171,14 @@ module.exports = function writeFiles() {
           to: `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`,
         },
       ]);
-      if (
-        this.props.bootstrap_css_preprocessor !==
-        PROMPTS_VALUES.bootstrap_css_preprocessor.less
-      ) {
+      if (this.props.bootstrap_css_preprocessor !== PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
         copyFiles([
           {
-            from: `${
-              VALUES.SRC_GENERAL_FILES
-            }/scss/cms_specific/_wp-reset.scss`,
+            from: `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_wp-reset.scss`,
             to: `${VALUES.MARKUP_SRC}/scss/base/_wp-reset.scss`,
           },
           {
-            from: `${
-              VALUES.SRC_GENERAL_FILES
-            }/scss/cms_specific/_cms-reset.scss`,
+            from: `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`,
             to: `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`,
           },
         ]);
@@ -205,15 +194,10 @@ module.exports = function writeFiles() {
       }
       break;
     case PROMPTS_VALUES.cms_type.other:
-      if (
-        this.props.bootstrap_css_preprocessor !=
-        PROMPTS_VALUES.bootstrap_css_preprocessor.less
-      ) {
+      if (this.props.bootstrap_css_preprocessor != PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
         copyFiles([
           {
-            from: `${
-              VALUES.SRC_GENERAL_FILES
-            }/scss/cms_specific/_cms-reset.scss`,
+            from: `${VALUES.SRC_GENERAL_FILES}/scss/cms_specific/_cms-reset.scss`,
             to: `${VALUES.MARKUP_SRC}/scss/base/_cms-reset.scss`,
           },
           {
@@ -234,10 +218,7 @@ module.exports = function writeFiles() {
           to: `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`,
         },
       ]);
-      this.fs.extendJSON(
-        this.destinationPath(`${VALUES.MARKUP}/package.json`),
-        additionalPackages.cms.magento
-      );
+      this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.cms.magento);
       break;
     default:
       copyFiles([
@@ -305,10 +286,7 @@ module.exports = function writeFiles() {
       break;
   }
 
-  if (
-    this.props.bootstrap_css_preprocessor ===
-    PROMPTS_VALUES.bootstrap_css_preprocessor.less
-  ) {
+  if (this.props.bootstrap_css_preprocessor === PROMPTS_VALUES.bootstrap_css_preprocessor.less) {
     copyFiles([
       {
         from: `${VALUES.GULP_TASKS_ROOT}/less.js`,
@@ -375,9 +353,7 @@ module.exports = function writeFiles() {
   }
 
   if (this.props.cms_type !== PROMPTS_VALUES.cms_type.cms_magento) {
-    if (
-      this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none
-    ) {
+    if (this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none) {
       copyFiles([
         {
           from: `${VALUES.SRC_GENERAL_FILES}/scss/common_files/*`,
