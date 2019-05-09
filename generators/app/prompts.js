@@ -30,7 +30,7 @@ module.exports = [
     choices: [
       {
         name: 'Wordpress',
-        value: PROMPTS_VALUES.cms_type.cms_wp,
+        value: PROMPTS_VALUES.cms_type.wp,
       },
       // {
       //   name: 'Magento',
@@ -38,7 +38,7 @@ module.exports = [
       // },
       {
         name: 'Other CMS',
-        value: PROMPTS_VALUES.cms_type.cms_other,
+        value: PROMPTS_VALUES.cms_type.other,
       },
     ],
     default: 0,
