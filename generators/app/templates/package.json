@@ -17,6 +17,10 @@
     "P2H",
     "yeoman-generator"
   ],
+  "browserslist": [
+    "last 2 versions",
+    "IE 11"
+  ],
   "devDependencies": {
     "@babel/core": "~7.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",

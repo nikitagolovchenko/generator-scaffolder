@@ -14,10 +14,10 @@ module.exports = [
         name: 'Markup + CMS',
         value: PROMPTS_VALUES.project_type.markup_cms,
       },
-      {
-        name: 'HTML5 Banner',
-        value: PROMPTS_VALUES.project_type.markup_banner,
-      },
+      // {
+      //   name: 'HTML5 Banner',
+      //   value: PROMPTS_VALUES.project_type.markup_banner,
+      // },
     ],
     default: 0,
   },

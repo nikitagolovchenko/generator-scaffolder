@@ -15,8 +15,7 @@ const config = require('../config');
 
 const processors = [
   autoprefixer({
-    cascade: false,
-    browsers: ['last 2 versions', 'IE 11'],
+    cascade: false
   }),
   mqpacker({
     sort: true,
