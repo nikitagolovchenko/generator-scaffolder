@@ -55,6 +55,7 @@
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "*",
     "gulp-sass-lint": "^1.4.0",
+    "gulp-sass-unicode": "^1.0.5",
     "gulp-sourcemaps": "*",
     "gulp-svgmin": "^2.1.0",
     "gulp-zip": "^4.2.0",

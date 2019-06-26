@@ -10,6 +10,7 @@ const perfectionist = require('perfectionist');
 const csso = require('postcss-csso');
 const gulpif = require('gulp-if');
 const cssDeclarationSorter = require('css-declaration-sorter');
+const sassUnicode = require('gulp-sass-unicode');
 const tildeImporter = require('node-sass-tilde-importer');
 const config = require('../config');
 
@@ -57,6 +58,7 @@ gulp.task('sass', ['sass-lint'], () =>
     .pipe(postcss(processors))
     .pipe(gulpif(config.getCssOutput() === 'compressed', postcss(csso)))
     .pipe(gulpif(config.development(), sourcemaps.write('.')))
+    .pipe(sassUnicode())
     .pipe(gulp.dest(config.dest.css))
 );
 
