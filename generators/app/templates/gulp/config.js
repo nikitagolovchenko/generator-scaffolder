@@ -6,7 +6,7 @@ const dev = 'development';
 let env = process.env.NODE_ENV;
 
 const config = {
-  environment: 'development',
+  environment: env,
   cssOutput: 'expanded',
   src: {
     root: paths.src.root,
@@ -31,13 +31,9 @@ const config = {
     this.cssOutput = output;
   },
   getCssOutput: () => this.cssOutput,
-  setEnvironment: environment => {
-    this.environment = environment;
-    env = environment;
-  },
-  getEnvironment: () => this.environment,
-  development: () => this.environment === dev,
-  production: () => this.environment === prod,
+  getEnvironment: () => env,
+  development: () => env === dev,
+  production: () => env === prod,
   showEnvironment: () => {
     if (env === dev) {
       /* eslint-disable no-console */

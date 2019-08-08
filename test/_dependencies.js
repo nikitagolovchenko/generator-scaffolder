@@ -37,7 +37,7 @@ describe(chalk.blue('Installing frameworks dependencides'), () => {
     });
   });
 
-  it(chalk.yellow('Create expected files'), async () => {
+  it(chalk.yellow('All dependencies for test are installed'), async () => {
     await generateDependencies(expectedFiles, (item, num) => {
       fs.existsSync(testModules(item.name));
     });

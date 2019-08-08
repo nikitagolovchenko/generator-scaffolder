@@ -41,14 +41,8 @@ npm i
 
 - Available commands:
 
-  - `gulp` - this will compile the entire project into development mode, start browserSync on localhost and will watch all the changes to the SCSS, html, images etc.
-  - `gulp dist`- this is used to compile project assets into production.
-
-  - Additional commands for CSS compilation:
-
-    - `gulp compact` - [compact output style](https://github.com/sass/node-sass#outputstyle) for CSS
-    - `gulp compressed` - [compressed output style](https://github.com/sass/node-sass#outputstyle) for CSS
-    - `gulp nested` - [nested output style](https://github.com/sass/node-sass#outputstyle) for CSS
+  - `npm run dev` - this will compile the entire project into development mode, start browserSync on localhost and will watch all the changes to the SCSS, html, images etc.
+  - `npm run build`- this is used to compile project assets into production.
 
   - **_NOTE:_** by default - we have an [extended](https://github.com/sass/node-sass#outputstyle) version of compiled CSS both in dev and prod mode.
 

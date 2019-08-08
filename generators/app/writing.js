@@ -207,19 +207,19 @@ module.exports = function writeFiles() {
         ]);
       }
       break;
-    case PROMPTS_VALUES.cms_type.magento:
-      copyFiles([
-        {
-          from: 'sass-lint.magento.yml',
-          to: `${VALUES.MARKUP}/sass-lint.yml`,
-        },
-        {
-          from: `${VALUES.GULP_TASKS_ROOT}/util/paths/paths_markup_only.js`,
-          to: `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`,
-        },
-      ]);
-      this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.cms.magento);
-      break;
+    // case PROMPTS_VALUES.cms_type.magento:
+    //   copyFiles([
+    //     {
+    //       from: 'sass-lint.magento.yml',
+    //       to: `${VALUES.MARKUP}/sass-lint.yml`,
+    //     },
+    //     {
+    //       from: `${VALUES.GULP_TASKS_ROOT}/util/paths/paths_markup_only.js`,
+    //       to: `${VALUES.GULP_TASKS_MARKUP}/util/paths.js`,
+    //     },
+    //   ]);
+    //   this.fs.extendJSON(this.destinationPath(`${VALUES.MARKUP}/package.json`), additionalPackages.cms.magento);
+    //   break;
     default:
       copyFiles([
         {
@@ -352,14 +352,12 @@ module.exports = function writeFiles() {
     ]);
   }
 
-  if (this.props.cms_type !== PROMPTS_VALUES.cms_type.cms_magento) {
-    if (this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none) {
-      copyFiles([
-        {
-          from: `${VALUES.SRC_GENERAL_FILES}/scss/common_files/*`,
-          to: `${VALUES.MARKUP_SRC}/scss/base`,
-        },
-      ]);
-    }
+  if (this.props.frontend_framework === PROMPTS_VALUES.frontend_framework.none) {
+    copyFiles([
+      {
+        from: `${VALUES.SRC_GENERAL_FILES}/scss/common_files/*`,
+        to: `${VALUES.MARKUP_SRC}/scss/base`,
+      },
+    ]);
   }
 };

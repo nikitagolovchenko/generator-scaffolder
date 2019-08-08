@@ -191,4 +191,12 @@ exports.sassFiles = [
   `${GULP_TASKS}/sass.js`,
 ];
 
-exports.nonFrameworkScssFiles = [`${SRC_SCSS}/base/*`];
+exports.nonFrameworkScssFiles = [
+  `${SRC_SCSS}/base/_functions.scss`,
+  `${SRC_SCSS}/base/_helpers.scss`,
+  `${SRC_SCSS}/base/_mixins.scss`,
+  `${SRC_SCSS}/base/_forms.scss`,
+  `${SRC_SCSS}/base/_reset.scss`,
+  `${SRC_SCSS}/base/_typography.scss`,
+  `${SRC_SCSS}/base/_variables.scss`,
+];

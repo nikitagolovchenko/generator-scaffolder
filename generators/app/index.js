@@ -30,7 +30,7 @@ function frameworkCopy(self) {
           switch (self.props.bootstrap_css_preprocessor) {
             case PROMPTS_VALUES.bootstrap_css_preprocessor.less:
               self.fs.copy(
-                self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap/less`),
+                self.destinationPath(`${VALUES.MARKUP_MODULES}/bootstrap-less/bootstrap/`),
                 self.destinationPath(`${VALUES.MARKUP_SRC}/less/vendors/bootstrap`)
               );
               break;
@@ -114,10 +114,10 @@ module.exports = class extends Generator {
 
     process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
 
-    this.installDependencies({
-      bower: false,
-      npm: true,
-    });
+    // this.installDependencies({
+    //   bower: false,
+    //   npm: true,
+    // });
   }
 
   checkModulesFolder() {
@@ -125,9 +125,9 @@ module.exports = class extends Generator {
   }
 
   end() {
-    this.log(chalk.green(`🙌 🙌 🙌 Installation done! Run command ${chalk.red('gulp')} from markup folder 🙌 🙌 🙌`));
-    if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
-      frameworkCopy(this);
-    }
+    this.log(chalk.green(`🙌 🙌 🙌 Installation done! Install modules and run command ${chalk.red('gulp')} from markup folder 🙌 🙌 🙌`));
+    // if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
+    //   frameworkCopy(this);
+    // }
   }
 };

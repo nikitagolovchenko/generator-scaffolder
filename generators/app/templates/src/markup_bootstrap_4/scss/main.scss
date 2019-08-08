@@ -1,6 +1,6 @@
 @import 'vendors/include-media';
-@import 'vendors/bootstrap/functions';
-@import 'vendors/bootstrap/variables';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 @import 'bootstrap-custom';
 
 $breakpoints: (
@@ -24,7 +24,7 @@ $media-expressions: (
 
 // ligatured operators ≥ ≤
 
-@import 'vendors/bootstrap/mixins';
+@import '~bootstrap/scss/mixins.scss';
 
 @import 'base/functions';
 @import 'base/mixins';

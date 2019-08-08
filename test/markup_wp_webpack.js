@@ -42,6 +42,7 @@ describe(chalk.blue('Markup + WP + webpack'), () => {
     assert.noFileContent(nonExpectedContent);
     done();
   });
+  
   afterEach(async () => {
     await del([`${VALUES.SRC}`, `${VALUES.DEST}`, `${VALUES.GULP}`, `!${VALUES.ROOT_MODULES}`].concat(expectedFiles));
     process.chdir(VALUES.INIT_CWD);

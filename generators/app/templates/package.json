@@ -18,9 +18,12 @@
     "yeoman-generator"
   ],
   "browserslist": [
-    "last 2 versions",
-    "IE 11"
+    "last 2 versions, IE 11"
   ],
+  "scripts": {
+    "dev": "NODE_ENV=development gulp",
+    "build": "NODE_ENV=production gulp dist"
+  },
   "devDependencies": {
     "@babel/core": "~7.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
@@ -31,6 +34,7 @@
     "babel-loader": "^8.0.0-beta.4",
     "browser-sync": "^2.26.0",
     "chalk": "^2.4.1",
+    "core-js": "^3.1.4",
     "css-declaration-sorter": "^4.0.1",
     "css-mqpacker": "^7.0.0",
     "del": "^3.0.0",
@@ -59,6 +63,7 @@
     "gulp-sourcemaps": "*",
     "gulp-svgmin": "^2.1.0",
     "gulp-zip": "^4.2.0",
+    "hard-source-webpack-plugin": "^0.13.1",
     "imagemin-jpeg-recompress": "^5.1.0",
     "imagemin-pngquant": "^6.0.0",
     "jquery": "^3.3.1",

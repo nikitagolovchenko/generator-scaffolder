@@ -114,10 +114,10 @@ module.exports = [
         name: 'Yes, lets use it!',
         value: PROMPTS_VALUES.js_bundler.webpack,
       },
-      {
-        name: 'No',
-        value: PROMPTS_VALUES.js_bundler.no_webpack,
-      },
+      // {
+      //   name: 'No',
+      //   value: PROMPTS_VALUES.js_bundler.no_webpack,
+      // },
     ],
     default: 0,
   },
