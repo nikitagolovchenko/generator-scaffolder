@@ -13,16 +13,14 @@
   "keywords": [
     "gulp",
     "webpack",
-    "boilerplate",
-    "P2H",
-    "yeoman-generator"
+    "P2H"
   ],
   "browserslist": [
     "last 2 versions, IE 11"
   ],
   "scripts": {
-    "dev": "NODE_ENV=development gulp",
-    "build": "NODE_ENV=production gulp dist"
+    "dev": "cross-env NODE_ENV=development gulp",
+    "build": "cross-env NODE_ENV=production gulp dist"
   },
   "devDependencies": {
     "@babel/core": "~7.3",
@@ -35,6 +33,7 @@
     "browser-sync": "^2.26.0",
     "chalk": "^2.4.1",
     "core-js": "^3.1.4",
+    "cross-env": "^5.2.0",
     "css-declaration-sorter": "^4.0.1",
     "css-mqpacker": "^7.0.0",
     "del": "^3.0.0",
