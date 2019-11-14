@@ -1,71 +1,54 @@
-# generator-p2h [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# Webpack build for optimized load speed
 
-> Build for common types of projects using gulp, webpack
+## Features 🤩
 
-## Installation
+- one file to control project - `config.json` 🔥:
 
-```bash
-npm install -g yo
-npm install -g generator-p2h
-```
+  - Control input/output folders for for files, filenames, folder names etc. Make your own structure of project if you need (not tested yet :D );
+  - different entries for different templates (with default index.html/index.js/main.scss)
+  - enable/disable linters with one line (`linters: true/false`)
+  - debug mode (`debug: true/false` bundle sizes/groups preview on production);
+  - server settings (host and port - for backend based projects, where you need to proxy PHP server);
 
-Then generate your new project in the new folder:
+- automatic code splitting for JS
+- common bundles between different entry files (index.js, about.js == common~index~about.js)
+- gzip encoding while previewing project - to boost load speed (brotli is comming also)
+- JS/CSS minification (critical CSS and removed unused CSS styles are incomming `critical_css: true/false`)
+- Stylelint - checking coding style for SCSS 🔥 Configured on `stylelint.config.js` - based on SASS guidlines rules
+- Prettier - format your files based on config automatically 🔥 - not mess with indentration, line widths, indentation widths etc. Based on `prettier.config.js` file and `.editorconfig`;
+- ES6 / newest features🔥 - Promises, Async/await, Maps and MORE
 
-```bash
-yo p2h
-```
+## Requirements ⚙️
 
-## How to use:
+Node JS > 8
+NPM/Yarn
 
-- Install [Node JS](https://nodejs.org) on your local machine, recommended version should be used (minimal version is 8)
+## Usage 🤔
 
-- Install [GULP Js](https://gulpjs.com/) globally
+All commands are listed in package.json file in scripts section and described below:
 
-```bash
-npm install gulp-cli -g
-```
+### To install all dependencies run `npm i` or `yarn`
 
-- Install [NPM](https://www.npmjs.com/get-npm) globally on your local machine - it could be installed with NODE JS. To check if you have it installed type in the terminal
+##### Dont use npm and yarn in same project - this can lead to unnexpected results
 
-```bash
-npm -v
-```
+### Dev mode `npm dev` or `npm run dev` or `yarn dev`
 
-- From the folder `markup` open terminal/command prompt
+  - remove `dist` folder
+  - build assets in development mode
+  - running dev server
+  - watching changes
 
-- To install all project dependencies type
+### Production mode `npm build` or `npm run build` or `yarn build`
 
-```bash
-npm i
-```
+  - remove `dist` folder
+  - build assets in production mode into `dist` folder
 
-- Available commands:
 
-  - `npm run dev` - this will compile the entire project into development mode, start browserSync on localhost and will watch all the changes to the SCSS, html, images etc.
-  - `npm run build`- this is used to compile project assets into production.
+### Utility scripts
 
-  - **_NOTE:_** by default - we have an [extended](https://github.com/sass/node-sass#outputstyle) version of compiled CSS both in dev and prod mode.
+ - `npm lint:fix` - running Stylelint fix of common issues in SCSS files. Not all of issues can be solved automatically. Good to use when you have a lot of issues with indentation (lint-staged is comming - checking codestyled in every git push. Perfect for GIT flow)
 
-### Dev tips:
+ - `npm run preview` - running local server to preview builded files - has a benefit of GZIP encoding 🔥 that can increase loading speed in times.
 
-- While developing - try not to push a dist folder to the repository, to prevent additional conflicts.
 
-### **IMPORTANT:**
 
-If you are facing some troubles while installing build on your machine, please make sure that you have a correct version of the NODE JS.
-To check the version - open terminal and type: `node -v` . It should be 10+ (maybe 8 is okay, but 6 is old, there is no support for node 6 in some modules that are used).
-
-## Getting To Know Yeoman
-
-- Feel free to [learn more about Yeoman](http://yeoman.io/).
-
-## License
-
-MIT © [P2H](https://www.p2h.com/)
-
-[npm-image]: https://badge.fury.io/js/generator-p2h.svg
-[npm-url]: https://npmjs.org/package/generator-p2h
-[travis-image]: https://travis-ci.org/mrlss/generator-p2h.svg?branch=master
-[travis-url]: https://travis-ci.org/mrlss/generator-p2h
-[daviddm-image]: https://david-dm.org/mrlss/generator-p2h.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/mrlss/generator-p2h

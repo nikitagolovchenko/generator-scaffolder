@@ -1,0 +1,69 @@
+{
+  "title": "Test title",
+  "src": "./src",
+  "dest": "./dist",
+  "linters": true,
+  "critical_css": false,
+  "debug": false,
+  "server": {
+    "port": "8080",
+    "host": "localhost"
+  },
+  "env": {
+    "dev": "development",
+    "prod": "production"
+  },
+  "styles": {
+    "name": "css",
+    "bundle": "main",
+    "src": "./src/styles",
+    "dest": "./dist/css",
+    "glob": "**/*.scss",
+    "extension": "scss"
+  },
+  "scripts": {
+    "name": "js",
+    "bundle": "index",
+    "src": "./src/js",
+    "dest": "./dist/js",
+    "glob": "**/*.js",
+    "extension": "js"
+  },
+  "templates": {
+    "name": "templates",
+    "bundle": "index",
+    "src": "./src/views/pages",
+    "dest": "./dist",
+    "glob": "*.html",
+    "extension": "html"
+  },
+  "entries": {
+    "about": ["./src/styles/main.scss", "./src/js/about.js", "./src/views/pages/about.html"]
+  },
+  "static": {
+    "images": {
+      "name": "images",
+      "src": "./src/images",
+      "dest": "./dist/images",
+      "glob": "**/**.*"
+    },
+    "fonts": {
+      "name": "fonts",
+      "src": "./src/fonts",
+      "dest": "./dist/fonts",
+      "glob": "**/**.*"
+    },
+    "video": {
+      "name": "video",
+      "src": "./src/video",
+      "dest": "./dist/video",
+      "glob": "**/**.*"
+    },
+    "ajax": {
+      "name": "ajax",
+      "src": "./src/inc",
+      "dest": "./dist/inc",
+      "glob": "**/**.*"
+    }
+  }
+}
