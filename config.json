@@ -1,10 +1,12 @@
 {
-  "title": "Test title",
+  "title": "My awesome project!",
   "src": "./src",
   "dest": "./dist",
+  "debug": false,
   "linters": true,
   "critical_css": false,
-  "debug": false,
+  "cache": false,
+  "minimize": false,
   "server": {
     "port": "8080",
     "host": "localhost"
@@ -16,54 +18,46 @@
   "styles": {
     "name": "css",
     "bundle": "main",
-    "src": "./src/styles",
-    "dest": "./dist/css",
+    "src": "./styles",
+    "dest": "./css",
     "glob": "**/*.scss",
     "extension": "scss"
   },
   "scripts": {
     "name": "js",
-    "bundle": "index",
-    "src": "./src/js",
-    "dest": "./dist/js",
+    "bundle": "app",
+    "src": "./js",
+    "dest": "./js",
     "glob": "**/*.js",
     "extension": "js"
   },
   "templates": {
     "name": "templates",
-    "bundle": "index",
-    "src": "./src/views/pages",
-    "dest": "./dist",
+    "src": "./views",
+    "dest": "./",
     "glob": "*.html",
     "extension": "html"
-  },
-  "entries": {
-    "about": ["./src/styles/main.scss", "./src/js/about.js", "./src/views/pages/about.html"]
   },
   "static": {
     "images": {
       "name": "images",
-      "src": "./src/images",
-      "dest": "./dist/images",
-      "glob": "**/**.*"
+      "src": "./images",
+      "dest": "./images"
     },
     "fonts": {
       "name": "fonts",
-      "src": "./src/fonts",
-      "dest": "./dist/fonts",
-      "glob": "**/**.*"
+      "src": "./fonts",
+      "dest": "./fonts"
     },
     "video": {
       "name": "video",
-      "src": "./src/video",
-      "dest": "./dist/video",
-      "glob": "**/**.*"
+      "src": "./video",
+      "dest": "./video"
     },
     "ajax": {
       "name": "ajax",
-      "src": "./src/inc",
-      "dest": "./dist/inc",
-      "glob": "**/**.*"
+      "src": "./inc",
+      "dest": "./inc"
     }
   }
 }

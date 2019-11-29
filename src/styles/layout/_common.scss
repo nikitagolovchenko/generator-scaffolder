@@ -12,12 +12,12 @@ body {
 }
 
 
-/**
- * Main content containers
- * 1. Make the container full-width with a maximum width
- * 2. Center it in the viewport
- * 3. Leave some space on the edges, especially valuable on small screens
- */
+/*
+  Main content containers
+  1. Make the container full-width with a maximum width
+  2. Center it in the viewport
+  3. Leave some space on the edges, especially valuable on small screens
+*/
 
 .container {
   max-width: $container-max-width; /* 1 */
@@ -44,7 +44,7 @@ body {
   display: flex;
   flex-direction: column;
 
-  // iOS viewport height trick: variables --full-viewport is passed from JS
+  // iOS viewport height trick: variables --full-viewport is calculated using JS
   .touchevents & {
     min-height: var(--full-viewport);
   }

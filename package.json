@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "rimraf dist && cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --color --progress",
+    "dev": "rimraf dist && cross-env NODE_ENV=development webpack-dev-server --color --progress",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --progress --color",
     "lint:fix": "stylelint --fix 'src/styles/**/*.scss' --config stylelint.config.js",
     "preview": "serve dist"
@@ -16,11 +16,9 @@
   ],
   "dependencies": {
     "body-scroll-lock": "^2.6.4",
-    "file-loader": "^4.2.0",
     "include-media": "^1.4.9",
     "intersection-observer": "^0.7.0",
-    "normalize.css": "^8.0.1",
-    "raw-loader": "^3.1.0"
+    "normalize.css": "^8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -34,18 +32,23 @@
     "critters-webpack-plugin": "^2.4.0",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "group-css-media-queries-loader": "^3.0.2",
     "html-webpack-inline-source-plugin": "0.0.10",
-    "html-webpack-plugin": "^4.0.0-beta.11",
+    "html-webpack-plugin": "^3.2.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "imagemin-webpack-plugin": "^2.4.2",
+    "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
+    "perfectionist": "^2.4.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^1.18.2",
     "prettier-loader": "^3.3.0",
+    "raw-loader": "^3.1.0",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",
     "script-ext-html-webpack-plugin": "^2.1.4",
@@ -59,6 +62,7 @@
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0",
+    "webpack-fix-style-only-entries": "^0.4.0",
     "webpack-module-hot-accept": "^1.0.5",
     "webpack-notifier": "^1.8.0"
   }

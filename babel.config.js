@@ -3,8 +3,7 @@ module.exports = function (api) {
 
   const presets = [
     ["@babel/preset-env", {
-      "useBuiltIns": "usage",
-      "corejs": "core-js@3",
+      loose: true,
     }]
   ];
 

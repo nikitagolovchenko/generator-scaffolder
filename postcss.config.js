@@ -1,6 +1,14 @@
 module.exports = ({options, env}) => ({
   plugins: {
-    'postcss-preset-env': options['postcss-preset-env'] ? options['postcss-preset-env'] : false,
-    cssnano: env === 'production' ? options.cssnano : false,
+    'postcss-preset-env': true,
+    cssnano: options.cssnano && env === 'production' ? {} : false,
+    perfectionist: options.cssnano && env === 'production' ? false : {
+      cascade: false,
+      colorShorthand: false,
+      indentSize: 2,
+      maxSelectorLength: false,
+      maxAtRuleLength: false,
+      maxValueLength: false,
+    },
   },
 });

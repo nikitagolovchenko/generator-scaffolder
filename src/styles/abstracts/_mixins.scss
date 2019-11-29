@@ -4,14 +4,14 @@
 // -----------------------------------------------------------------------------
 
 
-/*
-  @param {$fontfamily} - font family name
-  @param {$filename} - file name in 'fonts' folder (e.g. my-web-font.woff)
-  @param {$fontweight} - @default: normal;
-  @param {$fontstyle} - @default: normal;
-
-  NOTE: used only woff, because in supported in all browsers:
-*/
+// --
+//  @param {$fontfamily} - font family name
+//  @param {$filename} - file name in 'fonts' folder (e.g. my-web-font.woff)
+//  @param {$fontweight} - @default: normal;
+//  @param {$fontstyle} - @default: normal;
+//
+//  NOTE: used only woff, because in supported in all browsers:
+// --
 
 @mixin fontface($fontfamily, $filename, $fontweight: normal, $fontstyle: normal) {
   @font-face {
@@ -23,32 +23,34 @@
   }
 }
 
-/*
+// --
 
-  @param {$min-font-size} - minimum font size (in PX)
-  @param {$max-font-size} - maximum font size (in PX)
-  @param {$min-vw} - minimum viewport where minimum font size become fixed @default: $fluid-min;
-  @param {$max-vw} - maximum viewport where maximum font size become fixed @default: $fluid-max;
+//  @param {$min-font-size} - minimum font size (in PX)
+//  @param {$max-font-size} - maximum font size (in PX)
+//  @param {$min-vw} - minimum viewport where minimum font size become fixed @default: $fluid-min;
+//  @param {$max-vw} - maximum viewport where maximum font size become fixed @default: $fluid-max;
+//
+//  h1 {
+//    @include fluid-type(12px, 24px);
+//  }
+//
+//  NOTE:
+//
+//  Important: all values should be in same units (px, rem, em)
+//
+//  h2 {
+//    @include fluid-type(2rem, 4rem, 32rem, 190rem);
+//  }
+//
+//  This font work:;
+//
+//  h2 {
+//    @include fluid-type(2rem, 4em, 320px, 1920px);
+//  }
 
-  h1 {
-    @include fluid-type(12px, 24px);
-  }
+// --
 
-  NOTE:
 
-  Important: all values should be in same units (px, rem, em)
-
-  h2 {
-    @include fluid-type(2rem, 4rem, 32rem, 190rem);
-  }
-
-  This font work:;
-
-  h2 {
-    @include fluid-type(2rem, 4em, 320px, 1920px);
-  }
-
-*/
 @mixin fluid-type($min-font-size, $max-font-size, $min-vw: $fluid-min, $max-vw: $fluid-max) {
   $unit1: unit($min-vw);
   $unit2: unit($max-vw);
