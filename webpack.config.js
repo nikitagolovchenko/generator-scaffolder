@@ -35,7 +35,7 @@ const getAssetPath = (type, assetPath) => {
 };
 
 const getAssetName = (path, name, ext) => {
-  if (isProduction && config.cache) {
+  if (isProduction && config.cache_boost) {
     return `${path}/${name}.[contenthash].${ext}`;
   }
 
@@ -66,8 +66,7 @@ const generateStaticAssets = () => {
 const pluginsConfiguration = {
   BrowserSync: {
     ghost: false,
-    open: false,
-    online: true,
+    open: config.server.open,
     proxy: URL,
   },
   DevServer: {
@@ -82,12 +81,12 @@ const pluginsConfiguration = {
     quiet: false,
     open: false,
     clientLogLevel: 'silent',
-    // after: (app, server, compiler) => {
-    //   getAssetPath('src', config.templates.src)
-    //   chokidar.watch([path.resolve(__dirname, `${config.templates.src}/${config.templates.glob}`)]).on('change', () => {
-    //     server.sockWrite(server.sockets, 'content-changed');
-    //   });
-    // },
+    after: (app, server, compiler) => {
+      getAssetPath('src', config.templates.src)
+      chokidar.watch(getAssetPath('src', config.templates.src)).on('change', () => {
+        server.sockWrite(server.sockets, 'content-changed');
+      });
+    },
   },
   MiniCssExtract: {
     filename: getAssetName(config.styles.dest, '[name]', 'css'),
@@ -134,31 +133,34 @@ const generateHtmlPlugins = () => {
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
-      title: config.title || 'Project title',
+      title: config.title || 'TEST TITLE',
       // template: path.resolve(__dirname, `${config.templates.src}/${name}.${extension}`),
       template: getAssetPath('src', `${config.templates.src}/${name}.${extension}`),
       // filename: path.resolve(__dirname, `${config.dest}/${name}.${extension}`),
       filename: getAssetPath('dest', `${config.templates.dest}/${name}.${extension}`),
       inlineSource: 'runtime.+\\.js',
       chunks: config.entries ? [name] : false,
-      minify: false,
-      inject: true,
-      hash: isProduction && config.cache,
-      meta: {
-        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-      },
+      minify: config.minimize ? {
+        collapseWhitespace: true,
+        html5: true,
+        removeRedundantAttributes: false,
+      }: config.minimize,
+      hash: isProduction && config.cache_boost,
       optimize: {
         prefetch: true,
+      },
+      meta: {
+        viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
       },
     });
   });
 };
 
 const htmlPlugins = generateHtmlPlugins().concat([
+  new HtmlWebpackInlineSourcePlugin(),
   new ScriptExtHtmlWebpackPlugin({
     defaultAttribute: 'defer',
   }),
-  new HtmlWebpackInlineSourcePlugin(),
 ]);
 
 if (isProduction && config.critical_css) {
@@ -237,7 +239,7 @@ const getModules = () => {
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
-        loaders: ['babel-loader', 'webpack-module-hot-accept'],
+        loaders: ['babel-loader'],
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -259,6 +261,7 @@ const getModules = () => {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
+              sourceMap: true,
               config: {
                 ctx: {
                   cssnano: config.minimize ? true : false,
@@ -268,9 +271,6 @@ const getModules = () => {
           },
           {
             loader: "group-css-media-queries-loader",
-            // options: {
-            //   sourceMap: true,
-            // }
           },
           {
             loader: 'sass-loader',
@@ -341,7 +341,7 @@ const getOptimization = () => {
       moduleIds: 'hashed',
       runtimeChunk: 'single',
       splitChunks: {
-        minSize: 30000,
+        minSize: 180000,
         maxSize: 244000,
         cacheGroups: {
           vendors: {
@@ -369,7 +369,6 @@ const getOptimization = () => {
               inline: false,
               warnings: false,
               drop_console: true,
-              unsafe: true,
             },
             output: {
               comments: false,
@@ -385,7 +384,7 @@ const getOptimization = () => {
 
 const getEntry = entryName => {
   // Need this since useBuildins: usage in babel didn't add polyfill for Promise.all() when webpack is bundling
-  const iterator = ['core-js/modules/es.array.iterator'];
+  const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
 
   // default entry [index.js, main.scss] - used for all pages, if no specific entry is provided
   const entry = iterator.concat([
@@ -403,7 +402,10 @@ const getEntry = entryName => {
   // additional entries, specified in config.json file as [entries]
   if (config.entries) {
     for (const key in config.entries) {
-      entries[key] = iterator.concat(config.entries[key]);
+      // exclude template file from entry for production mode, to remove unused code from JS that is generated with loaders
+      const filteredEntry = config.entries[key].filter(bundle => !bundle.includes(config.templates.extension))
+
+      entries[key] = iterator.concat(!isProduction ? config.entries[key] : filteredEntry);
     }
   }
 
@@ -416,12 +418,15 @@ const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
   // devtool: isProduction ? false : 'source-map',
+  stats: false,
   output: {
     path: path.resolve(config.dest),
     filename: getAssetName(config.scripts.dest, '[name]', 'js'),
+    crossOriginLoading: 'anonymous',
   },
   plugins: getPlugins(),
   resolve: {
+    extensions: ['.js'],
     alias: {
       '@': getAssetPath('src', config.scripts.src),
       Utils: getAssetPath('src', `${config.scripts.src}/utils`),
