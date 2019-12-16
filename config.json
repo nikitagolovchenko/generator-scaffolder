@@ -5,11 +5,12 @@
   "debug": false,
   "linters": true,
   "critical_css": false,
-  "cache": false,
+  "cache_boost": false,
   "minimize": false,
   "server": {
     "port": "8080",
-    "host": "localhost"
+    "host": "localhost",
+    "open": false
   },
   "env": {
     "dev": "development",

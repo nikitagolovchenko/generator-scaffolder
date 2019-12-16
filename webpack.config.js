@@ -417,7 +417,7 @@ const getEntry = entryName => {
 const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
-  // devtool: isProduction ? false : 'source-map',
+  devtool: isProduction ? false : 'inline-source-map',
   stats: false,
   output: {
     path: path.resolve(config.dest),
