@@ -4,7 +4,7 @@
   "debug": false,
   "linters": {
     "css": true,
-    "js": false
+    "js": true
   },
   "critical_css": true,
   "cache_boost": true,
@@ -12,7 +12,7 @@
   "server": {
     "port": "8080",
     "host": "localhost",
-    "open": true
+    "open": false
   },
   "styles": {
     "name": "css",

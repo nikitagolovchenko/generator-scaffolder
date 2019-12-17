@@ -1,4 +1,4 @@
-import '@/plugins/openClosePlugin';
+import 'Plugins/openClosePlugin';
 
 // open-close init
 export default function initOpenClose() {

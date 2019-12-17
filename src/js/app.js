@@ -1,21 +1,28 @@
-import openClose from './components/openClose';
+import ready, {shuffle, delay, BODY, HTML} from 'Utils/global';
+import animationTest from 'Animations/test';
+import openClose from 'Components/openClose';
 
-jQuery(function() {
-  openClose();
+const delayTest = () => {
+  console.log('Await test');
+  delay(500);
+  console.log('Await test 2');
+  delay(500);
+};
 
-  [1, 2, 3].map(item => console.log(item));
+ready(async () => {
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  await delayTest();
 
   console.log('INDEX');
+  arr.map(item => console.log(item));
+  console.log('Shuffled array: ', shuffle(arr));
 
-  console.log('3');
+  BODY.classList.add('test');
+  BODY.classList.remove('test');
 
-  document.body.classList.add('test');
+  openClose();
+  animationTest();
 
-  document.body.classList.remove('test');
-
-  test();
+  HTML.classList.add('is-loaded');
 });
-
-function test() {
-  console.log('test 333');
-}

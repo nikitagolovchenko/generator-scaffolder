@@ -19,6 +19,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
+const PUBLIC_PATH = '/';
 const SRC = 'src';
 const DEST = 'dest';
 const PROD = 'production';
@@ -105,14 +106,8 @@ const pluginsConfiguration = {
   },
   ErrorsPlugin: {
     clearConsole: true,
-    onErrors: function (severity, errors) {
-      errors.forEach(error => {
-        console.log(error.webpackError);
-      })
-    },
   },
   CopyPlugin: generateStaticAssets(),
-
   ImageMin: {
     cacheFolder: path.resolve(__dirname, 'node_modules/.cache'),
     pngquant: {
@@ -326,12 +321,10 @@ const getModules = () => {
     ],
   };
 
-  // templates loaders
   modules.rules.push(getTemplatesLoader(config.templates.extension));
 
   if (!isProduction && config.linters) {
     modules.rules.push({
-      enforce: 'pre',
       test: /\.jsx?$/,
       loader: 'prettier-loader',
       exclude: /node_modules/,
@@ -339,7 +332,20 @@ const getModules = () => {
         parser: 'babel',
       },
     });
+
+    if (config.linters.js) {
+      modules.rules.push({
+        test: /\.jsx?$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        options: {
+          configFile: 'eslintrc.js'
+        },
+      })
+    }
   }
+
+
 
   return modules;
 };
@@ -424,7 +430,7 @@ const webpackConfig = {
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   stats: isProduction,
   output: {
-    publicPath: '/',
+    publicPath: PUBLIC_PATH,
     path: path.resolve(config.dest),
     filename: getAssetName(config.scripts.dest, '[name]', config.scripts.extension),
     crossOriginLoading: 'anonymous',
@@ -433,10 +439,12 @@ const webpackConfig = {
   resolve: {
     extensions: [`.${config.scripts.extension}`],
     alias: {
-      '@': getAssetPath(SRC, `${config.scripts.src}/`),
+      JS: getAssetPath(SRC, config.scripts.src),
       Utils: getAssetPath(SRC, `${config.scripts.src}/utils`),
       Vendors: getAssetPath(SRC, `${config.scripts.src}/vendors`),
-      Animations: getAssetPath(SRC, `${config.scripts.src}/Animations`),
+      Plugins: getAssetPath(SRC, `${config.scripts.src}/plugins`),
+      Components: getAssetPath(SRC, `${config.scripts.src}/components`),
+      Animations: getAssetPath(SRC, `${config.scripts.src}/animations`),
     },
   },
   optimization: getOptimization(),

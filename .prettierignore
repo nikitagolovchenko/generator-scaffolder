@@ -1,3 +1,5 @@
 src/scss/*.scss
 src/scss/vendors/*
 src/scss/base/*
+src/js/vendors/*
+src/js/utils/*

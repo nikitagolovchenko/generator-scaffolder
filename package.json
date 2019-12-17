@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "rimraf dist && cross-env NODE_ENV=development webpack-dev-server --progress",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --progress",
-    "lint:fix": "stylelint --fix src/styles/**/*.* --config stylelint.config.js",
+    "lint:fix:css": "stylelint --fix src/styles/**/*.* -c stylelint.config.js",
+    "lint:fix:js": "eslint --fix src/js/**/*.* -c eslintrc.js --ignore-path .prettierignore",
     "pretify:html": "prettier --check --write dist/*.html",
     "preview": "serve dist"
   },
@@ -35,6 +36,13 @@
     "critters-webpack-plugin": "^2.4.0",
     "cross-env": "^6.0.3",
     "css-loader": "^3.3.2",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-import-resolver-webpack": "^0.12.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "file-loader": "^4.2.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "group-css-media-queries-loader": "^3.0.2",
