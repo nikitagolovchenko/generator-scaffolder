@@ -1,11 +1,11 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const WebpackNotifierPlugin = require('webpack-notifier');
+const fs = require('fs');
+const path = require('path');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
-const path = require('path');
-const fs = require('fs');
+const WebpackNotifierPlugin = require('webpack-notifier');
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
@@ -13,29 +13,30 @@ const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const imageminMozjpeg = require('imagemin-mozjpeg');
-
-// optimization
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
+const SRC = 'src';
+const DEST = 'dest';
+const PROD = 'production';
 const ENV = process.env.NODE_ENV;
-const PORT = parseInt(process.env.PORT, 10) || config.server.port;
 const HOST = process.env.HOST || config.server.host;
+const PORT = parseInt(process.env.PORT, 10) || config.server.port;
 const URL = `http://${HOST}:${PORT}`;
-const isProduction = ENV === config.env.prod;
+const isProduction = ENV === PROD;
 
 const getAssetPath = (type, assetPath) => {
-  if (type === 'src') {
+  if (type === SRC) {
     return path.join(__dirname, config.src, assetPath);
   }
   return path.join(__dirname, config.dest, assetPath);
 };
 
-const getAssetName = (path, name, ext) => {
-  if (isProduction && config.cache_boost) {
+const getAssetName = (path, name, ext, shouldBoost = true) => {
+  if (isProduction && config.cache_boost && shouldBoost) {
     return `${path}/${name}.[contenthash].${ext}`;
   }
 
@@ -47,8 +48,8 @@ const generateStaticAssets = () => {
 
   for (const asset in config.static) {
     const assetObject = config.static[asset];
-    const srcPath = getAssetPath('src', assetObject.src);
-    const destPath = getAssetPath('dest', assetObject.dest);
+    const srcPath = getAssetPath(SRC, assetObject.src);
+    const destPath = getAssetPath(DEST, assetObject.dest ? assetObject.dest : assetObject.src);
 
     const assetFolderExist = fs.existsSync(srcPath);
 
@@ -67,10 +68,13 @@ const pluginsConfiguration = {
   BrowserSync: {
     ghost: false,
     open: config.server.open,
-    proxy: URL,
+    proxy: {
+      target: URL,
+      ws: true,
+    },
   },
   DevServer: {
-    contentBase: path.join(__dirname, config.src),
+    contentBase: path.join(__dirname, config.dest),
     hot: true,
     compress: true,
     watchContentBase: true,
@@ -78,12 +82,11 @@ const pluginsConfiguration = {
     liveReload: false,
     overlay: true,
     noInfo: true,
-    quiet: false,
     open: false,
     clientLogLevel: 'silent',
     after: (app, server, compiler) => {
-      getAssetPath('src', config.templates.src)
-      chokidar.watch(getAssetPath('src', config.templates.src)).on('change', () => {
+      getAssetPath(SRC, config.templates.src)
+      chokidar.watch(getAssetPath(SRC, config.templates.src)).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
       });
     },
@@ -97,11 +100,16 @@ const pluginsConfiguration = {
   },
   StyleLint: {
     configFile: 'stylelint.config.js',
-    context: getAssetPath('src', config.styles.src),
+    context: getAssetPath(SRC, config.styles.src),
     syntax: config.styles.extension,
   },
   ErrorsPlugin: {
     clearConsole: true,
+    onErrors: function (severity, errors) {
+      errors.forEach(error => {
+        console.log(error.webpackError);
+      })
+    },
   },
   CopyPlugin: generateStaticAssets(),
 
@@ -122,7 +130,7 @@ const pluginsConfiguration = {
 // creating new instance of plugin for each of the pages that we have
 const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
-  const templateFiles = fs.readdirSync(getAssetPath('src', config.templates.src));
+  const templateFiles = fs.readdirSync(getAssetPath(SRC, config.templates.src));
   const files = templateFiles.filter(elm => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
 
   return files.map(item => {
@@ -131,21 +139,26 @@ const generateHtmlPlugins = () => {
     const name = parts[0];
     const extension = parts[1];
 
+    const minify = () => {
+      if (config.minimize) {
+        return {
+          collapseWhitespace: true,
+          html5: true,
+          removeRedundantAttributes: false,
+        }
+      }
+
+      return config.minimize;
+    }
+
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
-      title: config.title || 'TEST TITLE',
-      // template: path.resolve(__dirname, `${config.templates.src}/${name}.${extension}`),
-      template: getAssetPath('src', `${config.templates.src}/${name}.${extension}`),
-      // filename: path.resolve(__dirname, `${config.dest}/${name}.${extension}`),
-      filename: getAssetPath('dest', `${config.templates.dest}/${name}.${extension}`),
+      template: getAssetPath(SRC, `${config.templates.src}/${name}.${extension}`),
+      filename: getAssetPath(DEST, `${config.templates.dest}/${name}.${extension}`),
       inlineSource: 'runtime.+\\.js',
-      chunks: config.entries ? [name] : false,
-      minify: config.minimize ? {
-        collapseWhitespace: true,
-        html5: true,
-        removeRedundantAttributes: false,
-      }: config.minimize,
-      hash: isProduction && config.cache_boost,
+      // awaiting for ^4.0 version to be able to insert chunks dynamically with multiple entries setup
+      // chunks: config.entries ? [name] : false,
+      minify: minify(),
       optimize: {
         prefetch: true,
       },
@@ -157,7 +170,7 @@ const generateHtmlPlugins = () => {
 };
 
 const htmlPlugins = generateHtmlPlugins().concat([
-  new HtmlWebpackInlineSourcePlugin(),
+  new HTMLWebpackInlineSourcePlugin(),
   new ScriptExtHtmlWebpackPlugin({
     defaultAttribute: 'defer',
   }),
@@ -167,7 +180,7 @@ if (isProduction && config.critical_css) {
   htmlPlugins.push(
     new Critters({
       inlineFonts: true,
-      pruneSource: true,
+      pruneSource: config.entries ? true : false,
       noscriptFallback: true,
       preload: 'swap',
     })
@@ -180,7 +193,7 @@ const getPlugins = () => {
       // prevent BrowserSync from reloading the page
       // and let Webpack Dev Server take care of this
       reload: false
-    })
+    }),
   ];
 
   let prodPlugins = [new ImageminPlugin(pluginsConfiguration.ImageMin)];
@@ -205,7 +218,7 @@ const getPlugins = () => {
   }
 
   // enable linters only if config.linters === true
-  if (config.linters) {
+  if (config.linters && config.linters.css) {
     defaultPlugins.push(new StyleLintPlugin(pluginsConfiguration.StyleLint));
   }
 
@@ -220,13 +233,6 @@ const getPlugins = () => {
 const getTemplatesLoader = templateType => {
   const HTML = /\html$/;
 
-  // if (templateType.match(HTML)) {
-  //   return {
-  //     test: HTML,
-  //     use: 'raw-loader',
-  //   };
-  // }
-
   return {
     test: HTML,
     use: 'raw-loader',
@@ -239,7 +245,7 @@ const getModules = () => {
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
-        loaders: ['babel-loader'],
+        loaders: ['babel-loader', 'webpack-module-hot-accept'],
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -248,6 +254,7 @@ const getModules = () => {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: !isProduction,
+              reloadAll: true,
               sourceMap: true,
             },
           },
@@ -286,8 +293,9 @@ const getModules = () => {
           {
             loader: 'file-loader',
             options: {
+              limit: 4096,
               context: config.static.fonts.name,
-              name: getAssetName(config.static.fonts.dest, '[name]', '[ext]'),
+              name: getAssetName(config.static.fonts.dest ? config.static.fonts.dest : config.static.fonts.src, '[name]', '[ext]', false),
               publicPath: (url, resourcePath, context) => {
                 const relativePath = path.relative(url, context);
 
@@ -303,8 +311,9 @@ const getModules = () => {
           {
             loader: 'file-loader',
             options: {
+              limit: 4096,
               context: config.static.images.name,
-              name: getAssetName(config.static.images.dest, '[name]', '[ext]'),
+              name: getAssetName(config.static.images.dest ? config.static.images.dest : config.static.images.src, '[name]', '[ext]', false),
               publicPath: (url, resourcePath, context) => {
                 const relativePath = path.relative(url, context);
 
@@ -336,50 +345,50 @@ const getModules = () => {
 };
 
 const getOptimization = () => {
-  if (isProduction) {
-    return {
-      moduleIds: 'hashed',
-      runtimeChunk: 'single',
-      splitChunks: {
-        minSize: 180000,
-        maxSize: 244000,
-        cacheGroups: {
-          vendors: {
-            chunks: 'all',
-            test: /[\\/]node_modules[\\/]/,
-          },
+  if (!isProduction) return {};
+
+  return {
+    namedModules: true,
+    namedChunks: true,
+    moduleIds: 'named',
+    runtimeChunk: 'single',
+    splitChunks: {
+      minSize: 180000,
+      maxSize: 244000,
+      cacheGroups: {
+        vendors: {
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/]/,
         },
       },
-      minimizer: [
-        new TerserPlugin({
-          chunkFilter: (chunk) => {
-            const name = chunk.name;
-            // Always include uglification for the `vendor` chunk
-            if (name && name.startsWith('vendors')) {
-              return true;
-            }
+    },
+    minimizer: [
+      new TerserPlugin({
+        chunkFilter: (chunk) => {
+          const name = chunk.name;
+          // Always include uglification for the `vendor` chunk
+          if (name && name.startsWith('vendors')) {
+            return true;
+          }
 
-            // but based on setting in config for main bundle
-            return config.minimize;
+          // but based on setting in config for main bundle
+          return config.minimize;
+        },
+        terserOptions: {
+          cache: true,
+          parallel: true,
+          compress: {
+            inline: false,
+            warnings: false,
+            drop_console: true,
           },
-          terserOptions: {
-            cache: true,
-            parallel: true,
-            compress: {
-              inline: false,
-              warnings: false,
-              drop_console: true,
-            },
-            output: {
-              comments: false,
-            },
+          output: {
+            comments: false,
           },
-        }),
-      ],
-    };
-  }
-
-  return {};
+        },
+      }),
+    ],
+  };
 };
 
 const getEntry = entryName => {
@@ -388,15 +397,12 @@ const getEntry = entryName => {
 
   // default entry [index.js, main.scss] - used for all pages, if no specific entry is provided
   const entry = iterator.concat([
-    getAssetPath('src', `${config.scripts.src}/${config.scripts.bundle}.${config.scripts.extension}`),
-    getAssetPath('src', `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`)
+    getAssetPath(SRC, `${config.scripts.src}/${config.scripts.bundle}.${config.scripts.extension}`),
+    getAssetPath(SRC, `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`)
   ]);
-
-  // const cssEntry = getAssetPath('src', `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`);
 
   let entries = {
     [config.scripts.bundle]: entry,
-    // [config.styles.bundle]: cssEntry,
   };
 
   // additional entries, specified in config.json file as [entries]
@@ -409,29 +415,28 @@ const getEntry = entryName => {
     }
   }
 
-  console.log(entries);
-
   return entries;
 };
 
 const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
-  devtool: isProduction ? false : 'inline-source-map',
-  stats: false,
+  devtool: isProduction ? 'source-map' : 'inline-source-map',
+  stats: isProduction,
   output: {
+    publicPath: '/',
     path: path.resolve(config.dest),
-    filename: getAssetName(config.scripts.dest, '[name]', 'js'),
+    filename: getAssetName(config.scripts.dest, '[name]', config.scripts.extension),
     crossOriginLoading: 'anonymous',
   },
   plugins: getPlugins(),
   resolve: {
-    extensions: ['.js'],
+    extensions: [`.${config.scripts.extension}`],
     alias: {
-      '@': getAssetPath('src', config.scripts.src),
-      Utils: getAssetPath('src', `${config.scripts.src}/utils`),
-      Vendors: getAssetPath('src', `${config.scripts.src}/vendors`),
-      Animations: getAssetPath('src', `${config.scripts.src}/Animations`),
+      '@': getAssetPath(SRC, `${config.scripts.src}/`),
+      Utils: getAssetPath(SRC, `${config.scripts.src}/utils`),
+      Vendors: getAssetPath(SRC, `${config.scripts.src}/vendors`),
+      Animations: getAssetPath(SRC, `${config.scripts.src}/Animations`),
     },
   },
   optimization: getOptimization(),

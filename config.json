@@ -1,64 +1,55 @@
 {
-  "title": "My awesome project!",
   "src": "./src",
   "dest": "./dist",
   "debug": false,
-  "linters": true,
-  "critical_css": false,
-  "cache_boost": false,
-  "minimize": false,
+  "linters": {
+    "css": true,
+    "js": false
+  },
+  "critical_css": true,
+  "cache_boost": true,
+  "minimize": true,
   "server": {
     "port": "8080",
     "host": "localhost",
-    "open": false
-  },
-  "env": {
-    "dev": "development",
-    "prod": "production"
+    "open": true
   },
   "styles": {
     "name": "css",
     "bundle": "main",
-    "src": "./styles",
-    "dest": "./css",
-    "glob": "**/*.scss",
+    "src": "styles",
+    "dest": "css",
     "extension": "scss"
   },
   "scripts": {
     "name": "js",
     "bundle": "app",
-    "src": "./js",
-    "dest": "./js",
-    "glob": "**/*.js",
+    "src": "js",
+    "dest": "js",
     "extension": "js"
   },
   "templates": {
     "name": "templates",
-    "src": "./views",
-    "dest": "./",
-    "glob": "*.html",
+    "src": "views",
+    "dest": "/",
     "extension": "html"
   },
   "static": {
     "images": {
       "name": "images",
-      "src": "./images",
-      "dest": "./images"
+      "src": "images"
     },
     "fonts": {
       "name": "fonts",
-      "src": "./fonts",
-      "dest": "./fonts"
+      "src": "fonts"
     },
     "video": {
       "name": "video",
-      "src": "./video",
-      "dest": "./video"
+      "src": "video"
     },
     "ajax": {
       "name": "ajax",
-      "src": "./inc",
-      "dest": "./inc"
+      "src": "inc"
     }
   }
 }
