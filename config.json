@@ -1,6 +1,6 @@
 {
-  "src": "./src",
-  "dest": "./dist",
+  "src": "src",
+  "dest": "dist",
   "debug": false,
   "linters": {
     "css": true,

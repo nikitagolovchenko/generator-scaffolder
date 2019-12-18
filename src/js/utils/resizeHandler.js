@@ -1,27 +1,22 @@
 /* eslint-disable */
+import {HTML} from './global';
 
-jQuery(function() {
-  initResizeHandler();
-});
-
-export default function initResizeHandler() {
-  var win = jQuery(window),
-    doc = jQuery('html'),
-    resizeClass = 'resize-active',
-    flag,
-    timer;
-  var removeClassHandler = function() {
+(function() {
+  const activeClass = 'resize-active';
+  const resetDelay = 500;
+  let flag = false;
+  let timer = null;
+  const removeClassHandler = function() {
     flag = false;
-    doc.removeClass(resizeClass);
+    HTML.classList.remove(activeClass);
   };
-  var resizeHandler = function() {
+  const resizeHandler = function() {
     if (!flag) {
       flag = true;
-      doc.addClass(resizeClass);
+      HTML.classList.add(activeClass);
     }
     clearTimeout(timer);
-    timer = setTimeout(removeClassHandler, 500);
-  };
-
-  win.on('resize orientationchange', resizeHandler);
-}
+    const timer = setTimeout(removeClassHandler, resetDelay);
+  }
+  window.addEventListener('resize', resizeHandler);
+})(window);

@@ -20,8 +20,8 @@ const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
 const PUBLIC_PATH = '/';
-const SRC = 'src';
-const DEST = 'dest';
+const SRC = config.src;
+const DEST = config.dest;
 const PROD = 'production';
 const ENV = process.env.NODE_ENV;
 const HOST = process.env.HOST || config.server.host;
@@ -345,8 +345,6 @@ const getModules = () => {
     }
   }
 
-
-
   return modules;
 };
 
@@ -354,9 +352,9 @@ const getOptimization = () => {
   if (!isProduction) return {};
 
   return {
-    namedModules: true,
-    namedChunks: true,
-    moduleIds: 'named',
+    namedModules: !config.cache_boost,
+    namedChunks: !config.cache_boost,
+    moduleIds: !config.cache_boost ? 'named' : 'hashed',
     runtimeChunk: 'single',
     splitChunks: {
       minSize: 180000,
@@ -401,25 +399,29 @@ const getEntry = entryName => {
   // Need this since useBuildins: usage in babel didn't add polyfill for Promise.all() when webpack is bundling
   const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
 
-  // default entry [index.js, main.scss] - used for all pages, if no specific entry is provided
+  // default JS entry {app.js} - used for all pages, if no specific entry is provided
   const entry = iterator.concat([
     getAssetPath(SRC, `${config.scripts.src}/${config.scripts.bundle}.${config.scripts.extension}`),
-    getAssetPath(SRC, `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`)
   ]);
+
+  // default CSS entry {main.scss} - used for all pages, if no specific entry is provided
+  const styleAsset = getAssetPath(SRC, `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`);
 
   let entries = {
     [config.scripts.bundle]: entry,
+    [config.styles.bundle]: styleAsset,
   };
 
-  // additional entries, specified in config.json file as [entries]
-  if (config.entries) {
-    for (const key in config.entries) {
-      // exclude template file from entry for production mode, to remove unused code from JS that is generated with loaders
-      const filteredEntry = config.entries[key].filter(bundle => !bundle.includes(config.templates.extension))
+  // additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
 
-      entries[key] = iterator.concat(!isProduction ? config.entries[key] : filteredEntry);
-    }
-  }
+  // if (config.entries) {
+  //   for (const key in config.entries) {
+  //     // exclude template file from entry for production mode, to remove unused code from JS that is generated with loaders
+  //     const filteredEntry = config.entries[key].filter(bundle => !bundle.includes(config.templates.extension))
+
+  //     entries[key] = iterator.concat(!isProduction ? config.entries[key] : filteredEntry);
+  //   }
+  // }
 
   return entries;
 };
@@ -427,7 +429,7 @@ const getEntry = entryName => {
 const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
-  devtool: isProduction ? 'source-map' : 'inline-source-map',
+  devtool: isProduction ? false : 'inline-source-map',
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,

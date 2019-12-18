@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import './resizeHandler';
 import './detectTouch';
 import './vh';
 
@@ -86,6 +87,7 @@ export const map = (value, min1, max1, min2, max2) => min2 + ((max2 - min2) * (v
 //
 // Returns: shuffled array
 export const shuffle = arr => [...arr].sort(() => 0.5 - Math.random());
+
 
 // Publish custom event
 // Params:

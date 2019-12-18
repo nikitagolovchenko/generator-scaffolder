@@ -1,7 +1,5 @@
 /* eslint-disable */
 
-/*! modernizr 3.6.0 (Custom Build) | MIT *
- * https://modernizr.com/download/?-touchevents-setclasses ! */
 !(function(e, n, t) {
   function o(e) {
     let n = u.className;
