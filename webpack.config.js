@@ -151,8 +151,8 @@ const generateHtmlPlugins = () => {
       template: getAssetPath(SRC, `${config.templates.src}/${name}.${extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.${extension}`),
       inlineSource: 'runtime.+\\.js',
-      // awaiting for ^4.0 version to be able to insert chunks dynamically with multiple entries setup
-      // chunks: config.entries ? [name] : false,
+      // awaiting for ^4.0 version to be stable
+      // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
       minify: minify(),
       optimize: {
         prefetch: true,
@@ -412,17 +412,47 @@ const getEntry = entryName => {
     [config.styles.bundle]: styleAsset,
   };
 
-  // additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
+  /*
+    additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
+    Usage in config:
 
-  // if (config.entries) {
-  //   for (const key in config.entries) {
-  //     // exclude template file from entry for production mode, to remove unused code from JS that is generated with loaders
-  //     const filteredEntry = config.entries[key].filter(bundle => !bundle.includes(config.templates.extension))
+    "entries": {
+      "about": {
+        "js": "about",
+        "css": "main"
+      }
+    }
+  */
 
-  //     entries[key] = iterator.concat(!isProduction ? config.entries[key] : filteredEntry);
-  //   }
-  // }
+  if (config.entries) {
+    for (const entryKey in config.entries) {
+      const additionalEntry = config.entries[entryKey];
+      const JSFileName = additionalEntry.js ? additionalEntry.js : entryKey;
+      const CSSFileName = additionalEntry.css ? additionalEntry.css : entryKey;
 
+      if (JSFileName) {
+        const JSFile = getAssetPath(SRC, `${config.scripts.src}/${JSFileName}.${config.scripts.extension}`);
+
+        if (fs.existsSync(JSFile)) {
+          if (!entries[entryKey]) entries[entryKey] = [];
+
+          entries[entryKey].push(...iterator.concat(JSFile));
+        }
+
+      }
+
+      if (CSSFileName) {
+        const CSSFile = CSSFileName && getAssetPath(SRC, `${config.styles.src}/${CSSFileName}.${config.styles.extension}`);
+
+        if (fs.existsSync(CSSFile)) {
+          if (!entries[entryKey]) entries[entryKey] = [];
+
+          entries[entryKey].push(CSSFile);
+        }
+
+      }
+    }
+  }
   return entries;
 };
 
