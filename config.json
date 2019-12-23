@@ -1,13 +1,13 @@
 {
   "src": "src",
   "dest": "dist",
-  "debug": false, // enable/disable BundleAnalyzerPlugin
-  "critical_css": true, // enable/disable critters-webpack-plugin
-  "cache_boost": true, // add if true hashed for JS and CSS for better caching
-  "minimize": true, // disable/enable CSS/JS/HTML minification
+  "debug": false,
+  "critical_css": true,
+  "cache_boost": true,
+  "minimize": true,
   "linters": {
-    "css": true, // enable Stylelint
-    "js": true // enable ESlint
+    "css": true,
+    "js": true
   },
   "server": {
     "port": "8080",
@@ -33,12 +33,6 @@
     "src": "views",
     "dest": "/",
     "extension": "html"
-  },
-  "entries": {
-    "about": {
-      "js": "about",
-      "css": "main"
-    }
   },
   "static": {
     "images": {
