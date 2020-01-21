@@ -6,9 +6,9 @@ const WebpackNotifierPlugin = require('webpack-notifier');
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
@@ -19,7 +19,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
-const PUBLIC_PATH = '/';
 const SRC = config.src;
 const DEST = config.dest;
 const PROD = 'production';
@@ -28,6 +27,7 @@ const HOST = process.env.HOST || config.server.host;
 const PORT = parseInt(process.env.PORT, 10) || config.server.port;
 const URL = `http://${HOST}:${PORT}`;
 const isProduction = ENV === PROD;
+const PUBLIC_PATH = isProduction ? './' : '/';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
@@ -36,12 +36,8 @@ const getAssetPath = (type, assetPath) => {
   return path.join(__dirname, config.dest, assetPath);
 };
 
-const getAssetName = (path, name, ext, shouldBoost = true) => {
-  if (isProduction && config.cache_boost && shouldBoost) {
-    return `${path}/${name}.[contenthash].${ext}`;
-  }
-
-  return `${path}/${name}.${ext}`
+const getAssetName = (dest, name, ext, shouldBoost = true) => {
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : `${dest}/${name}.${ext}`
 }
 
 const generateStaticAssets = () => {
@@ -154,6 +150,7 @@ const generateHtmlPlugins = () => {
       // awaiting for ^4.0 version to be stable
       // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
       minify: minify(),
+      hash: config.cache_boost,
       optimize: {
         prefetch: true,
       },
@@ -289,13 +286,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              context: config.static.fonts.name,
-              name: getAssetName(config.static.fonts.dest ? config.static.fonts.dest : config.static.fonts.src, '[name]', '[ext]', false),
-              publicPath: (url, resourcePath, context) => {
-                const relativePath = path.relative(url, context);
-
-                return path.join(relativePath, url);
-              },
+              name: getAssetName(config.fonts.dest ? config.fonts.dest : config.fonts.src, '[name]', '[ext]', false),
             },
           },
         ],
@@ -307,13 +298,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              context: config.static.images.name,
               name: getAssetName(config.static.images.dest ? config.static.images.dest : config.static.images.src, '[name]', '[ext]', false),
-              publicPath: (url, resourcePath, context) => {
-                const relativePath = path.relative(url, context);
-
-                return path.join(relativePath, url);
-              },
             },
           },
         ],
@@ -325,6 +310,7 @@ const getModules = () => {
 
   if (!isProduction && config.linters) {
     modules.rules.push({
+      enforce: 'pre',
       test: /\.jsx?$/,
       loader: 'prettier-loader',
       exclude: /node_modules/,
@@ -335,6 +321,7 @@ const getModules = () => {
 
     if (config.linters.js) {
       modules.rules.push({
+        enforce: 'pre',
         test: /\.jsx?$/,
         loader: 'eslint-loader',
         exclude: /node_modules/,
@@ -349,18 +336,18 @@ const getModules = () => {
 };
 
 const getOptimization = () => {
+  const cacheGroupName = 'vendors';
   if (!isProduction) return {};
 
   return {
-    namedModules: !config.cache_boost,
-    namedChunks: !config.cache_boost,
-    moduleIds: !config.cache_boost ? 'named' : 'hashed',
+    namedModules: config.cache_boost,
+    namedChunks: config.cache_boost,
+    moduleIds: config.cache_boost ? 'named' : false,
+    chunkIds: config.cache_boost ? 'named' : false,
     runtimeChunk: 'single',
     splitChunks: {
-      minSize: 180000,
-      maxSize: 244000,
       cacheGroups: {
-        vendors: {
+        [cacheGroupName]: {
           chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
         },
@@ -371,7 +358,7 @@ const getOptimization = () => {
         chunkFilter: (chunk) => {
           const name = chunk.name;
           // Always include uglification for the `vendor` chunk
-          if (name && name.startsWith('vendors')) {
+          if (name && name.startsWith(cacheGroupName)) {
             return true;
           }
 
