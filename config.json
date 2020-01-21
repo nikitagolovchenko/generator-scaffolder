@@ -2,7 +2,7 @@
   "src": "src",
   "dest": "dist",
   "debug": false,
-  "critical_css": true,
+  "critical_css": false,
   "cache_boost": true,
   "minimize": true,
   "linters": {
@@ -10,7 +10,7 @@
     "js": true
   },
   "server": {
-    "port": "8080",
+    "port": "5000",
     "host": "localhost",
     "open": false
   },
@@ -31,7 +31,7 @@
   "templates": {
     "name": "templates",
     "src": "views",
-    "dest": "/",
+    "dest": "./",
     "extension": "html"
   },
   "static": {
