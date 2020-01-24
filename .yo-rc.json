@@ -1,0 +1,20 @@
+{
+  "p2h": {
+    "promptValues": {
+      "projectType": "markup",
+      "framework": "bootstrap",
+      "cms": "other",
+      "linters": [
+        "css",
+        "js"
+      ]
+    }
+  },
+  "p2h-webpack": {
+    "promptValues": {
+      "projectType": "markup",
+      "framework": false,
+      "linters": []
+    }
+  }
+}

@@ -1,40 +1,26 @@
 {
-  "name": "generator-p2h",
-  "version": "1.0.9",
-  "description": "Build for common types of projects using gulp, webpack",
-  "homepage": "https://www.p2h.com/",
-  "author": {
-    "name": "P2H",
-    "email": "support@p2h.com",
-    "url": "https://www.p2h.com/"
-  },
+  "name": "p2h",
   "files": [
     "generators"
   ],
   "main": "generators/index.js",
   "keywords": [
-    "gulp",
-    "webpack",
-    "boilerplate",
-    "P2H",
     "yeoman-generator"
   ],
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "core-js": "^3.3.2",
     "eslint": "^5.6.1",
-    "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "13.0.0",
     "eslint-config-prettier": "^2.10.0",
-    "eslint-formatter-pretty": "^1.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^2.7.0",
-    "eslint-plugin-react": "^7.12.4",
     "husky": "^0.14.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.1.1",
-    "mkdirp": "^0.5.1",
-    "nsp": "^2.8.0",
+    "lodash.merge": "^4.6.2",
     "prettier": "^1.13.7",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
@@ -43,17 +29,9 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
-    "bootstrap": "^4.3.1",
-    "bootstrap-less": "^3.3.7",
-    "bootstrap-sass": "^3.3.7",
     "chalk": "^2.1.0",
-    "foundation-sites": "^6.5.3",
-    "fs-extra": "^7.0.1",
-    "materialize-css": "^1.0.0",
     "mocha": "^6.1.3",
-    "popper.js": "^1.15.0",
     "update-notifier": "^2.5.0",
-    "what-input": "^5.2.1",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
@@ -61,7 +39,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore ./test/a.js --fix",
+    "lint": "eslint --ignore-path .gitignore test --fix",
     "test": "mocha -S --timeout infinite"
   },
   "lint-staged": {

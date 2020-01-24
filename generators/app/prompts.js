@@ -1,124 +1,100 @@
-const { PROMPTS_VALUES } = require('./globals');
+const {PROMPTS_VALUES} = require('./globals');
 
 module.exports = [
   {
     type: 'list',
-    name: PROMPTS_VALUES.project_type.name,
+    name: Object.keys(PROMPTS_VALUES)[0],
     message: 'Select project type:',
     choices: [
       {
         name: 'Markup only',
-        value: PROMPTS_VALUES.project_type.markup,
+        value: PROMPTS_VALUES.projectType.markup,
       },
       {
         name: 'Markup + CMS',
-        value: PROMPTS_VALUES.project_type.markup_cms,
+        value: PROMPTS_VALUES.projectType.markupCms,
       },
-      // {
-      //   name: 'HTML5 Banner',
-      //   value: PROMPTS_VALUES.project_type.markup_banner,
-      // },
     ],
+    store: true,
     default: 0,
   },
   {
-    when: answers =>
-      answers.project_type === PROMPTS_VALUES.project_type.markup_cms,
+    when: answers => answers.projectType === PROMPTS_VALUES.projectType.markupCms,
     type: 'list',
-    name: PROMPTS_VALUES.cms_type.name,
+    name: Object.keys(PROMPTS_VALUES)[1],
     message: 'Select CMS:',
     choices: [
       {
         name: 'Wordpress',
-        value: PROMPTS_VALUES.cms_type.wp,
+        value: PROMPTS_VALUES.cms.wp,
       },
-      // {
-      //   name: 'Magento',
-      //   value: PROMPTS_VALUES.cms_type.cms_magento,
-      // },
       {
         name: 'Other CMS',
-        value: PROMPTS_VALUES.cms_type.other,
+        value: PROMPTS_VALUES.cms.other,
       },
     ],
+    store: true,
     default: 0,
   },
   {
     type: 'list',
-    name: PROMPTS_VALUES.frontend_framework.name,
-    message: 'Select frontend framework:',
+    name: Object.keys(PROMPTS_VALUES)[2],
+    message: 'Select framework:',
     choices: [
       {
         name: 'No framework',
-        value: PROMPTS_VALUES.frontend_framework.none,
+        value: PROMPTS_VALUES.framework.none,
       },
       {
         name: 'Bootstrap',
-        value: PROMPTS_VALUES.frontend_framework.bootstrap,
+        value: PROMPTS_VALUES.framework.bootstrap,
       },
       {
         name: 'Zurb Foundation',
-        value: PROMPTS_VALUES.frontend_framework.zurb,
+        value: PROMPTS_VALUES.framework.zurb,
       },
       {
         name: 'Materialize',
-        value: PROMPTS_VALUES.frontend_framework.materialize,
+        value: PROMPTS_VALUES.framework.materialize,
+      },
+    ],
+    store: true,
+    default: 0,
+  },
+  {
+    type: 'expand',
+    name: Object.keys(PROMPTS_VALUES)[3],
+    message: 'Do you want to use linters for SCSS and JS ?',
+    choices: [
+      {
+        key: 'y',
+        name: 'Yes, add linters',
+        value: PROMPTS_VALUES.linters.add,
+      },
+      {
+        key: 'n',
+        name: 'I don\'t want to lint my code 😢',
+        value: PROMPTS_VALUES.linters.remove,
       },
     ],
     default: 0,
   },
   {
-    when: answers =>
-      answers.frontend_framework ===
-      PROMPTS_VALUES.frontend_framework.bootstrap,
-    type: 'list',
-    name: PROMPTS_VALUES.bootstrap_version.name,
-    message: 'Select Bootstrap version:',
+    when: answers => answers.linters === PROMPTS_VALUES.linters.add,
+    type: 'checkbox',
+    name: Object.keys(PROMPTS_VALUES)[3],
+    message: 'Choose linters for your project:',
     choices: [
       {
-        name: 'Bootstrap 4',
-        value: PROMPTS_VALUES.bootstrap_version.bootstrap_4,
+        name: 'Stylelint for SCSS',
+        value: PROMPTS_VALUES.linters.css,
       },
       {
-        name: 'Bootstrap 3',
-        value: PROMPTS_VALUES.bootstrap_version.bootstrap_3,
+        name: 'ESLint for JS',
+        value: PROMPTS_VALUES.linters.js,
       },
     ],
-    default: 0,
-  },
-  {
-    when: answers =>
-      answers.bootstrap_version ===
-      PROMPTS_VALUES.bootstrap_version.bootstrap_3,
-    type: 'list',
-    name: PROMPTS_VALUES.bootstrap_css_preprocessor.name,
-    message: 'Select CSS preprocessor:',
-    choices: [
-      {
-        name: 'SCSS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.sass,
-      },
-      {
-        name: 'LESS',
-        value: PROMPTS_VALUES.bootstrap_css_preprocessor.less,
-      },
-    ],
-    default: 0,
-  },
-  {
-    type: 'list',
-    name: PROMPTS_VALUES.js_bundler.name,
-    message: 'Do you want to use Webpack?:',
-    choices: [
-      {
-        name: 'Yes, lets use it!',
-        value: PROMPTS_VALUES.js_bundler.webpack,
-      },
-      // {
-      //   name: 'No',
-      //   value: PROMPTS_VALUES.js_bundler.no_webpack,
-      // },
-    ],
-    default: 0,
+    default: [0, 1],
+    store: true,
   },
 ];
