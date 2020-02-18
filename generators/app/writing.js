@@ -47,40 +47,54 @@ module.exports = async function writeFiles() {
         copyFiles([['linters/js', 'markup']]);
         modifyConfig(jsLinterPackages, pkg);
       }
+    } else {
+      const noLinters = {
+        linters: false,
+      }
 
-      // console.log(2);
+      modifyConfig(noLinters);
     }
   };
 
   const setProjectTypeBasedSettings = () => {
-    const WPStyles = {
-      styles: {
-        bundle: 'style',
-        dest: '/',
-      }
+    const WP = {
+      config: {
+        styles: {
+          bundle: 'style',
+          dest: './',
+        }
+      },
     }
 
     if (this.props.cms === PROMPTS_VALUES.cms.wp) {
-      modifyConfig(WPStyles);
-
-      // fs.renameSync(this.destinationPath(`${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`), this.destinationPath(`${config.styles.src}/${WPStyles.styles.bundle}.${config.styles.extension}`));
-
-      // console.log(fs.readFile(this.destinationPath(projectConfig), (a) => {
-      //   console.log(a);
-      // }));
-
-      // this.fs.rename(this.destinationPath(config.))
+      modifyConfig(WP.config);
     }
-
-    // console.log(3);
   }
+
+  const setFrontendFrameworks = () => {
+    switch(this.props.framework) {
+      case PROMPTS_VALUES.framework.bootstrap:
+        modifyConfig(packages.frameworks.bootstrap, pkg);
+        copyFiles([['bootstrap', 'markup']]);
+        break;
+      case PROMPTS_VALUES.framework.zurb:
+        modifyConfig(packages.frameworks.zurb, pkg);
+        break;
+      case PROMPTS_VALUES.framework.materialize:
+        modifyConfig(packages.frameworks.materialize, pkg);
+        break;
+      default:
+        return;
+    }
+  }
+
 
   await Promise.all([
     copyFiles([['base', 'markup']]),
     setLinters(),
     setProjectTypeBasedSettings(),
+    setFrontendFrameworks(),
   ])
 
-  console.log(4);
-
+  // console.log(this.props);
 };

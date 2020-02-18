@@ -1,0 +1,91 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Color system
+
+$white:    #fff;
+$black:    #000;
+
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold:  200;
+
+// Customize the light and dark text colors for use in our YIQ color contrast function.
+$yiq-text-dark:             $black;
+$yiq-text-light:            $white;
+
+$grid-columns: 12;
+$grid-gutter-width: 30px;
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 375px,
+    md: 768px,
+    lg: 1024px,
+    xl: 1366px,
+    wide: 1440px,
+);
+
+$fluid-min: 320px;
+$fluid-max: map-get($grid-breakpoints, 'wide');
+
+$container-max-widths: (
+    sm: 1000px + ($grid-gutter-width * 2),
+);
+
+$container-small-width: 830px + ($grid-gutter-width * 2);
+$container-wide-width: 1200px + ($grid-gutter-width * 2);
+
+
+
+// spacing
+//
+// control the default styling of most bootstrap elements by modifying these
+// variables. mostly focused on spacing.
+// you can add more entries to the $spacers map, should you need more variation.
+
+// stylelint-disable-next-line scss/dollar-variable-default
+// prettier-ignore-start
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  5: ($spacer * 0.5),
+  10: $spacer,
+  15: ($spacer * 1.5),
+  20: ($spacer * 2),
+  25: ($spacer * 2.5),
+  30: ($spacer * 3),
+  35: ($spacer * 3.5),
+  40: ($spacer * 4),
+  45: ($spacer * 4.5),
+  50: ($spacer * 5)
+);
+
+// body
+//
+// settings for the `<body>` element.
+
+$body-bg: $white;
+$body-color: $black;
+
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif:      "Helvetica Neue", Arial, "Noto Sans", sans-serif ;
+$font-family-sans-serif-secondary:      $font-family-sans-serif;
+$font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+$font-family-base:            $font-family-sans-serif;
+$fonts-path: '../fonts';
+// stylelint-enable value-keyword-case
+
+$rem-base: 10px;
+
+$font-size-xl:                2rem;
+$font-size-lg:                1.8rem;
+$font-size-base:              1.6rem;
+$font-size-md:                1.4rem;
+$font-size-sm:                1.2rem;

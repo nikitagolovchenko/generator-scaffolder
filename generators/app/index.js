@@ -1,13 +1,12 @@
 const Generator = require('yeoman-generator');
-const updateNotifier = require('update-notifier');
+// const updateNotifier = require('update-notifier');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const fsNode = require('fs');
 
-const pkg = require('../../package.json');
+// const pkg = require('../../package.json');
 const PROMPTS = require('./prompts');
 const WRITING = require('./writing');
-const VALUES = require('./globals');
 // const {PROMPTS_VALUES} = require('./globals');
 // const notifier = updateNotifier({pkg, updateCheckInterval: 1000 * 60 * 60 * 24});
 
@@ -48,10 +47,11 @@ module.exports = class extends Generator {
 
     this.props = await this.prompt(PROMPTS);
 
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   // configuring() {
+  //   console.log(this, 'config');
   // }
 
   // default() {}
@@ -65,22 +65,21 @@ module.exports = class extends Generator {
   install() {
     // if (this.checkModulesFolder()) return;
 
-    // process.chdir(`${process.cwd()}/${VALUES.MARKUP}`);
+    // process.chdir(`${process.cwd()}/markup`);
 
     // this.installDependencies({
     //   bower: false,
-    //   npm: true,
+    //   npm: false,
+    //   yarn: true,
     // });
   }
 
   checkModulesFolder() {
-    // return fsNode.existsSync(this.destinationPath(VALUES.MARKUP_MODULES));
+    return fsNode.existsSync(this.destinationPath('node_modules'));
   }
 
   end() {
-    this.log(chalk.green(`🙌 🙌 🙌 Installation done! Install modules and run command ${chalk.red('gulp')} from markup folder 🙌 🙌 🙌`));
-    // if (this.props.frontend_framework !== PROMPTS_VALUES.frontend_framework.none) {
-    //   frameworkCopy(this);
-    // }
+    // console.log(this);
+    this.log(chalk.green(`🙌  Installation done! 🙌  For ${chalk.yellow('development mode')} run command ${chalk.red('npm run dev OR yarn dev')} from markup folder 👊`));
   }
 };

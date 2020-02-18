@@ -16,7 +16,7 @@
   },
   "styles": {
     "name": "css",
-    "bundle": "main",
+    "bundle": "style",
     "src": "styles",
     "dest": "css",
     "extension": "scss"

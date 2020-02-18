@@ -5,6 +5,7 @@ module.exports = {
     es6: true,
     jquery: true,
   },
+  ignorePatterns: ['src/js/vendors/', 'src/js/utils/', 'node_modules/'],
   extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
   settings: {
@@ -13,5 +14,12 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'no-console': ['off'],
+    'no-unused-expressions': ['error', {
+      'allowTernary': true,
+      'allowShortCircuit': true,
+    }],
+    'no-plusplus': ['error', {
+      'allowForLoopAfterthoughts': true
+    }]
   },
 };

@@ -27,7 +27,7 @@ const HOST = process.env.HOST || config.server.host;
 const PORT = parseInt(process.env.PORT, 10) || config.server.port;
 const URL = `http://${HOST}:${PORT}`;
 const isProduction = ENV === PROD;
-const PUBLIC_PATH = isProduction ? './' : '/';
+const PUBLIC_PATH = '';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
@@ -38,6 +38,10 @@ const getAssetPath = (type, assetPath) => {
 
 const getAssetName = (dest, name, ext, shouldBoost = true) => {
   return dest === PUBLIC_PATH ? `${name}.${ext}` : `${dest}/${name}.${ext}`
+}
+
+const getAssetOutput = asset => {
+  return asset.dest ? asset.dest : asset.src;
 }
 
 const generateStaticAssets = () => {
@@ -82,7 +86,6 @@ const pluginsConfiguration = {
     open: false,
     clientLogLevel: 'silent',
     after: (app, server, compiler) => {
-      getAssetPath(SRC, config.templates.src)
       chokidar.watch(getAssetPath(SRC, config.templates.src)).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
       });
@@ -146,7 +149,7 @@ const generateHtmlPlugins = () => {
     return new HTMLWebpackPlugin({
       template: getAssetPath(SRC, `${config.templates.src}/${name}.${extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.${extension}`),
-      inlineSource: 'runtime.+\\.js',
+      // inlineSource: 'runtime.+\\.js',
       // awaiting for ^4.0 version to be stable
       // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
       minify: minify(),
@@ -223,7 +226,7 @@ const getPlugins = () => {
 };
 
 const getTemplatesLoader = templateType => {
-  const HTML = /\html$/;
+  const HTML = /\.html$/;
 
   return {
     test: HTML,
@@ -286,7 +289,9 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              name: getAssetName(config.fonts.dest ? config.fonts.dest : config.fonts.src, '[name]', '[ext]', false),
+              publicPath: path.relative(getAssetOutput(config.styles), getAssetOutput(config.fonts)),
+              outputPath: getAssetOutput(config.fonts),
+              name: '[name].[ext]',
             },
           },
         ],
@@ -298,7 +303,9 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              name: getAssetName(config.static.images.dest ? config.static.images.dest : config.static.images.src, '[name]', '[ext]', false),
+              publicPath: path.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
+              outputPath: getAssetOutput(config.static.images),
+              name: '[name].[ext]',
             },
           },
         ],
@@ -310,7 +317,6 @@ const getModules = () => {
 
   if (!isProduction && config.linters) {
     modules.rules.push({
-      enforce: 'pre',
       test: /\.jsx?$/,
       loader: 'prettier-loader',
       exclude: /node_modules/,
@@ -344,15 +350,15 @@ const getOptimization = () => {
     namedChunks: config.cache_boost,
     moduleIds: config.cache_boost ? 'named' : false,
     chunkIds: config.cache_boost ? 'named' : false,
-    runtimeChunk: 'single',
-    splitChunks: {
+    runtimeChunk: config.cache_boost ? 'single' : false,
+    splitChunks: config.cache_boost ? {
       cacheGroups: {
         [cacheGroupName]: {
           chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
         },
       },
-    },
+    } : {},
     minimizer: [
       new TerserPlugin({
         chunkFilter: (chunk) => {
@@ -446,7 +452,7 @@ const getEntry = entryName => {
 const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
-  devtool: isProduction ? false : 'inline-source-map',
+  devtool: isProduction ? 'source-map' : 'inline-source-map',
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,
