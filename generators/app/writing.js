@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const merge = require('lodash.merge');
-const {PROMPTS_VALUES, packages} = require('./globals');
+const {PROMPTS_VALUES, packages, globals} = require('./globals');
 const config = require('./templates/base/config.json');
 
 const projectConfig = 'markup/config.json';
@@ -13,9 +13,11 @@ module.exports = async function writeFiles() {
       this.fs.copy(this.templatePath(files[0]), this.destinationPath(files[1]), {
         globOptions: {
           dot: true,
-        },
+        }
       });
-    })
+    });
+
+    
   };
 
   const modifyConfig = (settings, config = projectConfig) => {
@@ -33,18 +35,18 @@ module.exports = async function writeFiles() {
         }
       }
 
-      copyFiles([['linters/general', 'markup']]);
+      copyFiles([['linters/general', globals.destination]]);
       modifyConfig(lintersSettings)
 
       if (lintCSS) {
         const cssLinterPackages = merge(packages.linters.general, packages.linters.css);
-        copyFiles([['linters/css', 'markup']]);
+        copyFiles([['linters/css', globals.destination]]);
         modifyConfig(cssLinterPackages, pkg);
       }
 
       if (lintJS) {
         const jsLinterPackages = merge(packages.linters.general, packages.linters.js);
-        copyFiles([['linters/js', 'markup']]);
+        copyFiles([['linters/js', globals.destination]]);
         modifyConfig(jsLinterPackages, pkg);
       }
     } else {
@@ -75,13 +77,15 @@ module.exports = async function writeFiles() {
     switch(this.props.framework) {
       case PROMPTS_VALUES.framework.bootstrap:
         modifyConfig(packages.frameworks.bootstrap, pkg);
-        copyFiles([['bootstrap', 'markup']]);
+        copyFiles([['bootstrap', globals.destination]]);
         break;
       case PROMPTS_VALUES.framework.zurb:
         modifyConfig(packages.frameworks.zurb, pkg);
+        copyFiles([['zurb', globals.destination]]);
         break;
       case PROMPTS_VALUES.framework.materialize:
         modifyConfig(packages.frameworks.materialize, pkg);
+        copyFiles([['materialize', globals.destination]]);
         break;
       default:
         return;
@@ -90,11 +94,9 @@ module.exports = async function writeFiles() {
 
 
   await Promise.all([
-    copyFiles([['base', 'markup']]),
+    copyFiles([['base', globals.destination]]),
     setLinters(),
     setProjectTypeBasedSettings(),
     setFrontendFrameworks(),
   ])
-
-  // console.log(this.props);
 };

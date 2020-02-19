@@ -37,7 +37,7 @@ const getAssetPath = (type, assetPath) => {
 };
 
 const getAssetName = (dest, name, ext, shouldBoost = true) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : `${dest}/${name}.${ext}`
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.join(dest, `${name}.${ext}`)
 }
 
 const getAssetOutput = asset => {
@@ -86,7 +86,9 @@ const pluginsConfiguration = {
     open: false,
     clientLogLevel: 'silent',
     after: (app, server, compiler) => {
-      chokidar.watch(getAssetPath(SRC, config.templates.src)).on('change', () => {
+      const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
+
+      chokidar.watch(files).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
       });
     },

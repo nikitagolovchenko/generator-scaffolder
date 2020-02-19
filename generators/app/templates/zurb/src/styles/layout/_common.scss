@@ -1,0 +1,39 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the common layout of the site
+// -----------------------------------------------------------------------------
+
+body {
+  .menu--opened & {
+    overflow: hidden;
+  }
+}
+
+/*
+  Footer at bottom layout by default.
+  To disable - remove flex styles amd min-height
+*/
+
+.wrapper {
+  width: 100%;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  // iOS viewport height trick: variables --full-viewport is calculated using JS
+  .touchevents & {
+    min-height: var(--full-viewport);
+  }
+}
+
+/*
+  Element that will push footer to the end of page.
+  Didn't used as <main> tag, because mainly - structure of pages should be more
+  deeper for most of the designs, and <main> will be inside.
+*/
+
+.page-holder {
+  flex-grow: 1;
+  overflow: hidden;
+  width: 100%;
+}

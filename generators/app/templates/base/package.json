@@ -32,7 +32,7 @@
     "chokidar": "^3.3.1",
     "copy-webpack-plugin": "^5.0.4",
     "core-js": "^3.3.2",
-    "critters-webpack-plugin": "^2.4.0",
+    "critters-webpack-plugin": "^2.5.0",
     "cross-env": "^7.0.0",
     "css-loader": "^3.3.2",
     "eslint": "^6.7.2",

@@ -1,3 +1,6 @@
+const projectConfig = require('./templates/base/config.json');
+
+exports.config = projectConfig;
 exports.PROMPTS_VALUES = {
   projectType: {
     markup: 'markup',
@@ -21,6 +24,9 @@ exports.PROMPTS_VALUES = {
   }
 };
 
+exports.globals = {
+  destination: 'markup',
+}
 
 exports.packages = {
   linters: {
