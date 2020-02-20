@@ -57,6 +57,10 @@ module.exports = [
         name: 'Materialize',
         value: PROMPTS_VALUES.framework.materialize,
       },
+      {
+        name: 'Tailwind CSS',
+        value: PROMPTS_VALUES.framework.tailwind,
+      },
     ],
     store: true,
     default: 0,

@@ -12,7 +12,9 @@ module.exports = {
     'import/resolver': 'webpack',
   },
   rules: {
-    'prettier/prettier': ['error'],
+    'prettier/prettier': ['error', {
+      'endOfLine': 'auto',
+    }],
     'no-console': ['off'],
     'no-unused-expressions': ['error', {
       'allowTernary': true,
