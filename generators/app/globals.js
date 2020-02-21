@@ -15,6 +15,7 @@ exports.PROMPTS_VALUES = {
     bootstrap: 'bootstrap',
     zurb: 'zurb',
     materialize: 'materialize',
+    tailwind: 'tailwind',
   },
   linters: {
     add: true,
@@ -56,8 +57,13 @@ exports.packages = {
     },
     materialize: {
       dependencies: {
-        'materialize-css': 'latest',
+        'materialize-css': 'latest'
       },
     },
+    tailwind: {
+      dependencies: {
+        'tailwindcss': 'latest'
+      }
+    }
   },
 };

@@ -87,6 +87,10 @@ module.exports = async function writeFiles() {
         modifyConfig(packages.frameworks.materialize, pkg);
         copyFiles([['materialize', globals.destination]]);
         break;
+      case PROMPTS_VALUES.framework.tailwind:
+        modifyConfig(packages.frameworks.tailwind, pkg);
+        copyFiles([['tailwind', globals.destination]]);
+        break;
       default:
         return;
     }

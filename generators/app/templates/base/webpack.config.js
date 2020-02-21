@@ -31,17 +31,17 @@ const PUBLIC_PATH = '';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
-    return path.join(__dirname, config.src, assetPath);
+    return path.posix.join(__dirname, config.src, assetPath);
   }
-  return path.join(__dirname, config.dest, assetPath);
+  return path.posix.join(__dirname, config.dest, assetPath);
 };
 
 const getAssetName = (dest, name, ext, shouldBoost = true) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.join(dest, `${name}.${ext}`)
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.posix.join(dest, `${name}.${ext}`)
 }
 
 const getAssetOutput = asset => {
-  return asset.dest ? asset.dest : asset.src;
+  return asset.dest ? path.posix.normalize(asset.dest) : path.posix.normalize(asset.src);
 }
 
 const generateStaticAssets = () => {
@@ -75,7 +75,7 @@ const pluginsConfiguration = {
     },
   },
   DevServer: {
-    contentBase: path.join(__dirname, config.dest),
+    contentBase: path.posix.join(__dirname, config.dest),
     hot: true,
     compress: true,
     watchContentBase: true,
@@ -291,7 +291,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: path.relative(getAssetOutput(config.styles), getAssetOutput(config.fonts)),
+              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.fonts)),
               outputPath: getAssetOutput(config.fonts),
               name: '[name].[ext]',
             },
@@ -305,7 +305,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: path.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
+              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
               outputPath: getAssetOutput(config.static.images),
               name: '[name].[ext]',
             },
@@ -458,7 +458,7 @@ const webpackConfig = {
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,
-    path: path.resolve(config.dest),
+    path: path.posix.resolve(config.dest),
     filename: getAssetName(config.scripts.dest, '[name]', config.scripts.extension),
     crossOriginLoading: 'anonymous',
   },
