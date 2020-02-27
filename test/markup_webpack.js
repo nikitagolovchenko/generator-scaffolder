@@ -1,46 +1,86 @@
 const path = require('path');
 const chalk = require('chalk');
-const del = require('del');
+const chai = require("chai");
 const helpers = require('yeoman-test');
-const assert = require('yeoman-assert');
+const yeomanAssert = require('yeoman-assert');
+const { chaiExecAsync } = require("chai-exec");
 const VALUES = require('../generators/app/globals');
-const {PROMPTS_VALUES} = require('../generators/app/globals');
+const {PROMPTS_VALUES, config} = require('../generators/app/globals');
 
-const expectedFiles = [`${VALUES.SRC_SCSS}/vendors/_normalize.scss`].concat(
-  VALUES.generalExpectedFiles,
-  VALUES.webpackFiles
-);
+const assert = chai.assert;
+const tempFolder = path.join(__dirname, 'tmp');
+chai.use(chaiExecAsync);
 
-const nonExpectedFiles = [].concat(VALUES.nonWebpackFiles, VALUES.cmsSpecificFiles, VALUES.cmsSpecificFiles_WP);
+chaiExecAsync.defaults = {
+  options: {
+    cwd: path.join(__dirname, 'tmp/markup')
+  }
+};
 
-const expectedContent = [[`${VALUES.SRC_SCSS}/main.scss`, 'vendors/normalize']].concat(VALUES.generalExpectedContent);
+const prompts = {
+  projectType: PROMPTS_VALUES.projectType.markup,
+  framework: PROMPTS_VALUES.framework.none,
+  linters: PROMPTS_VALUES.linters.remove,
+}
 
-const nonExpectedContent = [].concat(VALUES.cmsSpecificContent_WP);
+const expectedFiles = [
+  'webpack.config.js',
+  'config.json',
+  'package.json',
+  'babel.config.js',
+  '.gitignore',
+  '.editorconfig',
+  'postcss.config.js',
+  'README.md',
+  path.join(config.src, config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`),
+  path.join(config.src, config.styles.src, `${config.styles.bundle}.${config.styles.extension}`),
+]
 
-describe(chalk.blue('Static markup + webpack'), () => {
-  const AppFolderPath = path.join(VALUES.INIT_CWD, 'generators/app');
+const unexpectedFiles = [
+  'eslintrc.js',
+]
 
-  beforeEach(() => {
+const expectedCompilation = [
+  path.join(config.dest, config.styles.dest, `${config.styles.bundle}.css`),
+  path.join(config.dest, config.scripts.dest, `${config.scripts.bundle}.${config.scripts.extension}`),
+]
+
+const setProcessToDestination = (dest = 'tmp/markup') => process.chdir(path.resolve(__dirname, dest));
+
+describe(chalk.blue(`Project with prompts: ${JSON.stringify(prompts)}`), async () => {
+  before(() => {
     return helpers
-      .run(AppFolderPath)
-      .cd(VALUES.TEST_FOLDER)
-      .withPrompts({
-        project_type: PROMPTS_VALUES.project_type.markup,
-        frontend_framework: PROMPTS_VALUES.frontend_framework.none,
-        js_bundler: PROMPTS_VALUES.js_bundler.webpack,
-      });
+      .run(path.join(__dirname, '../generators/app'))
+      .inDir(tempFolder)
+      .withPrompts(prompts)
   });
 
-  it(chalk.yellow('Created expected files'), done => {
-    process.chdir(`${VALUES.TEST_FOLDER}/${VALUES.MARKUP}`);
-    assert.file(expectedFiles);
-    assert.noFile(nonExpectedFiles);
-    assert.fileContent(expectedContent);
-    assert.noFileContent(nonExpectedContent);
-    done();
+  describe('Create files:', () => {
+    it(chalk.green('Created expected files'), async () => {
+      setProcessToDestination();
+      await yeomanAssert.file(expectedFiles);
+      await yeomanAssert.noFile(unexpectedFiles);
+    });
+  })
+
+  describe('Install dependencies:', () => {
+    it(chalk.green('Install all dependencies'), async () => {
+      const cli = await chaiExecAsync('yarn');
+      assert.exitCode(cli, 0);
+    })
   });
-  afterEach(async () => {
-    await del([`${VALUES.SRC}`, `${VALUES.DEST}`, `${VALUES.GULP}`, `!${VALUES.ROOT_MODULES}`].concat(expectedFiles));
-    process.chdir(VALUES.INIT_CWD);
+
+  describe('Run build process:', () => {
+    it(chalk.green('Run project in production mode:'), async () => {
+      const cli = await chaiExecAsync('yarn build');
+      assert.exitCode(cli, 0);
+    });
   });
+
+  describe('Build correct files:', () => {
+    setProcessToDestination();
+    it(chalk.green('Generate all files based on config'), async () => {
+      await yeomanAssert.file(expectedCompilation);
+    });
+  })
 });
