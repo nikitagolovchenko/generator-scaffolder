@@ -1590,14 +1590,11 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-<<<<<<< HEAD
 check-error@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
   integrity sha1-V00xLt2Iu13YkS6Sht1sCu1KrII=
 
-=======
->>>>>>> 671b650e41ee16438f69ea042b430b7d08aa8610
 ci-info@^1.5.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.6.0.tgz#2ca20dbb9ceb32d4524a683303313f0304b1e497"
@@ -2560,7 +2557,6 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-<<<<<<< HEAD
 ez-spawn@^2.1.3:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/ez-spawn/-/ez-spawn-2.1.6.tgz#e6343ba59f9ef6f32396e53427876d7a4b5fa539"
@@ -2571,16 +2567,10 @@ ez-spawn@^2.1.3:
     string-argv "^0.3.1"
     type-detect "^4.0.8"
 
-fast-deep-equal@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
-  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
-=======
 fast-deep-equal@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.1.tgz#545145077c501491e33b15ec408c294376e94ae4"
   integrity sha512-8UEa58QDLauDNfpbrX55Q9jrGHThw2ZMdOky5Gl1CDtVeJDPVrG4Jxx1N8jw2gkWaff5UUuX1KJd+9zGe2B+ZA==
->>>>>>> 671b650e41ee16438f69ea042b430b7d08aa8610
 
 fast-diff@^1.1.2:
   version "1.2.0"
@@ -2894,8 +2884,6 @@ glob-parent@^3.1.0:
     is-glob "^3.1.0"
     path-dirname "^1.0.0"
 
-<<<<<<< HEAD
-=======
 glob-parent@^5.0.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.0.tgz#5f4c1d1e748d30cd73ad2944b3577a81b081e8c2"
@@ -2903,7 +2891,6 @@ glob-parent@^5.0.0:
   dependencies:
     is-glob "^4.0.1"
 
->>>>>>> 671b650e41ee16438f69ea042b430b7d08aa8610
 glob-to-regexp@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz#8c5a1494d2066c570cc3bfe4496175acc4d502ab"
@@ -3487,11 +3474,7 @@ is-glob@^3.1.0:
   dependencies:
     is-extglob "^2.1.0"
 
-<<<<<<< HEAD
-is-glob@^4.0.0:
-=======
 is-glob@^4.0.0, is-glob@^4.0.1:
->>>>>>> 671b650e41ee16438f69ea042b430b7d08aa8610
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.1.tgz#7567dbe9f2f5e2467bc77ab83c4a29482407a5dc"
   integrity sha512-5G0tKtBTFImOqDnLB2hG6Bp2qcKEFduo4tZu9MT/H6NQv/ghhy30o55ufafxJ/LdH79LLs2Kfrn85TLKyA7BUg==
@@ -7056,10 +7039,10 @@ yeoman-generator@^4.4.0, yeoman-generator@^4.5.0:
     through2 "^3.0.1"
     yeoman-environment "^2.3.4"
 
-yeoman-test@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/yeoman-test/-/yeoman-test-2.1.0.tgz#2df3f7c2c0577a26da7b380dcd35ee87f39f6c98"
-  integrity sha512-m7yt5z109XP+namMcqexj1FqdT7zw0VY8iW+kjO46NxxW4hMnqN77loWUoDYuzT9MXra3Q4OphZ3P6WIYFHTeg==
+yeoman-test@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/yeoman-test/-/yeoman-test-2.2.0.tgz#c7d9ef22a37bfa0ae21b1702c8142d8b789703f2"
+  integrity sha512-JxZSiPnuxRR/7ESx0A/VK2HREbhnaCEtDK3vx4XwM8ltgdVe+jm4bCTXpBJVoWqcZ9JxGmUKxiS6TOQl5C+2fg==
   dependencies:
     inquirer "^7.0.3"
     lodash "^4.17.15"
