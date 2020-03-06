@@ -1,7 +1,19 @@
+const path = require('path');
 const projectConfig = require('./templates/base/config.json');
 
-exports.config = projectConfig;
-exports.PROMPTS_VALUES = {
+const CONFIG = projectConfig;
+
+const PATHS = {
+  appFolder: path.resolve(process.cwd(), 'generators/app/'),
+  templatesFolder: path.resolve(process.cwd(), 'generators/app/templates/'),
+  baseFolder: path.resolve(process.cwd(), 'generators/app/templates/base/'),
+  tetFolder: path.join(process.cwd(), 'test/'),
+  tempFolder: path.join(process.cwd(), 'test/tmp/'),
+  tempMarkupFolder: path.join(process.cwd(), 'test/tmp/markup/'),
+  destination: 'markup',
+};
+
+const PROMPTS_VALUES = {
   projectType: {
     markup: 'markup',
     markupCms: 'markupCms',
@@ -25,11 +37,7 @@ exports.PROMPTS_VALUES = {
   }
 };
 
-exports.globals = {
-  destination: 'markup',
-}
-
-exports.packages = {
+const PACKAGES = {
   linters: {
     css: {
       scripts: {
@@ -67,3 +75,7 @@ exports.packages = {
     }
   },
 };
+
+module.exports = {
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES
+}
