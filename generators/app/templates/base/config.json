@@ -34,11 +34,11 @@
     "dest": "./",
     "extension": "html"
   },
-  "fonts": {
-    "name": "fonts",
-    "src": "fonts"
-  },
   "static": {
+    "fonts": {
+      "name": "fonts",
+      "src": "fonts"
+    },
     "images": {
       "name": "images",
       "src": "images"

@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const prependFile = require('prepend-file');
-const {config, globals} = require('../globals');
+const {CONFIG, PATHS} = require('../globals');
 
 function WPHeader({instance}) {
     const {name} = path.parse(instance.destinationPath()) || 'Base';
-    const stylesFilePath = path.join(globals.destination, config.src, config.styles.src, `${config.styles.bundle}.${config.styles.extension}`)
+    const stylesFilePath = path.join(PATHS.destination, CONFIG.src, CONFIG.styles.src, `${CONFIG.styles.bundle}.${CONFIG.styles.extension}`)
 
     const WPHeaderTemplate = `
 /*

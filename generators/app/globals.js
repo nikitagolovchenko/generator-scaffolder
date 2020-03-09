@@ -1,7 +1,19 @@
+const path = require('path');
 const projectConfig = require('./templates/base/config.json');
 
-exports.config = projectConfig;
-exports.PROMPTS_VALUES = {
+const CONFIG = projectConfig;
+
+const PATHS = {
+  appFolder: path.resolve(process.cwd(), 'generators/app/'),
+  templatesFolder: path.resolve(process.cwd(), 'generators/app/templates/'),
+  baseFolder: path.resolve(process.cwd(), 'generators/app/templates/base/'),
+  tetFolder: path.join(process.cwd(), 'test/'),
+  tempFolder: path.join(process.cwd(), 'test/tmp/'),
+  tempMarkupFolder: path.join(process.cwd(), 'test/tmp/markup/'),
+  destination: 'markup',
+};
+
+const PROMPTS_VALUES = {
   projectType: {
     markup: 'markup',
     markupCms: 'markupCms',
@@ -25,11 +37,36 @@ exports.PROMPTS_VALUES = {
   }
 };
 
-exports.globals = {
-  destination: 'markup',
+const OTHER_FILES = {
+  linters: {
+    general: ['.prettierignore', 'prettier.config.js'],
+    css: ['.stylelintignore', 'stylelint.config.js'],
+    js: ['eslintrc.js'],
+  }
 }
 
-exports.packages = {
+const CONFIG_REWRITES = {
+  WP: {
+    styles: {
+      bundle: 'style',
+      dest: './',
+    },
+  },
+  PUG: {
+    templates: {
+      pages: 'views/pages',
+      extensition: 'pug',
+    }
+  },
+  TWIG: {
+    templates: {
+      pages: 'views/pages',
+      extensition: 'html.twig',
+    }
+  },
+}
+
+const PACKAGES = {
   linters: {
     css: {
       scripts: {
@@ -66,4 +103,21 @@ exports.packages = {
       }
     }
   },
+  templating: {
+    pug: {
+      devDependencies: {
+        'pug': 'latest',
+        'pug-html-loader': 'latest',
+      },
+    },
+    twig: {
+      devDependencies: {
+        'twig-html-loader': 'latest',
+      },
+    },
+  }
 };
+
+module.exports = {
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES
+}
