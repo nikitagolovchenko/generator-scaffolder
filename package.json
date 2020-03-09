@@ -42,7 +42,7 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore test --fix",
-    "test:files": "cross-env FILES_ONLY=true mocha -S --timeout infinite",
+    "test:files": "cross-env FILES_ONLY=true mocha test/index.js --timeout infinite",
     "test": "mocha -S --timeout infinite"
   },
   "lint-staged": {
