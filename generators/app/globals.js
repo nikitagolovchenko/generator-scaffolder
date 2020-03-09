@@ -37,6 +37,35 @@ const PROMPTS_VALUES = {
   }
 };
 
+const OTHER_FILES = {
+  linters: {
+    general: ['.prettierignore', 'prettier.config.js'],
+    css: ['.stylelintignore', 'stylelint.config.js'],
+    js: ['eslintrc.js'],
+  }
+}
+
+const CONFIG_REWRITES = {
+  WP: {
+    styles: {
+      bundle: 'style',
+      dest: './',
+    },
+  },
+  PUG: {
+    templates: {
+      pages: 'views/pages',
+      extensition: 'pug',
+    }
+  },
+  TWIG: {
+    templates: {
+      pages: 'views/pages',
+      extensition: 'html.twig',
+    }
+  },
+}
+
 const PACKAGES = {
   linters: {
     css: {
@@ -74,8 +103,21 @@ const PACKAGES = {
       }
     }
   },
+  templating: {
+    pug: {
+      devDependencies: {
+        'pug': 'latest',
+        'pug-html-loader': 'latest',
+      },
+    },
+    twig: {
+      devDependencies: {
+        'twig-html-loader': 'latest',
+      },
+    },
+  }
 };
 
 module.exports = {
-  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES
 }

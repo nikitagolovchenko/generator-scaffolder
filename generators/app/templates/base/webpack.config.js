@@ -126,7 +126,8 @@ const pluginsConfiguration = {
 // creating new instance of plugin for each of the pages that we have
 const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
-  const templateFiles = fs.readdirSync(getAssetPath(SRC, config.templates.src));
+  const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
+  const templateFiles = fs.readdirSync(getAssetPath(SRC, sitePages));
   const files = templateFiles.filter(elm => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
 
   return files.map(item => {
@@ -149,8 +150,8 @@ const generateHtmlPlugins = () => {
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
-      template: getAssetPath(SRC, `${config.templates.src}/${name}.${extension}`),
-      filename: getAssetPath(DEST, `${config.templates.dest}/${name}.${extension}`),
+      template: getAssetPath(SRC, `${sitePages}/${name}.${extension}`),
+      filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
       // inlineSource: 'runtime.+\\.js',
       // awaiting for ^4.0 version to be stable
       // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
@@ -228,7 +229,38 @@ const getPlugins = () => {
 };
 
 const getTemplatesLoader = templateType => {
-  const HTML = /\.html$/;
+  const HTML = new RegExp('html');
+  const PUG = new RegExp('pug');
+  const TWIG = new RegExp('html.twig');
+
+  if (PUG.test(templateType)) {
+    return {
+      test: PUG,
+      use: [
+        'raw-loader',
+        `pug-html-loader?basedir=${path.join(config.src, config.templates.src)}`
+      ],
+    };
+  }
+
+  if (TWIG.test(templateType)) {
+    return {
+      test: TWIG,
+      use: [
+        'raw-loader',
+        {
+          loader: 'twig-html-loader',
+          options: {
+            namespaces: {
+              layout: path.resolve(__dirname, 'src/views/_layout'),
+              components: path.resolve(__dirname, 'src/views/_components'),
+              includes: path.resolve(__dirname, 'src/views/_includes'),
+            },
+          },
+        },
+      ],
+    };
+  }
 
   return {
     test: HTML,
@@ -291,8 +323,8 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.fonts)),
-              outputPath: getAssetOutput(config.fonts),
+              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
+              outputPath: getAssetOutput(config.static.fonts),
               name: '[name].[ext]',
             },
           },

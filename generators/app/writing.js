@@ -1,22 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 const merge = require('lodash.merge');
-const {PROMPTS_VALUES, PACKAGES, PATHS} = require('./globals');
+const {PROMPTS_VALUES, PACKAGES, PATHS, OTHER_FILES, CONFIG_REWRITES} = require('./globals');
 
 const projectConfig = 'markup/config.json';
 const projectPackages = 'markup/package.json';
 
 module.exports = async function writeFiles() {
   const copyFiles = paths => {
-    paths.forEach(files => {
-      this.fs.copy(this.templatePath(files[0]), this.destinationPath(files[1]), {
-        globOptions: {
-          dot: true,
-        }
-      });
+    this.fs.copy(this.templatePath(paths[0]), this.destinationPath(paths[1]), {
+      globOptions: {
+        dot: true,
+      }
     });
-
-    
   };
 
   const modifyConfig = (settings, config = projectConfig) => {
@@ -24,7 +20,7 @@ module.exports = async function writeFiles() {
   }
 
   const setLinters = () => {
-    if (this.props.linters && this.props.linters.length) {
+    if (this.props.linters && typeof this.props.linters === 'object') {
       const lintCSS = this.props.linters.includes(PROMPTS_VALUES.linters.css);
       const lintJS = this.props.linters.includes(PROMPTS_VALUES.linters.js);
       const lintersSettings = {
@@ -34,18 +30,18 @@ module.exports = async function writeFiles() {
         }
       }
 
-      copyFiles([['linters/general', PATHS.destination]]);
+      copyFiles(['linters/general', PATHS.destination]);
       modifyConfig(lintersSettings)
 
       if (lintCSS) {
         const cssLinterPackages = merge(PACKAGES.linters.general, PACKAGES.linters.css);
-        copyFiles([['linters/css', PATHS.destination]]);
+        copyFiles(['linters/css', PATHS.destination]);
         modifyConfig(cssLinterPackages, projectPackages);
       }
 
       if (lintJS) {
         const jsLinterPackages = merge(PACKAGES.linters.general, PACKAGES.linters.js);
-        copyFiles([['linters/js', PATHS.destination]]);
+        copyFiles(['linters/js', PATHS.destination]);
         modifyConfig(jsLinterPackages, projectPackages);
       }
     } else {
@@ -58,17 +54,8 @@ module.exports = async function writeFiles() {
   };
 
   const setProjectTypeBasedSettings = () => {
-    const WP = {
-      config: {
-        styles: {
-          bundle: 'style',
-          dest: './',
-        }
-      },
-    }
-
     if (this.props.cms === PROMPTS_VALUES.cms.wp) {
-      modifyConfig(WP.config);
+      modifyConfig(CONFIG_REWRITES.WP);
     }
   }
 
@@ -76,19 +63,19 @@ module.exports = async function writeFiles() {
     switch(this.props.framework) {
       case PROMPTS_VALUES.framework.bootstrap:
         modifyConfig(PACKAGES.frameworks.bootstrap, projectPackages);
-        copyFiles([['bootstrap', PATHS.destination]]);
+        copyFiles(['bootstrap', PATHS.destination]);
         break;
       case PROMPTS_VALUES.framework.zurb:
         modifyConfig(PACKAGES.frameworks.zurb, projectPackages);
-        copyFiles([['zurb', PATHS.destination]]);
+        copyFiles(['zurb', PATHS.destination]);
         break;
       case PROMPTS_VALUES.framework.materialize:
         modifyConfig(PACKAGES.frameworks.materialize, projectPackages);
-        copyFiles([['materialize', PATHS.destination]]);
+        copyFiles(['materialize', PATHS.destination]);
         break;
       case PROMPTS_VALUES.framework.tailwind:
         modifyConfig(PACKAGES.frameworks.tailwind, projectPackages);
-        copyFiles([['tailwind', PATHS.destination]]);
+        copyFiles(['tailwind', PATHS.destination]);
         break;
       default:
         return;
@@ -97,7 +84,7 @@ module.exports = async function writeFiles() {
 
 
   await Promise.all([
-    copyFiles([['base', PATHS.destination]]),
+    copyFiles(['base', PATHS.destination]),
     setLinters(),
     setProjectTypeBasedSettings(),
     setFrontendFrameworks(),
