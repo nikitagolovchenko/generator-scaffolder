@@ -18,7 +18,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
-    "husky": "^0.14.3",
+    "husky": "^4.2.3",
     "jest": "^22.0.6",
     "lint-staged": "^6.1.1",
     "lodash.merge": "^4.6.2",
