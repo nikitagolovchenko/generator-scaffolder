@@ -1,12 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // 1. Configuration and helpers
 @import 'abstracts/variables';
 @import 'abstracts/functions';
 @import 'abstracts/mixins';
 
 // 2. Vendors
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import 'vendors/icomoon/styles';
 
 // 3. Base styles and elements
