@@ -708,6 +708,23 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@jsdevtools/chai-exec@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@jsdevtools/chai-exec/-/chai-exec-2.0.1.tgz#770e4925720e48a07d485a10ab2c5e0e360b7658"
+  integrity sha512-v512MRvbkU5GyvCdAu08zw+JcweBM3ihvmYnPc8YYa/IDcspfbbTT0GcwRRzeLXLKgyOe2S57paAgXqSHPfqrw==
+  dependencies:
+    "@jsdevtools/ez-spawn" "^3.0.0"
+
+"@jsdevtools/ez-spawn@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@jsdevtools/ez-spawn/-/ez-spawn-3.0.0.tgz#621f37395034500c91c95ac538f24c89c4230740"
+  integrity sha512-9YSL7HvGRQWXX9VGfsBLi7tp2FvBl1KHJT+fbvmjexwId3Om/A96OdGjS1bZTPOH/ecaboTrzLHyPtH/Nt1drQ==
+  dependencies:
+    call-me-maybe "^1.0.1"
+    cross-spawn "^7.0.1"
+    string-argv "^0.3.1"
+    type-detect "^4.0.8"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1499,12 +1516,12 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-chai-exec@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/chai-exec/-/chai-exec-1.1.2.tgz#bed32fc7e437f2e4bbee9ffb466308c2f9f23ea2"
-  integrity sha512-5K3Up5YKY+2ezCpq+9YsMwbnSnpTM4KkP4U5sDBp6agWjkkACFbTRxtzIvFFKoipS/EX5mFMKp2lQNl+Rfyt/A==
+chai-exec@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/chai-exec/-/chai-exec-2.0.1.tgz#9ceac92bc09d971232cef3253344c69370b7a39c"
+  integrity sha512-uN4brobJ0eo1nztnOqKRmd6RbTf4vO+EP36E4KvroTzTVWHo7RChYcJi0z1x7yGMDjcqM2mv25bAnb81cceIxw==
   dependencies:
-    ez-spawn "^2.1.3"
+    "@jsdevtools/chai-exec" "2.0.1"
 
 chai@^4.2.0:
   version "4.2.0"
@@ -2514,16 +2531,6 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
-
-ez-spawn@^2.1.3:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/ez-spawn/-/ez-spawn-2.1.6.tgz#e6343ba59f9ef6f32396e53427876d7a4b5fa539"
-  integrity sha512-SXH+o93DtsKug2tUB+iySoNw0TBCwAUGGiQr6f+1uMULPETKEd4Y7iSk3FgQwUo27Umz0wpkfEKbNEueILWzYQ==
-  dependencies:
-    call-me-maybe "^1.0.1"
-    cross-spawn "^7.0.1"
-    string-argv "^0.3.1"
-    type-detect "^4.0.8"
 
 fast-deep-equal@^3.1.1:
   version "3.1.1"

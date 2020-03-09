@@ -33,7 +33,7 @@
   "dependencies": {
     "assert": "^2.0.0",
     "chai": "^4.2.0",
-    "chai-exec": "^1.1.2",
+    "chai-exec": "^2.0.1",
     "chalk": "^3.0.0",
     "mocha": "^7.1.0",
     "update-notifier": "^4.1.0",
