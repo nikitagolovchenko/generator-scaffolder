@@ -31,13 +31,13 @@ All commands are listed in package.json file in scripts section and described be
 
 ##### Dont use npm and yarn in same project - this can lead to unnexpected results
 
-### Dev mode `npm dev` or `npm run dev` or `yarn dev`
+### Dev mode `npm run dev` or `yarn dev`
 
   - build assets in development mode
   - running dev server
   - watching changes
 
-### Production mode `npm build` or `npm run build` or `yarn build`
+### Production mode `npm run build` or `yarn build`
 
   - build assets in production mode into `dist` folder
 
