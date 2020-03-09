@@ -34,6 +34,7 @@
     "chai": "^4.2.0",
     "chai-exec": "^2.0.1",
     "chalk": "^3.0.0",
+    "cross-env": "^7.0.2",
     "mocha": "^7.1.0",
     "update-notifier": "^4.1.0",
     "yeoman-generator": "^4.6.0",
@@ -41,6 +42,7 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore test --fix",
+    "test:files": "cross-env FILES_ONLY=true mocha -S --timeout infinite",
     "test": "mocha -S --timeout infinite"
   },
   "lint-staged": {

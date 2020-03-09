@@ -13,6 +13,12 @@ const PATHS = {
   destination: 'markup',
 };
 
+const SCRIPTS = {
+  install: 'yarn',
+  dev: 'yarn dev',
+  build: 'yarn build',
+}
+
 const PROMPTS_VALUES = {
   projectType: {
     markup: 'markup',
@@ -119,5 +125,5 @@ const PACKAGES = {
 };
 
 module.exports = {
-  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES, SCRIPTS
 }
