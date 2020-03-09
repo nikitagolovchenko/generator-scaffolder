@@ -229,9 +229,9 @@ const getPlugins = () => {
 };
 
 const getTemplatesLoader = templateType => {
-  const HTML = new RegExp('html');
-  const PUG = new RegExp('pug');
-  const TWIG = new RegExp('html.twig');
+  const HTML = new RegExp('\\.html$');
+  const PUG = new RegExp('\\.pug$');
+  const TWIG = new RegExp('\\.html.twig$');
 
   if (PUG.test(templateType)) {
     return {
