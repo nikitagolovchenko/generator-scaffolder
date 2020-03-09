@@ -4,7 +4,6 @@ const chalk = require('chalk');
 const chai = require('chai');
 const helpers = require('yeoman-test');
 const yeomanAssert = require('yeoman-assert');
-const {promisify} = require('util');
 const {getFilesArray, setProcessToDestination} = require('../generators/app/utils');
 const {chaiExecAsync} = require('chai-exec');
 const {PROMPTS_VALUES, PATHS, OTHER_FILES} = require('../generators/app/globals');
@@ -28,8 +27,9 @@ describe(chalk.blue(`Project with prompts: ${JSON.stringify(prompts)}`), async (
   });
 
   describe('Generating files:', () => {
-    setProcessToDestination();
     it(chalk.green('Create expected files'), async () => {
+      setProcessToDestination();
+
       const expectedFiles = await getFilesArray(PATHS.baseFolder);
       const unexpectedFiles = [...OTHER_FILES.linters.general, ...OTHER_FILES.linters.css, ...OTHER_FILES.linters.js];
 
@@ -53,8 +53,9 @@ describe(chalk.blue(`Project with prompts: ${JSON.stringify(prompts)}`), async (
   });
 
   describe('Building correct files:', () => {
-    setProcessToDestination();
     it(chalk.green('Generate all files based on project config'), async () => {
+      setProcessToDestination();
+
       const newCfg = JSON.parse(fs.readFileSync(path.join(PATHS.tempMarkupFolder, 'config.json')));
       const expectedCompilation = [
         path.join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`),
