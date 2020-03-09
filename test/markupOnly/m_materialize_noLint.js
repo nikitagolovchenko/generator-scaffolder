@@ -14,23 +14,20 @@ const assert = chai.assert;
 
 const expectedFilesContent = {
   js: [
-    /import 'what-input';/,
-    /import 'foundation-sites';/,
-    'jQuery(document).foundation();',
+    /import Materialize from 'materialize-css';/,
+    'Materialize.AutoInit();',
   ],
   styles: [
-    /@import 'vendors\/zurb';/,
-    /@import 'vendors-extensions\/zurb';/,
-    /@import 'vendors\/zurb-utilities';/,
+    /@import 'vendors\/materialize';/,
   ],
-  json: [PACKAGES.frameworks.zurb],
+  json: [PACKAGES.frameworks.materialize],
 }
 
 const staticExpectedFiles = [];
 const staticUnexpectedFiles = [...OTHER_FILES.linters.general, ...OTHER_FILES.linters.css, ...OTHER_FILES.linters.js];
 const prompts = {
   projectType: PROMPTS_VALUES.projectType.markup,
-  framework: PROMPTS_VALUES.framework.zurb,
+  framework: PROMPTS_VALUES.framework.materialize,
   linters: false,
 };
 
@@ -55,7 +52,7 @@ describe(chalk.blue(`Project with prompts: ${chalk.yellow(JSON.stringify(prompts
 
       const unexpectedFiles = [].concat(staticUnexpectedFiles);
       const expectedFiles = [...await getFilesArray(PATHS.baseFolder)]
-        .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.zurb))])
+        .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.materialize))])
         .concat(staticExpectedFiles);
 
       await yeomanAssert.file(expectedFiles);
