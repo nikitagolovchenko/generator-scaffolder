@@ -13,21 +13,23 @@ const ONLY_FILES_TEST = process.env.FILES_ONLY;
 const assert = chai.assert;
 
 const expectedFilesContent = {
-  js: [/import 'bootstrap'/],
-  styles: [
-    /@import 'vendors\/bootstrap'\;/,
-    /@import 'vendors-extensions\/bootstrap'\;/,
-    /@import 'vendors\/bootstrap-utilities'\;/,
-    /@import 'abstracts\/rebuilded-mixins'\;/,
+  js: [
+    /import 'what-input';/,
+    /import 'foundation-sites';/,
   ],
-  json: [PACKAGES.frameworks.bootstrap],
+  styles: [
+    /@import 'vendors\/zurb';/,
+    /@import 'vendors-extensions\/zurb';/,
+    /@import 'vendors\/zurb-utilities';/,
+  ],
+  json: [PACKAGES.frameworks.zurb],
 }
 
 const staticExpectedFiles = [];
 const staticUnexpectedFiles = [...OTHER_FILES.linters.general, ...OTHER_FILES.linters.css, ...OTHER_FILES.linters.js];
 const prompts = {
   projectType: PROMPTS_VALUES.projectType.markup,
-  framework: PROMPTS_VALUES.framework.bootstrap,
+  framework: PROMPTS_VALUES.framework.zurb,
   linters: false,
 };
 
@@ -52,7 +54,7 @@ describe(chalk.blue(`Project with prompts: ${chalk.yellow(JSON.stringify(prompts
 
       const unexpectedFiles = [].concat(staticUnexpectedFiles);
       const expectedFiles = [...await getFilesArray(PATHS.baseFolder)]
-        .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.bootstrap))])
+        .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.zurb))])
         .concat(staticExpectedFiles);
 
       await yeomanAssert.file(expectedFiles);
