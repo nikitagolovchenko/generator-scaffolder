@@ -15,7 +15,6 @@ module.exports = [
         value: PROMPTS_VALUES.projectType.markupCms,
       },
     ],
-    store: true,
     default: 0,
   },
   {
@@ -33,7 +32,6 @@ module.exports = [
         value: PROMPTS_VALUES.cms.other,
       },
     ],
-    store: true,
     default: 0,
   },
   {
@@ -62,7 +60,6 @@ module.exports = [
         value: PROMPTS_VALUES.framework.tailwind,
       },
     ],
-    store: true,
     default: 0,
   },
   {
@@ -91,14 +88,15 @@ module.exports = [
     choices: [
       {
         name: 'Stylelint for SCSS',
+        checked: true,
         value: PROMPTS_VALUES.linters.css,
       },
       {
         name: 'ESLint for JS',
+        checked: true,
         value: PROMPTS_VALUES.linters.js,
       },
     ],
     default: [0, 1],
-    store: true,
   },
 ];

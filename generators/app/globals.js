@@ -51,6 +51,25 @@ const OTHER_FILES = {
   }
 }
 
+const GENERAL_TEST_SETTINGS = [
+  {
+    linters: false,
+    staticUnexpectedFiles: [...OTHER_FILES.linters.general, ...OTHER_FILES.linters.css, ...OTHER_FILES.linters.js],
+  },
+  {
+    linters: ['css'],
+    staticUnexpectedFiles: [...OTHER_FILES.linters.js],
+  },
+  {
+    linters: ['js'],
+    staticUnexpectedFiles: [...OTHER_FILES.linters.css],
+  },
+  {
+    linters: ['css', 'js'],
+    staticUnexpectedFiles: [],
+  },
+]
+
 const CONFIG_REWRITES = {
   WP: {
     styles: {
@@ -125,5 +144,5 @@ const PACKAGES = {
 };
 
 module.exports = {
-  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES, SCRIPTS
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES, SCRIPTS, GENERAL_TEST_SETTINGS
 }

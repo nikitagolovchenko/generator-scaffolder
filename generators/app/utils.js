@@ -1,5 +1,4 @@
-'use strict';
-
+const chalk = require('chalk');
 const {join, resolve} = require('path');
 const {readdir, stat} = require('fs');
 const {promisify} = require('util');
@@ -25,4 +24,20 @@ async function getFilesArray(dir, allFiles = []) {
 
 const setProcessToDestination = (dest = PATHS.tempMarkupFolder) => process.chdir(resolve(__dirname, dest));
 
-module.exports = {getFilesArray, setProcessToDestination};
+const projectTypeMessage = prompts => {
+  const message = `
+    Project with settings:
+    ${
+      chalk.yellow(
+        `
+        1) Project type: ${prompts.projectType}
+        2) CSS/JS framework: ${prompts.framework}
+        3) Linters: ${JSON.stringify(prompts.linters)}
+        `
+      )
+    }
+  `
+  return chalk.blue(message)
+}
+
+module.exports = {getFilesArray, setProcessToDestination, projectTypeMessage};

@@ -486,7 +486,7 @@ const getEntry = entryName => {
 const webpackConfig = {
   mode: ENV,
   entry: getEntry(),
-  devtool: isProduction ? 'source-map' : 'inline-source-map',
+  devtool: isProduction ? false : 'inline-source-map',
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,

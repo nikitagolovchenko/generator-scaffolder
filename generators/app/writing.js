@@ -1,7 +1,5 @@
-const fs = require('fs');
-const path = require('path');
 const merge = require('lodash.merge');
-const {PROMPTS_VALUES, PACKAGES, PATHS, OTHER_FILES, CONFIG_REWRITES} = require('./globals');
+const {PROMPTS_VALUES, PACKAGES, PATHS, CONFIG_REWRITES} = require('./globals');
 
 const projectConfig = 'markup/config.json';
 const projectPackages = 'markup/package.json';
@@ -20,7 +18,7 @@ module.exports = async function writeFiles() {
   }
 
   const setLinters = () => {
-    if (this.props.linters && typeof this.props.linters === 'object') {
+    if (this.props.linters) {
       const lintCSS = this.props.linters.includes(PROMPTS_VALUES.linters.css);
       const lintJS = this.props.linters.includes(PROMPTS_VALUES.linters.js);
       const lintersSettings = {
