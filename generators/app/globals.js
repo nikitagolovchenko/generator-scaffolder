@@ -70,6 +70,8 @@ const GENERAL_TEST_SETTINGS = [
   },
 ]
 
+
+
 const CONFIG_REWRITES = {
   WP: {
     styles: {
@@ -143,6 +145,193 @@ const PACKAGES = {
   }
 };
 
+const wpExpectedContent = {
+  styles: ['Author:', 'Author URI:', 'Version:', 'Description:', 'License:', 'License URI:', 'Text Domain:', 'Tags:', 'Theme URI:']
+};
+
+const TESTS_SETTINGS = {
+  markup: {
+    default: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {},
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markup,
+        framework: PROMPTS_VALUES.framework.none,
+        cms: false,
+      }
+    },
+    bootstrap: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [/import 'bootstrap'/],
+        styles: [
+          /@import 'vendors\/bootstrap'\;/,
+          /@import 'vendors-extensions\/bootstrap'\;/,
+          /@import 'vendors\/bootstrap-utilities'\;/,
+          /@import 'abstracts\/rebuilded-mixins'\;/,
+        ],
+        json: [PACKAGES.frameworks.bootstrap],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markup,
+        framework: PROMPTS_VALUES.framework.bootstrap,
+        cms: false,
+      }
+    },
+    materialize: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [
+          /import Materialize from 'materialize-css';/,
+          'Materialize.AutoInit();',
+        ],
+        styles: [
+          /@import 'vendors\/materialize';/,
+        ],
+        json: [PACKAGES.frameworks.materialize],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markup,
+        framework: PROMPTS_VALUES.framework.materialize,
+        cms: false,
+      }
+    },
+    tailwind: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [],
+        styles: [
+          '// stylelint-disable scss/at-rule-no-unknown',
+          '@tailwind base;',
+          '@tailwind components;',
+          '@tailwind utilities;',
+        ],
+        json: [PACKAGES.frameworks.tailwind],
+        postcss: [/'tailwindcss': true/]
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markup,
+        framework: PROMPTS_VALUES.framework.tailwind,
+        cms: false,
+      }
+    },
+    zurb: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [
+          /import 'what-input';/,
+          /import 'foundation-sites';/,
+          'jQuery(document).foundation();',
+        ],
+        styles: [
+          /@import 'vendors\/zurb';/,
+          /@import 'vendors-extensions\/zurb';/,
+          /@import 'vendors\/zurb-utilities';/,
+        ],
+        json: [PACKAGES.frameworks.zurb],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markup,
+        framework: PROMPTS_VALUES.framework.zurb,
+        cms: false,
+      }
+    },
+  },
+  wp: {
+    default: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        styles: [...wpExpectedContent.styles],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markupCms,
+        framework: PROMPTS_VALUES.framework.none,
+        cms: PROMPTS_VALUES.cms.wp,
+      }
+    },
+    bootstrap: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [/import 'bootstrap'/],
+        styles: [
+          /@import 'vendors\/bootstrap'\;/,
+          /@import 'vendors-extensions\/bootstrap'\;/,
+          /@import 'vendors\/bootstrap-utilities'\;/,
+          /@import 'abstracts\/rebuilded-mixins'\;/,
+          ...wpExpectedContent.styles
+        ],
+        json: [PACKAGES.frameworks.bootstrap],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markupCms,
+        framework: PROMPTS_VALUES.framework.bootstrap,
+        cms: PROMPTS_VALUES.cms.wp,
+      }
+    },
+    materialize: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [
+          /import Materialize from 'materialize-css';/,
+          'Materialize.AutoInit();',
+        ],
+        styles: [
+          /@import 'vendors\/materialize';/,
+          ...wpExpectedContent.styles
+        ],
+        json: [PACKAGES.frameworks.materialize],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markupCms,
+        framework: PROMPTS_VALUES.framework.materialize,
+        cms: PROMPTS_VALUES.cms.wp,
+      }
+    },
+    tailwind: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [],
+        styles: [
+          '// stylelint-disable scss/at-rule-no-unknown',
+          '@tailwind base;',
+          '@tailwind components;',
+          '@tailwind utilities;',
+          ...wpExpectedContent.styles
+        ],
+        json: [PACKAGES.frameworks.tailwind],
+        postcss: [/'tailwindcss': true/]
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markupCms,
+        framework: PROMPTS_VALUES.framework.tailwind,
+        cms: PROMPTS_VALUES.cms.wp,
+      }
+    },
+    zurb: {
+      staticExpectedFiles: [],
+      expectedFilesContent: {
+        js: [
+          /import 'what-input';/,
+          /import 'foundation-sites';/,
+          'jQuery(document).foundation();',
+        ],
+        styles: [
+          /@import 'vendors\/zurb';/,
+          /@import 'vendors-extensions\/zurb';/,
+          /@import 'vendors\/zurb-utilities';/,
+          ...wpExpectedContent.styles
+        ],
+        json: [PACKAGES.frameworks.zurb],
+      },
+      generalSettings: {
+        projectType: PROMPTS_VALUES.projectType.markupCms,
+        framework: PROMPTS_VALUES.framework.zurb,
+        cms: PROMPTS_VALUES.cms.wp,
+      }
+    },
+  }
+}
+
 module.exports = {
-  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES, SCRIPTS, GENERAL_TEST_SETTINGS
+  CONFIG, PATHS, PROMPTS_VALUES, PACKAGES, OTHER_FILES, CONFIG_REWRITES, SCRIPTS, GENERAL_TEST_SETTINGS, TESTS_SETTINGS
 }

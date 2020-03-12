@@ -33,6 +33,7 @@ const projectTypeMessage = prompts => {
         1) Project type: ${prompts.projectType}
         2) CSS/JS framework: ${prompts.framework}
         3) Linters: ${JSON.stringify(prompts.linters)}
+        4) CMS: ${JSON.stringify(prompts.cms)}
         `
       )
     }
