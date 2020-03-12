@@ -41,6 +41,7 @@
     "yosay": "^2.0.1"
   },
   "scripts": {
+    "precommit": "lint-staged",
     "lint": "eslint --ignore-path .gitignore test --fix",
     "test:files": "cross-env FILES_ONLY=true mocha test/index.js --timeout infinite",
     "test": "mocha -S --timeout infinite"
