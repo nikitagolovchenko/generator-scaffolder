@@ -1,9 +1,9 @@
 const chalk = require('chalk');
-const bootstrapTest = require('./markupOnly/bootstrap');
-const defaultTest = require('./markupOnly/default');
-const zurbTest = require('./markupOnly/zurb');
-const materializeTest = require('./markupOnly/materialize');
-const tailwindTest = require('./markupOnly/tailwind');
+const bootstrapTest = require('./tests/bootstrap');
+const defaultTest = require('./tests/default');
+const zurbTest = require('./tests/zurb');
+const materializeTest = require('./tests/materialize');
+const tailwindTest = require('./tests/tailwind');
 const { TESTS_SETTINGS } = require(`${process.env.PWD}/generators/app/globals`);
 
 const title = (text) => {
