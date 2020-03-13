@@ -1,6 +1,8 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const glob = require('glob');
+const {join} = require('path');
 const Generator = require('yeoman-generator');
 const updateNotifier = require('update-notifier');
 const PROMPTS = require('./prompts');
@@ -23,6 +25,7 @@ class WebpackGenerator extends Generator {
   constructor(args, opts) {
     super(args, opts);
     this.option('babel');
+    this.HTMLFiles = 'markup/src/views/*.html';;
   }
 
   async prompting() {
@@ -48,6 +51,12 @@ class WebpackGenerator extends Generator {
         instance: this,
       });
     }
+
+    if (this.props.templating) {
+      glob(this.HTMLFiles, {}, (err, files) => {
+        files.length && files.map(file => fs.unlinkSync(file))
+      });
+    }
   }
 
   checkModulesFolder() {
@@ -57,6 +66,7 @@ class WebpackGenerator extends Generator {
   end() {
     this.log(chalk.green(`
   🙌 Installation done! 🙌
+  📦 Dont forget to install node modules
   💻 For ${chalk.yellow('development mode')} run command ${chalk.red('npm run dev')} OR ${chalk.red('yarn dev')} from ${chalk.yellow('markup')} folder 👊.
   ℹ️  For more info, read ${chalk.yellow('README.md')}
     `));

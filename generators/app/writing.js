@@ -1,6 +1,5 @@
 const merge = require('lodash.merge');
 const {PROMPTS_VALUES, PACKAGES, PATHS, CONFIG_REWRITES} = require('./globals');
-
 const projectConfig = 'markup/config.json';
 const projectPackages = 'markup/package.json';
 
@@ -53,7 +52,7 @@ module.exports = async function writeFiles() {
 
   const setProjectTypeBasedSettings = () => {
     if (this.props.cms === PROMPTS_VALUES.cms.wp) {
-      modifyConfig(CONFIG_REWRITES.WP);
+      modifyConfig(CONFIG_REWRITES.wp);
     }
   }
 
@@ -80,11 +79,24 @@ module.exports = async function writeFiles() {
     }
   }
 
+  const setTemplateEngine = () => {
+    switch(this.props.templating) {
+      case PROMPTS_VALUES.templating.pug:
+
+        modifyConfig(PACKAGES.templating.pug, projectPackages);
+        modifyConfig(CONFIG_REWRITES.pug);
+        copyFiles(['pug', PATHS.destination]);
+        break;
+      default:
+        return;
+    }
+  }
 
   await Promise.all([
     copyFiles(['base', PATHS.destination]),
     setLinters(),
     setProjectTypeBasedSettings(),
     setFrontendFrameworks(),
-  ])
+    setTemplateEngine(),
+  ]);
 };

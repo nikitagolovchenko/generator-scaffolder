@@ -1,0 +1,8 @@
+mixin test(props)
+  -
+    var content = props.content || false
+    var attr = props.attr || false
+
+  div&attributes(attr)
+    for item, index in content
+      p(data-index=index)=item

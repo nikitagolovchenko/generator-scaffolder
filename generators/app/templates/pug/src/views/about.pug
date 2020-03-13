@@ -1,0 +1,25 @@
+extends /layout/main
+
+block variables
+  -
+    var pageClass = 'about-page'
+    var testContent = {
+      attr: {
+        class: 'test-class',
+        'data-test-attr': 'test',
+      },
+      content: [
+        'About page Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, quaerat. Quaerat cumque laborum illum earum quasi totam ad omnis est, aliquam distinctio recusandae, pariatur quos explicabo voluptatem, doloribus a enim!',
+        'About page Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, quaerat. Quaerat cumque laborum illum earum quasi totam ad omnis est, aliquam distinctio recusandae, pariatur quos explicabo voluptatem, doloribus a enim!',
+      ],
+    }
+
+block content
+  section
+    .container
+      h1
+        | ABOUT PAGE
+        | ABOUT2 PAGE
+        | ABOUT3 PAGE
+
+      +test(testContent)

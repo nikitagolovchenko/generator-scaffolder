@@ -35,12 +35,15 @@ const PROMPTS_VALUES = {
     materialize: 'materialize',
     tailwind: 'tailwind',
   },
+  templating: {
+    pug: 'pug',
+  },
   linters: {
     add: true,
     remove: false,
     css: 'css',
     js: 'js',
-  }
+  },
 };
 
 const OTHER_FILES = {
@@ -73,22 +76,22 @@ const GENERAL_TEST_SETTINGS = [
 
 
 const CONFIG_REWRITES = {
-  WP: {
+  wp: {
     styles: {
       bundle: 'style',
       dest: './',
     },
   },
-  PUG: {
+  pug: {
     templates: {
-      pages: 'views/pages',
-      extensition: 'pug',
+      // pages: 'views/pages',
+      extension: 'pug',
     }
   },
-  TWIG: {
+  twig: {
     templates: {
-      pages: 'views/pages',
-      extensition: 'html.twig',
+      // pages: 'views/pages',
+      extension: 'html.twig',
     }
   },
 }
@@ -133,8 +136,8 @@ const PACKAGES = {
   templating: {
     pug: {
       devDependencies: {
-        'pug': 'latest',
-        'pug-html-loader': 'latest',
+        'pug': '^2.0.4',
+        'pug-html-loader': '^1.1.5',
       },
     },
     twig: {

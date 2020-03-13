@@ -1,0 +1,19 @@
+include /utils/mixins
+- var pageTitle = 'Project Title'
+
+block variables
+
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title=pageTitle
+    block head
+
+  body(class=pageClass)
+    .wrapper
+      include /includes/header
+      .page-holder
+        main.main
+          block content
+      include /includes/footer

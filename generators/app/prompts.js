@@ -63,8 +63,20 @@ module.exports = [
     default: 0,
   },
   {
-    type: 'expand',
+    type: 'list',
     name: Object.keys(PROMPTS_VALUES)[3],
+    message: 'Select Template Engine:',
+    choices: [
+      {
+        name: 'PUG',
+        value: PROMPTS_VALUES.templating.pug,
+      },
+    ],
+    default: 0,
+  },
+  {
+    type: 'expand',
+    name: Object.keys(PROMPTS_VALUES)[4],
     message: 'Do you want to use linters for SCSS and JS ?',
     choices: [
       {
@@ -83,7 +95,7 @@ module.exports = [
   {
     when: answers => answers.linters === PROMPTS_VALUES.linters.add,
     type: 'checkbox',
-    name: Object.keys(PROMPTS_VALUES)[3],
+    name: Object.keys(PROMPTS_VALUES)[4],
     message: 'Choose linters for your project:',
     choices: [
       {
