@@ -1,6 +1,6 @@
+const fs = require('fs');
 const path = require('path');
 const projectConfig = require('./templates/base/config.json');
-
 const CONFIG = projectConfig;
 
 const PATHS = {
@@ -36,6 +36,7 @@ const PROMPTS_VALUES = {
     tailwind: 'tailwind',
   },
   templating: {
+    none: false,
     pug: 'pug',
   },
   linters: {
@@ -332,7 +333,7 @@ const TESTS_SETTINGS = {
         cms: PROMPTS_VALUES.cms.wp,
       }
     },
-  }
+  },
 }
 
 module.exports = {

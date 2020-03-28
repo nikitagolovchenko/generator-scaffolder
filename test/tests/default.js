@@ -27,7 +27,6 @@ function defaultTest({staticExpectedFiles, expectedFilesContent, generalSettings
       });
 
       const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-      const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
       const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
       const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
@@ -38,8 +37,8 @@ function defaultTest({staticExpectedFiles, expectedFilesContent, generalSettings
           const unexpectedFiles = testSettings.staticUnexpectedFiles;
           const expectedFiles = [...await getFilesArray(PATHS.baseFolder)].concat(testSettings.staticExpectedFiles);
 
-          await yeomanAssert.file(expectedFiles);
-          await yeomanAssert.noFile(unexpectedFiles);
+          yeomanAssert.file(expectedFiles);
+          yeomanAssert.noFile(unexpectedFiles);
         });
       });
 
@@ -82,7 +81,7 @@ function defaultTest({staticExpectedFiles, expectedFilesContent, generalSettings
 
             glob(HTMLFiles, {}, async (err, files) => {
               expectedCompilation.push(...files);
-              await yeomanAssert.file(expectedCompilation);
+              yeomanAssert.file(expectedCompilation);
             })
           });
         });

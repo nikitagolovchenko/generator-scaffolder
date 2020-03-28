@@ -21,6 +21,14 @@ describe(title('Markup'), () => {
   zurbTest(TESTS_SETTINGS.markup.zurb);
 })
 
+describe(title('Markup + PUG'), () => {
+  defaultTest({...TESTS_SETTINGS.markup.default, ...TESTS_SETTINGS.pug});
+  bootstrapTest({...TESTS_SETTINGS.markup.bootstrap, ...TESTS_SETTINGS.pug});
+  materializeTest({...TESTS_SETTINGS.markup.materialize, ...TESTS_SETTINGS.pug});
+  tailwindTest({...TESTS_SETTINGS.markup.tailwind, ...TESTS_SETTINGS.pug});
+  zurbTest({...TESTS_SETTINGS.markup.zurb, ...TESTS_SETTINGS.pug});
+})
+
 describe(title('Markup + Wordpress'), () => {
   defaultTest(TESTS_SETTINGS.wp.default);
   bootstrapTest(TESTS_SETTINGS.wp.bootstrap);
@@ -28,3 +36,5 @@ describe(title('Markup + Wordpress'), () => {
   zurbTest(TESTS_SETTINGS.wp.zurb);
   tailwindTest(TESTS_SETTINGS.wp.tailwind);
 })
+
+

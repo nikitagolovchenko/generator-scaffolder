@@ -68,6 +68,10 @@ module.exports = [
     message: 'Select Template Engine:',
     choices: [
       {
+        name: 'No engine, just HTML',
+        value: PROMPTS_VALUES.templating.none,
+      },
+      {
         name: 'PUG',
         value: PROMPTS_VALUES.templating.pug,
       },
@@ -86,7 +90,7 @@ module.exports = [
       },
       {
         key: 'n',
-        name: 'I don\'t want to lint my code 😢',
+        name: "I don't want to lint my code 😢",
         value: PROMPTS_VALUES.linters.remove,
       },
     ],
