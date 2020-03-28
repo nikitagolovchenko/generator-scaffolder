@@ -1,0 +1,17 @@
+name: automerge
+on:
+  pull_request:
+    types:
+      - dependencies
+  pull_request_review: {}
+  check_suite: {}
+  status: {}
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge pull requests
+        uses: pascalgn/automerge-action@v0.8.0
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
