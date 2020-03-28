@@ -34,7 +34,7 @@
     "core-js": "^3.6.4",
     "critters-webpack-plugin": "^2.5.0",
     "cross-env": "^7.0.0",
-    "css-loader": "^3.3.2",
+    "css-loader": "^3.4.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
