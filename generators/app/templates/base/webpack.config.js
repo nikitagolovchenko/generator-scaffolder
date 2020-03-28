@@ -5,11 +5,10 @@ const chokidar = require('chokidar');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -37,12 +36,12 @@ const getAssetPath = (type, assetPath) => {
 };
 
 const getAssetName = (dest, name, ext, shouldBoost = true) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.posix.join(dest, `${name}.${ext}`)
-}
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.posix.join(dest, `${name}.${ext}`);
+};
 
 const getAssetOutput = asset => {
   return asset.dest ? path.posix.normalize(asset.dest) : path.posix.normalize(asset.src);
-}
+};
 
 const generateStaticAssets = () => {
   let assetsArray = [];
@@ -142,19 +141,17 @@ const generateHtmlPlugins = () => {
           collapseWhitespace: true,
           html5: true,
           removeRedundantAttributes: false,
-        }
+        };
       }
 
       return config.minimize;
-    }
+    };
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
       template: getAssetPath(SRC, `${sitePages}/${name}.${extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
-      // inlineSource: 'runtime.+\\.js',
-      // awaiting for ^4.0 version to be stable
-      // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
+      chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
       minify: minify(),
       hash: config.cache_boost,
       optimize: {
@@ -168,7 +165,7 @@ const generateHtmlPlugins = () => {
 };
 
 const htmlPlugins = generateHtmlPlugins().concat([
-  new HTMLWebpackInlineSourcePlugin(),
+  new FixStyleOnlyEntriesPlugin(),
   new ScriptExtHtmlWebpackPlugin({
     defaultAttribute: 'defer',
   }),
@@ -190,7 +187,7 @@ const getPlugins = () => {
     new BrowserSyncPlugin(pluginsConfiguration.BrowserSync, {
       // prevent BrowserSync from reloading the page
       // and let Webpack Dev Server take care of this
-      reload: false
+      reload: false,
     }),
   ];
 
@@ -200,7 +197,6 @@ const getPlugins = () => {
     new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
     new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
     new CopyWebpackPlugin(pluginsConfiguration.CopyPlugin),
-    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin(pluginsConfiguration.MiniCssExtract),
     new WebpackNotifierPlugin({
       excludeWarnings: true,
@@ -229,17 +225,13 @@ const getPlugins = () => {
 };
 
 const getTemplatesLoader = templateType => {
-  const HTML = new RegExp('html');
   const PUG = new RegExp('pug');
   const TWIG = new RegExp('html.twig');
 
   if (PUG.test(templateType)) {
     return {
       test: PUG,
-      use: [
-        'raw-loader',
-        `pug-html-loader?basedir=${path.join(config.src, config.templates.src)}`
-      ],
+      use: ['raw-loader', `pug-html-loader?basedir=${path.join(config.src, config.templates.src)}`],
     };
   }
 
@@ -263,7 +255,7 @@ const getTemplatesLoader = templateType => {
   }
 
   return {
-    test: HTML,
+    test: /\.html$/i,
     use: 'raw-loader',
   };
 };
@@ -306,7 +298,7 @@ const getModules = () => {
             },
           },
           {
-            loader: "group-css-media-queries-loader",
+            loader: 'group-css-media-queries-loader',
           },
           {
             loader: 'sass-loader',
@@ -366,9 +358,9 @@ const getModules = () => {
         loader: 'eslint-loader',
         exclude: /node_modules/,
         options: {
-          configFile: 'eslintrc.js'
+          configFile: 'eslintrc.js',
         },
-      })
+      });
     }
   }
 
@@ -385,17 +377,19 @@ const getOptimization = () => {
     moduleIds: config.cache_boost ? 'named' : false,
     chunkIds: config.cache_boost ? 'named' : false,
     runtimeChunk: config.cache_boost ? 'single' : false,
-    splitChunks: config.cache_boost ? {
-      cacheGroups: {
-        [cacheGroupName]: {
-          chunks: 'all',
-          test: /[\\/]node_modules[\\/]/,
-        },
-      },
-    } : {},
+    splitChunks: config.cache_boost
+      ? {
+          cacheGroups: {
+            [cacheGroupName]: {
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/]/,
+            },
+          },
+        }
+      : {},
     minimizer: [
       new TerserPlugin({
-        chunkFilter: (chunk) => {
+        chunkFilter: chunk => {
           const name = chunk.name;
           // Always include uglification for the `vendor` chunk
           if (name && name.startsWith(cacheGroupName)) {
@@ -422,17 +416,17 @@ const getOptimization = () => {
   };
 };
 
-const getEntry = entryName => {
+const getEntries = () => {
   // Need this since useBuildins: usage in babel didn't add polyfill for Promise.all() when webpack is bundling
   const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
 
   // default JS entry {app.js} - used for all pages, if no specific entry is provided
-  const entry = iterator.concat([
-    getAssetPath(SRC, `${config.scripts.src}/${config.scripts.bundle}.${config.scripts.extension}`),
-  ]);
+  const entryJsFile = path.join(config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`);
+  const entry = iterator.concat([getAssetPath(SRC, entryJsFile)]);
 
   // default CSS entry {main.scss} - used for all pages, if no specific entry is provided
-  const styleAsset = getAssetPath(SRC, `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`);
+  const entryCSSFile = path.join(config.styles.src, `${config.styles.bundle}.${config.styles.extension}`);
+  const styleAsset = getAssetPath(SRC, entryCSSFile);
 
   let entries = {
     [config.scripts.bundle]: entry,
@@ -465,7 +459,6 @@ const getEntry = entryName => {
 
           entries[entryKey].push(...iterator.concat(JSFile));
         }
-
       }
 
       if (CSSFileName) {
@@ -476,16 +469,18 @@ const getEntry = entryName => {
 
           entries[entryKey].push(CSSFile);
         }
-
       }
     }
   }
+
+  console.log(entries);
+  
   return entries;
 };
 
 const webpackConfig = {
   mode: ENV,
-  entry: getEntry(),
+  entry: getEntries(),
   devtool: isProduction ? false : 'inline-source-map',
   stats: isProduction,
   output: {

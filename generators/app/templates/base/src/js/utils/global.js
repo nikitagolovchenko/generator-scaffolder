@@ -120,9 +120,3 @@ export const ev = (eventName, data, target = document, once = false) => {
   const e = new CustomEvent(eventName, {detail: data}, {once});
   target.dispatchEvent(e);
 };
-
-// emulate delay, async function
-// Params:
-// {ms}: Number - value to await (in milliseconds);
-// return: Promise
-export const delay = ms => new Promise(res => setTimeout(ms, res));
