@@ -78,6 +78,7 @@ const pluginsConfiguration = {
     hot: true,
     compress: true,
     watchContentBase: true,
+    disableHostCheck: true,
     port: PORT,
     liveReload: false,
     overlay: true,
@@ -473,8 +474,6 @@ const getEntries = () => {
     }
   }
 
-  console.log(entries);
-  
   return entries;
 };
 
