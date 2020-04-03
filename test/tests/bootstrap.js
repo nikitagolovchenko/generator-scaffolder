@@ -14,7 +14,7 @@ const assert = chai.assert;
 
 chai.use(chaiExecAsync);
 
-function bootstrapTest({staticExpectedFiles, expectedFilesContent, generalSettings}) {
+function bootstrapTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
   GENERAL_TEST_SETTINGS.forEach(prompts => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
@@ -36,12 +36,12 @@ function bootstrapTest({staticExpectedFiles, expectedFilesContent, generalSettin
           setProcessToDestination();
 
           const unexpectedFiles = testSettings.staticUnexpectedFiles;
-          const expectedFiles = [...await getFilesArray(PATHS.baseFolder)]
-            .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.bootstrap))])
+          const expectedFiles = [...(await getFilesArray(templatesFilesPath))]
+            .concat([...(await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.bootstrap)))])
             .concat(testSettings.staticExpectedFiles);
 
-          await yeomanAssert.file(expectedFiles);
-          await yeomanAssert.noFile(unexpectedFiles);
+          yeomanAssert.file(expectedFiles);
+          yeomanAssert.noFile(unexpectedFiles);
         });
       });
 
@@ -57,6 +57,8 @@ function bootstrapTest({staticExpectedFiles, expectedFilesContent, generalSettin
         });
 
         it(chalk.green('Modules added to package.json:'), () => {
+          console.log(testSettings.expectedFilesContent.json);
+          
           testSettings.expectedFilesContent.json.map(content => yeomanAssert.jsonFileContent(newPkgfilePath, content));
         });
       });
@@ -89,12 +91,12 @@ function bootstrapTest({staticExpectedFiles, expectedFilesContent, generalSettin
             glob(HTMLFiles, {}, (err, files) => {
               expectedCompilation.push(...files);
               yeomanAssert.file(expectedCompilation);
-            })
+            });
           });
         });
       }
     });
-  })
+  });
 }
 
 module.exports = bootstrapTest;

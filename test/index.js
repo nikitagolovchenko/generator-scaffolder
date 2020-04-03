@@ -4,7 +4,8 @@ const defaultTest = require('./tests/default');
 const zurbTest = require('./tests/zurb');
 const materializeTest = require('./tests/materialize');
 const tailwindTest = require('./tests/tailwind');
-const { TESTS_SETTINGS } = require(`${process.env.PWD}/generators/app/globals`);
+const {TESTS_SETTINGS} = require(`${process.env.PWD}/generators/app/globals`);
+const {mergeDeep} = require(`${process.env.PWD}/generators/app/utils`);
 
 const title = (text) => {
   return chalk.bgCyan(chalk.bold.black(`
@@ -13,28 +14,33 @@ const title = (text) => {
     ****************************`))
 }
 
-describe(title('Markup'), () => {
-  defaultTest(TESTS_SETTINGS.markup.default);
-  bootstrapTest(TESTS_SETTINGS.markup.bootstrap);
-  materializeTest(TESTS_SETTINGS.markup.materialize);
-  tailwindTest(TESTS_SETTINGS.markup.tailwind);
-  zurbTest(TESTS_SETTINGS.markup.zurb);
-})
+const getProjectSettings = (target, source) => {
+  const settings = mergeDeep(Object.assign({}, target), source);
 
-describe(title('Markup + PUG'), () => {
-  defaultTest({...TESTS_SETTINGS.markup.default, ...TESTS_SETTINGS.pug});
-  bootstrapTest({...TESTS_SETTINGS.markup.bootstrap, ...TESTS_SETTINGS.pug});
-  materializeTest({...TESTS_SETTINGS.markup.materialize, ...TESTS_SETTINGS.pug});
-  tailwindTest({...TESTS_SETTINGS.markup.tailwind, ...TESTS_SETTINGS.pug});
-  zurbTest({...TESTS_SETTINGS.markup.zurb, ...TESTS_SETTINGS.pug});
-})
+  return settings;
+}
 
-describe(title('Markup + Wordpress'), () => {
-  defaultTest(TESTS_SETTINGS.wp.default);
-  bootstrapTest(TESTS_SETTINGS.wp.bootstrap);
-  materializeTest(TESTS_SETTINGS.wp.materialize);
-  zurbTest(TESTS_SETTINGS.wp.zurb);
-  tailwindTest(TESTS_SETTINGS.wp.tailwind);
-})
+for (const key in TESTS_SETTINGS.templating) {
+  if (TESTS_SETTINGS.templating.hasOwnProperty(key)) {
+    const templatesFiles = TESTS_SETTINGS.templating[key];
+
+    describe(title(`Markup + ${key}`), () => {
+      defaultTest(getProjectSettings(TESTS_SETTINGS.markup.default, templatesFiles));
+      bootstrapTest(getProjectSettings(TESTS_SETTINGS.markup.bootstrap, templatesFiles));
+      materializeTest(getProjectSettings(TESTS_SETTINGS.markup.materialize, templatesFiles));
+      tailwindTest(getProjectSettings(TESTS_SETTINGS.markup.tailwind, templatesFiles));
+      zurbTest(getProjectSettings(TESTS_SETTINGS.markup.zurb, templatesFiles));
+    });
+
+    describe(title(`Markup + Wordpress + ${key}`), () => {
+      defaultTest(getProjectSettings(TESTS_SETTINGS.wp.default, templatesFiles));
+      bootstrapTest(getProjectSettings(TESTS_SETTINGS.wp.bootstrap, templatesFiles));
+      materializeTest(getProjectSettings(TESTS_SETTINGS.wp.materialize, templatesFiles));
+      tailwindTest(getProjectSettings(TESTS_SETTINGS.wp.tailwind, templatesFiles));
+      zurbTest(getProjectSettings(TESTS_SETTINGS.wp.zurb, templatesFiles));
+    });
+  }
+}
+
 
 

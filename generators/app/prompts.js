@@ -69,7 +69,7 @@ module.exports = [
     choices: [
       {
         name: 'No engine, just HTML',
-        value: PROMPTS_VALUES.templating.none,
+        value: PROMPTS_VALUES.templating.html,
       },
       {
         name: 'PUG',

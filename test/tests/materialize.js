@@ -14,7 +14,7 @@ const assert = chai.assert;
 
 chai.use(chaiExecAsync);
 
-function materializeTest({staticExpectedFiles, expectedFilesContent, generalSettings}) {
+function materializeTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
   GENERAL_TEST_SETTINGS.forEach(prompts => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
@@ -36,12 +36,12 @@ function materializeTest({staticExpectedFiles, expectedFilesContent, generalSett
           setProcessToDestination();
 
           const unexpectedFiles = testSettings.staticUnexpectedFiles;
-          const expectedFiles = [...await getFilesArray(PATHS.baseFolder)]
-            .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.materialize))])
+          const expectedFiles = [...(await getFilesArray(templatesFilesPath))]
+            .concat([...(await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.materialize)))])
             .concat(testSettings.staticExpectedFiles);
 
-          await yeomanAssert.file(expectedFiles);
-          await yeomanAssert.noFile(unexpectedFiles);
+          yeomanAssert.file(expectedFiles);
+          yeomanAssert.noFile(unexpectedFiles);
         });
       });
 
@@ -89,12 +89,12 @@ function materializeTest({staticExpectedFiles, expectedFilesContent, generalSett
             glob(HTMLFiles, {}, (err, files) => {
               expectedCompilation.push(...files);
               yeomanAssert.file(expectedCompilation);
-            })
+            });
           });
         });
       }
     });
-  })
+  });
 }
 
 module.exports = materializeTest;

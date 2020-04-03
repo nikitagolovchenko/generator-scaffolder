@@ -14,7 +14,7 @@ const assert = chai.assert;
 
 chai.use(chaiExecAsync);
 
-function tailwindTest({staticExpectedFiles, expectedFilesContent, generalSettings}) {
+function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
   GENERAL_TEST_SETTINGS.forEach(prompts => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
@@ -38,12 +38,12 @@ function tailwindTest({staticExpectedFiles, expectedFilesContent, generalSetting
           setProcessToDestination();
 
           const unexpectedFiles = testSettings.staticUnexpectedFiles;
-          const expectedFiles = [...await getFilesArray(PATHS.baseFolder)]
-            .concat([...await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.tailwind))])
+          const expectedFiles = [...(await getFilesArray(templatesFilesPath))]
+            .concat([...(await getFilesArray(join(PATHS.templatesFolder, PROMPTS_VALUES.framework.tailwind)))])
             .concat(testSettings.staticExpectedFiles);
 
-          await yeomanAssert.file(expectedFiles);
-          await yeomanAssert.noFile(unexpectedFiles);
+          yeomanAssert.file(expectedFiles);
+          yeomanAssert.noFile(unexpectedFiles);
         });
       });
 
@@ -95,12 +95,12 @@ function tailwindTest({staticExpectedFiles, expectedFilesContent, generalSetting
             glob(HTMLFiles, {}, (err, files) => {
               expectedCompilation.push(...files);
               yeomanAssert.file(expectedCompilation);
-            })
+            });
           });
         });
       }
     });
-  })
+  });
 }
 
 module.exports = tailwindTest;

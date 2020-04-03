@@ -93,7 +93,10 @@ module.exports = async function writeFiles() {
         copyFiles(['twig', PATHS.destination]);
         break;
       default:
-        return;
+        console.log(this.props);
+        
+        copyFiles(['html', PATHS.destination]);
+        break;
     }
   }
 

@@ -14,7 +14,7 @@ const assert = chai.assert;
 
 chai.use(chaiExecAsync);
 
-function defaultTest({staticExpectedFiles, expectedFilesContent, generalSettings}) {
+function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
   GENERAL_TEST_SETTINGS.forEach(prompts => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
@@ -35,7 +35,7 @@ function defaultTest({staticExpectedFiles, expectedFilesContent, generalSettings
           setProcessToDestination();
 
           const unexpectedFiles = testSettings.staticUnexpectedFiles;
-          const expectedFiles = [...await getFilesArray(PATHS.baseFolder)].concat(testSettings.staticExpectedFiles);
+          const expectedFiles = [...(await getFilesArray(templatesFilesPath))].concat(testSettings.staticExpectedFiles);
 
           yeomanAssert.file(expectedFiles);
           yeomanAssert.noFile(unexpectedFiles);

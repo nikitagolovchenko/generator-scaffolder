@@ -51,12 +51,6 @@ class WebpackGenerator extends Generator {
         instance: this,
       });
     }
-
-    if (this.props.templating) {
-      glob(this.HTMLFiles, {}, (err, files) => {
-        files.length && files.map(file => fs.unlinkSync(file))
-      });
-    }
   }
 
   checkModulesFolder() {
