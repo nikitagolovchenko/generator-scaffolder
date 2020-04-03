@@ -35,7 +35,7 @@ const getAssetPath = (type, assetPath) => {
   return path.posix.join(__dirname, config.dest, assetPath);
 };
 
-const getAssetName = (dest, name, ext, shouldBoost = true) => {
+const getAssetName = (dest, name, ext) => {
   return dest === PUBLIC_PATH ? `${name}.${ext}` : path.posix.join(dest, `${name}.${ext}`);
 };
 
@@ -134,7 +134,6 @@ const generateHtmlPlugins = () => {
     // Split names and extension
     const parts = item.split('.');
     const name = parts[0];
-    const extension = parts[1];
 
     const minify = () => {
       if (config.minimize) {
@@ -150,9 +149,9 @@ const generateHtmlPlugins = () => {
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
-      template: getAssetPath(SRC, `${sitePages}/${name}.${extension}`),
+      template: getAssetPath(SRC, `${sitePages}/${name}.${config.templates.extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
-      chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
+      chunks: config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false,
       minify: minify(),
       hash: config.cache_boost,
       optimize: {
@@ -166,7 +165,6 @@ const generateHtmlPlugins = () => {
 };
 
 const htmlPlugins = generateHtmlPlugins().concat([
-  new FixStyleOnlyEntriesPlugin(),
   new ScriptExtHtmlWebpackPlugin({
     defaultAttribute: 'defer',
   }),
@@ -197,6 +195,7 @@ const getPlugins = () => {
   let defaultPlugins = [
     new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
     new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
+    new FixStyleOnlyEntriesPlugin(),
     new CopyWebpackPlugin(pluginsConfiguration.CopyPlugin),
     new MiniCssExtractPlugin(pluginsConfiguration.MiniCssExtract),
     new WebpackNotifierPlugin({
@@ -227,7 +226,7 @@ const getPlugins = () => {
 
 const getTemplatesLoader = templateType => {
   const PUG = new RegExp('pug');
-  const TWIG = new RegExp('html.twig');
+  const TWIG = new RegExp('twig');
 
   if (PUG.test(templateType)) {
     return {

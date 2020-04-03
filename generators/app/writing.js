@@ -80,12 +80,17 @@ module.exports = async function writeFiles() {
   }
 
   const setTemplateEngine = () => {
-    switch(this.props.templating) {
+    switch (this.props.templating) {
       case PROMPTS_VALUES.templating.pug:
-
         modifyConfig(PACKAGES.templating.pug, projectPackages);
         modifyConfig(CONFIG_REWRITES.pug);
         copyFiles(['pug', PATHS.destination]);
+        break;
+
+      case PROMPTS_VALUES.templating.twig:
+        modifyConfig(PACKAGES.templating.twig, projectPackages);
+        modifyConfig(CONFIG_REWRITES.twig);
+        copyFiles(['twig', PATHS.destination]);
         break;
       default:
         return;

@@ -1,0 +1,25 @@
+{% set class = 'site-section intro-section ' ~ class|default('') %}
+{% set title = title|default('Default section title') %}
+{% set buttonClass = buttonClass|default('button--primary') %}
+{% set buttonHref = buttonHref|default('#test') %}
+{% set buttonText = buttonText|default('default text') %}
+
+<section class="{{ class }}">
+  <div class="site-section__holder">
+    <div class="site-section__container">
+      {% if title is defined %}
+        <h1>
+          {{ title|raw }}
+        </h1>
+      {% endif %}
+
+      {% if buttonText is defined %}
+        {% include '@components/button.html.twig' with {
+          class: buttonClass,
+          href: buttonHref,
+          text: buttonText,
+        } %}
+      {% endif %}
+    </div>
+  </div>
+</section>

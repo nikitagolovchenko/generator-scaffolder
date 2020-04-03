@@ -1,0 +1,15 @@
+{% extends '@layout/base.html.twig' %}
+
+{% block body %}
+  {% include '@layout/header.html.twig' %}
+  
+  <div class="wrapper">
+    <div class="page-holder">
+      <main class="main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    {% include '@layout/footer.html.twig' %}
+  </div>
+{% endblock %}

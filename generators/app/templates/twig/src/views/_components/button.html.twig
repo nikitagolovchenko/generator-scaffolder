@@ -1,0 +1,46 @@
+{#
+    Button
+    @param {string} href (Button URL)
+    @param {string} text (optional)
+    @param {string} external (Button external URL)
+    @param {string} icon (optional)
+    @param {boolean} icon_show_before (optional)
+    @param {string} class (optional)
+#}
+
+{# Parameters #}
+
+{% set href = href ?? '#' %}
+{% set type = type ?? false %}
+{% set text = text ?? null %}
+{% set external = external ?? false %}
+{% set icon = icon ?? null %}
+{% set icon_show_before = icon_show_before ?? true %}
+{% set class = class ?? null %}
+{% set attr = attr ?? null %}
+
+{# Output #}
+
+{% if type is defined and type is not same as(false) %}
+  {% set tag = 'button' %}
+{% else %}
+  {% set tag = 'a' %}
+{% endif %}
+
+<{{tag}}
+  class="{{ 'button ' ~ class|default('') }}" 
+  {% if tag == 'button' %} type="{{- type -}}" {% else %} href="{{- href -}}" {% endif %}
+  {{ external == true ? 'target="_blank" rel="noopener"' }}
+  {{ attr is not same as(null) ? {{attr}} }}
+  >
+
+  {% if icon|length and icon_show_before %}
+    <i class="button__icon button__icon--prepend {{ icon }}"></i>
+  {% endif %}
+
+  <span class="button__text">{{- text|raw -}}</span>
+
+  {% if icon|length and not icon_show_before %}
+    <i class="button__icon button__icon--append {{ icon }}"></i>
+  {% endif %}
+</{{tag}}>

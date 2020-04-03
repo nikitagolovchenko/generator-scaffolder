@@ -1,0 +1,34 @@
+{% set header = {
+  mainNav: [
+    {
+      href: 'index.html',
+      text: 'Home',
+    },
+    {
+      href: 'about.html',
+      text: 'About',
+    },
+  ],
+} %}
+
+{% if header is defined %}
+  <header class="header">
+    {% if header.mainNav is defined %}
+      <ul class="list">
+        {% for item in header.mainNav %}
+          {% set class = 'list__item ' ~ item.class|default('') %}
+
+          {% if activeUrl == item.text %}
+            {% set class = class ~ ' active' %}
+          {% endif %}
+          
+          <li class="{{ class|trim }}">
+            <a class="list__link" href="{{ item.href }}">
+              {{ item.text }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </header>
+{% endif %}

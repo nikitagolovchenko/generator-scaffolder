@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const projectConfig = require('./templates/base/config.json');
 const CONFIG = projectConfig;
@@ -38,6 +37,7 @@ const PROMPTS_VALUES = {
   templating: {
     none: false,
     pug: 'pug',
+    twig: 'twig',
   },
   linters: {
     add: true,
@@ -85,13 +85,11 @@ const CONFIG_REWRITES = {
   },
   pug: {
     templates: {
-      // pages: 'views/pages',
       extension: 'pug',
     }
   },
   twig: {
     templates: {
-      // pages: 'views/pages',
       extension: 'html.twig',
     }
   },

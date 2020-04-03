@@ -1,0 +1,36 @@
+{% extends '@layout/site.html.twig' %}
+{% import '@includes/macros.html.twig' as macros %}
+
+{% set activeUrl = 'About' %}
+
+{% set introSection = {
+  class: 'intro-section--about',
+  buttonText: 'go to homepage',
+  buttonHref: '/index.html'
+} %}
+
+{% set entry = {
+  blocks: [
+    {
+      type: 'headline',
+      text: 'Headline block 2',
+    },
+    {
+      text: 'This block is missing',
+    },
+    {
+      type: 'headline',
+      text: 'Headline block 1',
+    },
+  ]
+} %}
+
+{% block content %}
+  {% include '@includes/sections/intro-section.html.twig' with introSection %}
+
+  <div class="about-blocks">
+    {% for block in entry.blocks %}
+        {{ macros.renderBlock(block) }}
+    {% endfor %}
+  </div>
+{% endblock %}

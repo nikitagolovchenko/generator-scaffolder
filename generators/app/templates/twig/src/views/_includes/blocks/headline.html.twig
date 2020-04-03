@@ -1,0 +1,9 @@
+{% set class = 'headline-block ' ~ block.class|default('') %}
+
+{% if block.text %}
+  <div class="{{class}}">
+    <h1>
+      {{ block.text|raw }}
+    </h1>
+  </div>
+{% endif %}

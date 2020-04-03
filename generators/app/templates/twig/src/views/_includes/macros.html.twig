@@ -1,0 +1,7 @@
+{% macro renderBlock(block, index, currentEntry) %}
+  {% if block.type %}
+    {% include '@includes/blocks/' ~ block.type ~ '.html.twig' with { block: block } %}
+  {% else %}
+    {% include '@includes/blocks/_missing.html.twig' with { block: block } %}
+  {% endif %}
+{% endmacro %}

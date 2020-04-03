@@ -75,6 +75,10 @@ module.exports = [
         name: 'PUG',
         value: PROMPTS_VALUES.templating.pug,
       },
+      {
+        name: 'Twig',
+        value: PROMPTS_VALUES.templating.twig,
+      },
     ],
     default: 0,
   },
