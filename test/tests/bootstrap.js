@@ -57,8 +57,6 @@ function bootstrapTest({staticExpectedFiles = [], templatesFilesPath, expectedFi
         });
 
         it(chalk.green('Modules added to package.json:'), () => {
-          console.log(testSettings.expectedFilesContent.json);
-          
           testSettings.expectedFilesContent.json.map(content => yeomanAssert.jsonFileContent(newPkgfilePath, content));
         });
       });
@@ -85,6 +83,8 @@ function bootstrapTest({staticExpectedFiles = [], templatesFilesPath, expectedFi
             const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
+
+            console.log(stylesFile, jsFile);
 
             const expectedCompilation = [stylesFile, jsFile];
 
