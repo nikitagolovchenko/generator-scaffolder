@@ -15,21 +15,18 @@
     "open": true
   },
   "styles": {
-    "name": "css",
     "bundle": "style",
     "src": "styles",
     "dest": "css",
     "extension": "scss"
   },
   "scripts": {
-    "name": "js",
     "bundle": "app",
     "src": "js",
     "dest": "js",
     "extension": "js"
   },
   "templates": {
-    "name": "templates",
     "src": "views",
     "dest": "./",
     "extension": "html"
