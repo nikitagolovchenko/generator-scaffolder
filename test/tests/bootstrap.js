@@ -84,8 +84,6 @@ function bootstrapTest({staticExpectedFiles = [], templatesFilesPath, expectedFi
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
 
-            console.log(stylesFile, jsFile);
-
             const expectedCompilation = [stylesFile, jsFile];
 
             glob(HTMLFiles, {}, (err, files) => {
