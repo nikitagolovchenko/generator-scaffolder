@@ -49,7 +49,7 @@ function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFil
 
       describe('Checking dependencies:', () => {
         setProcessToDestination();
-
+        
         it(chalk.green('Library imported into JS:'), () => {
           testSettings.expectedFilesContent.js.map(content => yeomanAssert.fileContent(jsFile, content));
         });

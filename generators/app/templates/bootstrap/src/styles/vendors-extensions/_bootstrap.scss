@@ -9,7 +9,7 @@ $white:    #fff;
 $black:    #000;
 
 // The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
-$yiq-contrasted-threshold:  200;
+$yiq-contrasted-threshold:  180;
 
 // Customize the light and dark text colors for use in our YIQ color contrast function.
 $yiq-text-dark:             $black;
@@ -19,25 +19,17 @@ $grid-columns: 12;
 $grid-gutter-width: 30px;
 
 $grid-breakpoints: (
-    xs: 0,
-    sm: 375px,
-    md: 768px,
-    lg: 1024px,
-    xl: 1366px,
-    wide: 1440px,
+  xs: 0,
+  sm: 375px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1366px,
+  wide: 1440px,
 );
-
-$fluid-min: 320px;
-$fluid-max: map-get($grid-breakpoints, 'wide');
 
 $container-max-widths: (
-    sm: 1000px + ($grid-gutter-width * 2),
+  sm: 1000px + ($grid-gutter-width * 2),
 );
-
-$container-small-width: 830px + ($grid-gutter-width * 2);
-$container-wide-width: 1200px + ($grid-gutter-width * 2);
-
-
 
 // spacing
 //
@@ -70,6 +62,9 @@ $body-bg: $white;
 $body-color: $black;
 
 
+// border radius
+$rounded-circle: 50%;
+
 // Typography
 //
 // Font, line-height, and color for body text, headings, and more.
@@ -79,13 +74,64 @@ $font-family-sans-serif:      "Helvetica Neue", Arial, "Noto Sans", sans-serif ;
 $font-family-sans-serif-secondary:      $font-family-sans-serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 $font-family-base:            $font-family-sans-serif;
-$fonts-path: '../fonts';
+$base-font-path: '../fonts';
 // stylelint-enable value-keyword-case
 
 $rem-base: 10px;
+
+$font-weight-thin: 100;
+$font-weight-ulight: 200;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-heavy: 800;
+$font-weight-black: 900;
 
 $font-size-xl:                2rem;
 $font-size-lg:                1.8rem;
 $font-size-base:              1.6rem;
 $font-size-md:                1.4rem;
 $font-size-sm:                1.2rem;
+
+$font-sizes: (
+  'xl': $font-size-xl,
+  'lg': $font-size-lg,
+  'base': $font-size-base,
+  'md': $font-size-md,
+  'sm': $font-size-sm,
+);
+
+$font-sizes-max: (
+  'xl': 3rem,
+  'lg': 2.2rem,
+  'base': 1.6rem,
+  'md': 1.4rem,
+  'sm': 1.2rem,
+);
+
+$headings-sizes: (
+  'h1': 3rem,
+  'h2': 2.6rem,
+  'h3': 2.2rem,
+  'h4': 2rem,
+  'h5': 1.8rem,
+  'h6': 1.6rem,
+);
+
+$headings-sizes-max: (
+  'h1': 4rem,
+  'h2': 3.6rem,
+  'h3': 3.2rem,
+  'h4': 3rem,
+  'h5': 2.8rem,
+  'h6': 2.6rem,
+);
+
+$fluid-min: 320px;
+$fluid-max: map-get($grid-breakpoints, 'wide');
+
+// Base transition function
+$transition-duration-base: 0.35s;
+$transition-easing-base: cubic-bezier(0.3, 0.86, 0.36, 0.95);

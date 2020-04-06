@@ -56,17 +56,21 @@
   $unit2: unit($max-vw);
   $unit3: unit($min-font-size);
   $unit4: unit($max-font-size);
+  $multiplier: strip-unit($max-font-size - $min-font-size);
 
-  @if $unit1 == $unit2 and $unit1 == $unit3 and $unit1 == $unit4 {
-    font-size: $min-font-size;
-    @media screen and (min-width: $min-vw) {
-      font-size: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
-    }
-    @media screen and (min-width: $max-vw) {
-      font-size: $max-font-size;
-    }
+  @if $unit3 == 'rem' and $unit4 == 'rem' {
+    $multiplier: strip-unit($max-font-size - $min-font-size) * strip-unit($rem-base);
+  }
+
+  font-size: $min-font-size;
+  @media screen and (min-width: $min-vw) {
+    font-size: calc(#{$min-font-size} + #{$multiplier} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+  }
+  @media screen and (min-width: $max-vw) {
+    font-size: $max-font-size;
   }
 }
+
 
 @mixin make-embed($map) {
   $ratio-x: nth($map, 1);
