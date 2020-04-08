@@ -123,7 +123,7 @@ You can see default structure of this file: **`enable/disable` means `true/false
 - Prettier - format your files automatically 🔥  based on `prettier.config.js` file and `.editorconfig`;
 - ES6+ newest syntax 🔥 Promises, Async/await, npm modules and more...
 
-## How to use 🤔
+## How to use
 
 All commands are listed in package.json file in scripts section and described below:
 
