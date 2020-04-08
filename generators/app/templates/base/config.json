@@ -33,19 +33,15 @@
   },
   "static": {
     "fonts": {
-      "name": "fonts",
       "src": "fonts"
     },
     "images": {
-      "name": "images",
       "src": "images"
     },
     "video": {
-      "name": "video",
       "src": "video"
     },
     "ajax": {
-      "name": "ajax",
       "src": "inc"
     }
   }
