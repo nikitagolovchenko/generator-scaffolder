@@ -45,7 +45,7 @@ Depending on which options you choose while generating your projects, output fea
 
 ###### Can be configured:
 - `Eslint` - JavaScript syntax linter based on [airbnb config](https://www.npmjs.com/package/eslint-config-airbnb) and some custom options;
-- `Stylelint` - SCSS syntax linter based on [SASS Guidlines](https://sass-guidelin.es/)
+- `Stylelint` - SCSS syntax linter based on [SASS Guidelines](https://sass-guidelin.es/)
 
 You can enable/disable those options when generating projects and in already generated project in `config.json` file.
 
