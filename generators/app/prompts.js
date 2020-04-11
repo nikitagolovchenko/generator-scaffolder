@@ -18,7 +18,7 @@ module.exports = [
     default: 0,
   },
   {
-    when: answers => answers.projectType === PROMPTS_VALUES.projectType.markupCms,
+    when: (answers) => answers.projectType === PROMPTS_VALUES.projectType.markupCms,
     type: 'list',
     name: Object.keys(PROMPTS_VALUES)[1],
     message: 'Select CMS:',
@@ -84,24 +84,24 @@ module.exports = [
   },
   {
     type: 'expand',
-    name: Object.keys(PROMPTS_VALUES)[4],
+    name: 'lintersSetup',
     message: 'Do you want to use linters for SCSS and JS ?',
     choices: [
       {
         key: 'y',
         name: 'Yes, add linters',
-        value: PROMPTS_VALUES.linters.add,
+        value: true,
       },
       {
         key: 'n',
         name: "I don't want to lint my code 😢",
-        value: PROMPTS_VALUES.linters.remove,
+        value: false,
       },
     ],
     default: 0,
   },
   {
-    when: answers => answers.linters === PROMPTS_VALUES.linters.add,
+    when: answers => answers.lintersSetup,
     type: 'checkbox',
     name: Object.keys(PROMPTS_VALUES)[4],
     message: 'Choose linters for your project:',

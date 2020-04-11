@@ -17,7 +17,8 @@ module.exports = async function writeFiles() {
   }
 
   const setLinters = () => {
-    if (this.props.linters) {
+    if (this.props.linters && typeof this.props.linters === 'object') {
+      
       const lintCSS = this.props.linters.includes(PROMPTS_VALUES.linters.css);
       const lintJS = this.props.linters.includes(PROMPTS_VALUES.linters.js);
       const lintersSettings = {
@@ -93,8 +94,6 @@ module.exports = async function writeFiles() {
         copyFiles(['twig', PATHS.destination]);
         break;
       default:
-        console.log(this.props);
-        
         copyFiles(['html', PATHS.destination]);
         break;
     }

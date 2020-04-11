@@ -16,7 +16,10 @@ const yosayPrompts = props => {
        ${chalk.red(props.current)} → ${chalk.green(props.latest)}.
        Run ${chalk.blue(`npm i -g generator-p2h`)} to update`;
   }
-  return `2005-${new Date().getFullYear()} All rights Reserved. P2H, Inc. TEST TEST`;
+  return `
+    generator-p2h: v${pkg.version}.
+    2005-${new Date().getFullYear()} All rights Reserved. P2H, Inc
+  `;
 };
 
 class WebpackGenerator extends Generator {
