@@ -1,8 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const glob = require('glob');
-const {join} = require('path');
 const Generator = require('yeoman-generator');
 const updateNotifier = require('update-notifier');
 const PROMPTS = require('./prompts');
@@ -18,7 +16,7 @@ const yosayPrompts = props => {
        ${chalk.red(props.current)} → ${chalk.green(props.latest)}.
        Run ${chalk.blue(`npm i -g generator-p2h`)} to update`;
   }
-  return `2005-${new Date().getFullYear()} All rights Reserved. P2H, Inc.`;
+  return `2005-${new Date().getFullYear()} All rights Reserved. P2H, Inc. TEST TEST`;
 };
 
 class WebpackGenerator extends Generator {
