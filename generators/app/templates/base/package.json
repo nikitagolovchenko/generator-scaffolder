@@ -45,7 +45,7 @@
     "file-loader": "^6.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "group-css-media-queries-loader": "^3.0.2",
-    "html-webpack-plugin": "^4.0.4",
+    "html-webpack-plugin": "^4.2.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "imagemin-webpack-plugin": "^2.4.2",
