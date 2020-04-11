@@ -1,54 +1,91 @@
 # Webpack build for optimized load speed
 
-## Features 🤩
+#### Config file ⚙️
+Internal configuration for project folder structure and some major features can be controlled using `config.json`.
+The main idea behind this file is to control webpack behavior without webpack configuration change.
 
-- one file to control project - `config.json` 🔥:
+You can see default structure of this file: **`enable/disable` means `true/false`**
 
-  - Control input/output folders for for files, filenames, folder names etc. Make your own structure of project if you need (not tested yet :D );
-  - different entries for different templates (with default index.html/index.js/main.scss)
-  - enable/disable linters with one line (`linters: true/false`)
-  - debug mode (`debug: true/false` bundle sizes/groups preview on production);
-  - server settings (host and port - for backend based projects, where you need to proxy PHP server);
+```
+{
+  "src": "src", // source files folder
+  "dest": "dist", // production files folder
+  "debug": false, // enable/disable debug mode
+  "critical_css": false, // enable/disable critical CSS styles, that will be inlined into head
+  "cache_boost": false, // enable/disable boost for generated CSS/JS bundles
+  "minimize": true, // enable/disable CSS/JS minification
+  "linters": {
+    "css": true, // enable/disable Stylelint
+    "js": true // enable/disable Eslint
+  },
+  "server": {
+    "port": "3000", // redefine port for server
+    "host": "localhost", // redefine host for server, e.g. my-site.test (if PHP server is used)
+    "open": true // enable/disable automatic open of page in browser while running development mode
+  },
+  "styles": {
+    "bundle": "style", // filename for main SCSS file
+    "src": "styles", // source folder
+    "dest": "css", // folder where to put compiled files, e.g to compile into project root (WP style), change to './'
+    "extension": "scss" // file extension (SCSS only for now)
+  },
+  "scripts": {
+    "bundle": "app", // filename for main JS file
+    "src": "js", // source folder
+    "dest": "js",  // folder where to put compiled files
+    "extension": "js" // file extension
+  },
+  "templates": {
+    "src": "views", // source folder for views
+    "dest": "./", // where to compile (root of dest folder in this case)
+    "extension": "html" // file extension
+  },
+  // static files object, this is all files that just copy/pasted from src to dest (with some postprocessing, for images in this case used imagemin)
+  "static": {
+    "fonts": {
+      "src": "fonts", // folder name. By default dest === src, e.g. src/fonts === dist/fonts folder
+      "dest": "fontsAwesomeFolder" // If you need another destination folder, just add this option (this is for showcase)
+    },
+    "images": {
+      "src": "images"
+    },
+    "video": {
+      "src": "video"
+    },
+    "ajax": {
+      "src": "inc"
+    }
+  }
+}
+```
+#### Features 🤩
+  - Control input/output folders for files; control filenames, folder names etc. Make your own structure of project you need;
+  - Control linters with one object (`linters: {}`);
+  - Debug mode (`debug: true/false`) - review compiled code to remove/optimize your vendors using [Webpack Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer);
+  - Critical CSS (`critical_css: true/false`) - inline critical CSS into head, using  [Critters](https://www.npmjs.com/package/critters-webpack-plugin). Please note, that this is not mean that first visible content of page will be inlined, this plugin extract critical styles that are most important for First Paint Time in PageSpeedInsights;
+  - Cache boost (`cache_boost: true/false`) - if enabled:
+    - All JS/CSS/HTML get minified;
+    - All JS and CSS files receive unique hash in HTML based on their content. (Enable browser caching for frontend without backend);
+    - If JS file size is more than 240Kb - then all vendors are extracting into separate bundle, and `runtime.js` file is created.
+    `runtime.js` file contains code that enables loading of your chunks. It loads created chunks via Jsonp. Since we have asked webpack to split chunks, we are now free to load any chunk any time. Hence for each chunk, webpack emit this `runtime.js` file so that it can handle requires correctly;
+    - All those files are automatically added into HTML using HTMLWebpackPlugin;
 
-- automatic code splitting for JS
-- common bundles between different entry files (index.js, about.js == common~index~about.js)
-- gzip encoding while previewing project - to boost load speed (brotli is comming also)
-- JS/CSS minification (critical CSS and removed unused CSS styles are incomming `critical_css: true/false`)
-- Stylelint - checking coding style for SCSS 🔥 Configured on `stylelint.config.js` - based on SASS guidlines rules
-- Prettier - format your files based on config automatically 🔥 - not mess with indentration, line widths, indentation widths etc. Based on `prettier.config.js` file and `.editorconfig`;
-- ES6 / newest features🔥 - Promises, Async/await, Maps and MORE
+- Stylelint - checking code style for SCSS 🔥 based on `stylelint.config.js` file;
+- Prettier - format your files automatically 🔥  based on `prettier.config.js` file and `.editorconfig`;
+- ES6+ newest syntax 🔥 Promises, Async/await, npm modules and more...
 
-## Requirements ⚙️
-
-Node JS > 8
-NPM/Yarn
-
-## Usage 🤔
+## How to use
 
 All commands are listed in package.json file in scripts section and described below:
 
-### To install all dependencies run `npm i` or `yarn`
+1.  **Generate project: `yo p2h`** - choose project settings you need. (**_if you already has project installed, skip this step_**)
+2.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
+3.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
+4.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets intro `dist` folder
 
-##### Dont use npm and yarn in same project - this can lead to unnexpected results
+**Additional utility scripts:**
 
-### Dev mode `npm dev` or `npm run dev` or `yarn dev`
+1. **`npm run preview` or `yarn preview`** - run local webserver (to preview builded assets, for example)
+1. **`npm run pretify:html` or `yarn pretify:html`** - uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
-  - remove `dist` folder
-  - build assets in development mode
-  - running dev server
-  - watching changes
-
-### Production mode `npm build` or `npm run build` or `yarn build`
-
-  - remove `dist` folder
-  - build assets in production mode into `dist` folder
-
-
-### Utility scripts
-
- - `npm lint:fix` - running Stylelint fix of common issues in SCSS files. Not all of issues can be solved automatically. Good to use when you have a lot of issues with indentation (lint-staged is comming - checking codestyled in every git push. Perfect for GIT flow)
-
- - `npm run preview` - running local server to preview builded files - has a benefit of GZIP encoding 🔥 that can increase loading speed in times.
-
-
-
+**_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
