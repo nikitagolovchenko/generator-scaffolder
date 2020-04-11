@@ -1,12 +1,17 @@
 {
-  "version": "2.0.0",
+  "version": "2.0.1",
   "name": "generator-p2h",
   "files": [
     "generators"
   ],
   "main": "generators/index.js",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "webpack",
+    "p2h",
+    "psd2html",
+    "twig",
+    "pug"
   ],
   "dependencies": {
     "assert": "^2.0.0",
