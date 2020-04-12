@@ -8,6 +8,7 @@ const { join } = require('path');
 const { getFilesArray, setProcessToDestination, projectTypeMessage } = require(`${process.env.PWD}/generators/app/utils`);
 const { chaiExecAsync } = require('chai-exec');
 const { PROMPTS_VALUES, PATHS, SCRIPTS, GENERAL_TEST_SETTINGS } = require(`${process.env.PWD}/generators/app/globals`);
+const {cleanUpFolder} = require('./utils');
 
 const ONLY_FILES_TEST = process.env.FILES_ONLY;
 const assert = chai.assert;
@@ -19,17 +20,10 @@ function zurbTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesCo
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
     describe(projectTypeMessage(testSettings), async () => {
-      before(() => {
-        return helpers
-          .run(PATHS.appFolder)
-          .inDir(PATHS.tempFolder)
-          .withPrompts(testSettings);
+      before(async () => {
+        await cleanUpFolder();
+        return helpers.run(PATHS.appFolder).cd(PATHS.tempFolder).withPrompts(testSettings);
       });
-
-      const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-      const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
-      const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
-      const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
       describe('Generating files:', () => {
         it(chalk.green('Create expected files'), async () => {
@@ -47,6 +41,11 @@ function zurbTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesCo
 
       describe('Checking dependencies:', () => {
         setProcessToDestination();
+
+        const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
+        const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
+        const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
+        const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
         it(chalk.green('Library imported into JS:'), () => {
           testSettings.expectedFilesContent.js.map(content => yeomanAssert.fileContent(jsFile, content));
@@ -80,6 +79,7 @@ function zurbTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesCo
           it(chalk.green('Generate all files based on project config'), async () => {
             setProcessToDestination();
 
+            const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
             const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
