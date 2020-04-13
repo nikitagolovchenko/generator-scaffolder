@@ -1,21 +1,19 @@
-import {HTML} from './global';
-
 (function (window) {
   const activeClass = 'resize-active';
   const resetDelay = 500;
   let flag = false;
   let timer = null;
-  const removeClassHandler = function () {
+  const removeClassHandler = () => {
     flag = false;
-    HTML.classList.remove(activeClass);
+    document.documentElement.classList.remove(activeClass);
   };
-  const resizeHandler = function () {
+  const resizeHandler = () => {
     if (!flag) {
       flag = true;
-      HTML.classList.add(activeClass);
+      document.documentElement.classList.add(activeClass);
     }
     clearTimeout(timer);
-    const timer = setTimeout(removeClassHandler, resetDelay);
+    timer = setTimeout(removeClassHandler, resetDelay);
   };
   window.addEventListener('resize', resizeHandler);
 })(window);

@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+const {existsSync, readdirSync} = require('fs');
+const {address} = require('ip');
+const {posix, resolve, join, relative} = require('path');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -7,10 +8,8 @@ const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
@@ -25,22 +24,39 @@ const ENV = process.env.NODE_ENV;
 const HOST = config.server.host || process.env.HOST;
 const PORT = config.server.port || process.env.PORT;
 const URL = `http://${HOST}:${PORT}`;
+const IP = `http://${address()}:${PORT}`;
 const isProduction = ENV === PROD;
 const PUBLIC_PATH = '';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
-    return path.posix.join(__dirname, config.src, assetPath);
+    return posix.resolve(__dirname, config.src, assetPath);
   }
-  return path.posix.join(__dirname, config.dest, assetPath);
+  return posix.resolve(__dirname, config.dest, assetPath);
 };
 
 const getAssetName = (dest, name, ext) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : path.posix.join(dest, `${name}.${ext}`);
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : posix.join(dest, `${name}.${ext}`);
 };
 
 const getAssetOutput = asset => {
-  return asset.dest ? path.posix.normalize(asset.dest) : path.posix.normalize(asset.src);
+  return asset.dest ? posix.normalize(asset.dest) : posix.normalize(asset.src);
+};
+
+const postServerMessage = () => {
+  const RED = '\033[0;31m';
+  const GREEN = '\033[0;32m';
+  const PURPLE = '\033[0;35m';
+
+  return console.log(`
+    ${RED}---------------------------------------
+    🎉 ${GREEN}Server is running at port ${PORT}:
+
+    ${PURPLE}
+    💻 Internal: ${URL}
+    🌎 External: ${IP}
+    ${RED}---------------------------------------
+  `);
 };
 
 const generateStaticAssets = () => {
@@ -51,7 +67,7 @@ const generateStaticAssets = () => {
     const srcPath = getAssetPath(SRC, assetObject.src);
     const destPath = getAssetPath(DEST, assetObject.dest ? assetObject.dest : assetObject.src);
 
-    const assetFolderExist = fs.existsSync(srcPath);
+    const assetFolderExist = existsSync(srcPath);
 
     if (assetFolderExist) {
       assetsArray.push({
@@ -65,36 +81,34 @@ const generateStaticAssets = () => {
 };
 
 const pluginsConfiguration = {
-  BrowserSync: {
-    ghost: false,
-    open: config.server.open,
-    proxy: {
-      target: URL,
-      ws: true,
-    },
-  },
   DevServer: {
-    contentBase: path.posix.join(__dirname, config.dest),
+    contentBase: relative(__dirname, config.dest),
     hot: true,
+    host: '0.0.0.0',
     compress: true,
     watchContentBase: true,
     disableHostCheck: true,
+    historyApiFallback: true,
     port: PORT,
+    public: URL,
     liveReload: false,
     overlay: true,
+    useLocalIp: true,
     noInfo: true,
-    open: false,
+    open: config.server.open,
     clientLogLevel: 'silent',
     after: (app, server, compiler) => {
       const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
 
+      postServerMessage();
       chokidar.watch(files).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
       });
     },
   },
   MiniCssExtract: {
-    filename: getAssetName(config.styles.dest, '[name]', 'css'),
+    filename: getAssetName(config.styles.dest, config.styles.bundle, 'css'),
+    chunkFilename: getAssetName(config.styles.dest, config.entries ? '[name]' : config.styles.bundle, 'css'),
   },
   ProvidePlugin: {
     $: 'jquery',
@@ -110,7 +124,7 @@ const pluginsConfiguration = {
   },
   CopyPlugin: generateStaticAssets(),
   ImageMin: {
-    cacheFolder: path.resolve(__dirname, 'node_modules/.cache'),
+    cacheFolder: resolve(__dirname, 'node_modules/.cache'),
     pngquant: {
       quality: '70-80',
     },
@@ -127,7 +141,7 @@ const pluginsConfiguration = {
 const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
   const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
-  const templateFiles = fs.readdirSync(getAssetPath(SRC, sitePages));
+  const templateFiles = readdirSync(getAssetPath(SRC, sitePages));
   const files = templateFiles.filter(elm => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
 
   return files.map(item => {
@@ -152,8 +166,9 @@ const generateHtmlPlugins = () => {
       template: getAssetPath(SRC, `${sitePages}/${name}.${config.templates.extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
       chunks: config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false,
-      minify: minify(),
-      hash: config.cache_boost,
+      minify: isProduction ? minify() : false,
+      hash: isProduction ? config.cache_boost : false,
+      scriptLoading: 'defer',
       optimize: {
         prefetch: true,
       },
@@ -171,31 +186,24 @@ const htmlPlugins = generateHtmlPlugins().concat([
 ]);
 
 if (isProduction && config.critical_css) {
-  htmlPlugins.push(
-    new Critters({
-      inlineFonts: true,
-      pruneSource: config.entries ? true : false,
-      noscriptFallback: true,
-      preload: 'swap',
-    })
-  );
+  console.log('Critical CSS feature is comming soon...')
+  // htmlPlugins.push(
+  //   new Critters({
+  //     inlineFonts: true,
+  //     pruneSource: config.entries ? true : false,
+  //     noscriptFallback: true,
+  //     preload: 'swap',
+  //   })
+  // );
 }
 
 const getPlugins = () => {
-  let devPlugins = [
-    new BrowserSyncPlugin(pluginsConfiguration.BrowserSync, {
-      // prevent BrowserSync from reloading the page
-      // and let Webpack Dev Server take care of this
-      reload: false,
-    }),
-  ];
-
+  let devPlugins = [];
   let prodPlugins = [new ImageminPlugin(pluginsConfiguration.ImageMin)];
 
   let defaultPlugins = [
     new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
     new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
-    new FixStyleOnlyEntriesPlugin(),
     new CopyWebpackPlugin(pluginsConfiguration.CopyPlugin),
     new MiniCssExtractPlugin(pluginsConfiguration.MiniCssExtract),
     new WebpackNotifierPlugin({
@@ -231,7 +239,7 @@ const getTemplatesLoader = templateType => {
   if (PUG.test(templateType)) {
     return {
       test: PUG,
-      use: ['raw-loader', `pug-html-loader?basedir=${path.join(config.src, config.templates.src)}`],
+      use: ['raw-loader', `pug-html-loader?basedir=${join(config.src, config.templates.src)}`],
     };
   }
 
@@ -244,9 +252,9 @@ const getTemplatesLoader = templateType => {
           loader: 'twig-html-loader',
           options: {
             namespaces: {
-              layout: path.resolve(__dirname, 'src/views/_layout'),
-              components: path.resolve(__dirname, 'src/views/_components'),
-              includes: path.resolve(__dirname, 'src/views/_includes'),
+              layout: resolve(__dirname, 'src/views/_layout'),
+              components: resolve(__dirname, 'src/views/_components'),
+              includes: resolve(__dirname, 'src/views/_includes'),
             },
           },
         },
@@ -260,14 +268,28 @@ const getTemplatesLoader = templateType => {
   };
 };
 
+const getScriptsLoader = (templateType) => {
+  const TS = new RegExp('ts');
+
+  if (TS.test(templateType)) {
+    return {
+      // /node_modules\/(?!(module_to_include)\/).*/
+      test: /\.tsx?$/,
+      exclude: /node_modules/,
+      loaders: ['awesome-typescript-loader', 'webpack-module-hot-accept'],
+    };
+  }
+
+  return {
+    test: /\.m?js$/,
+    exclude: /node_modules/,
+    loaders: ['babel-loader', 'webpack-module-hot-accept'],
+  };
+};
+
 const getModules = () => {
   const modules = {
     rules: [
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        loaders: ['babel-loader', 'webpack-module-hot-accept'],
-      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -315,7 +337,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
+              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
               outputPath: getAssetOutput(config.static.fonts),
               name: '[name].[ext]',
             },
@@ -329,7 +351,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: path.posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
+              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
               outputPath: getAssetOutput(config.static.images),
               name: '[name].[ext]',
             },
@@ -338,8 +360,6 @@ const getModules = () => {
       },
     ],
   };
-
-  modules.rules.push(getTemplatesLoader(config.templates.extension));
 
   if (!isProduction && config.linters) {
     modules.rules.push({
@@ -362,6 +382,8 @@ const getModules = () => {
         },
       });
     }
+
+    modules.rules.unshift(getScriptsLoader(config.scripts.extension), getTemplatesLoader(config.templates.extension));
   }
 
   return modules;
@@ -382,7 +404,7 @@ const getOptimization = () => {
           cacheGroups: {
             [cacheGroupName]: {
               chunks: 'all',
-              test: /[\\/]node_modules[\\/]/,
+              test: /node_modules/,
             },
           },
         }
@@ -421,16 +443,15 @@ const getEntries = () => {
   const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
 
   // default JS entry {app.js} - used for all pages, if no specific entry is provided
-  const entryJsFile = path.join(config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`);
+  const entryJsFile = join(config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`);
   const entry = iterator.concat([getAssetPath(SRC, entryJsFile)]);
 
   // default CSS entry {main.scss} - used for all pages, if no specific entry is provided
-  const entryCSSFile = path.join(config.styles.src, `${config.styles.bundle}.${config.styles.extension}`);
+  const entryCSSFile = join(config.styles.src, `${config.styles.bundle}.${config.styles.extension}`);
   const styleAsset = getAssetPath(SRC, entryCSSFile);
 
   let entries = {
-    [config.scripts.bundle]: entry,
-    [config.styles.bundle]: styleAsset,
+    [config.scripts.bundle]: [...entry, styleAsset],
   };
 
   /*
@@ -454,7 +475,7 @@ const getEntries = () => {
       if (JSFileName) {
         const JSFile = getAssetPath(SRC, `${config.scripts.src}/${JSFileName}.${config.scripts.extension}`);
 
-        if (fs.existsSync(JSFile)) {
+        if (existsSync(JSFile)) {
           if (!entries[entryKey]) entries[entryKey] = [];
 
           entries[entryKey].push(...iterator.concat(JSFile));
@@ -464,7 +485,7 @@ const getEntries = () => {
       if (CSSFileName) {
         const CSSFile = CSSFileName && getAssetPath(SRC, `${config.styles.src}/${CSSFileName}.${config.styles.extension}`);
 
-        if (fs.existsSync(CSSFile)) {
+        if (existsSync(CSSFile)) {
           if (!entries[entryKey]) entries[entryKey] = [];
 
           entries[entryKey].push(CSSFile);
@@ -483,8 +504,8 @@ const webpackConfig = {
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,
-    path: path.posix.resolve(config.dest),
-    filename: getAssetName(config.scripts.dest, '[name]', config.scripts.extension),
+    path: posix.resolve(config.dest),
+    filename: getAssetName(config.scripts.dest, '[name]', 'js'),
     crossOriginLoading: 'anonymous',
   },
   plugins: getPlugins(),
