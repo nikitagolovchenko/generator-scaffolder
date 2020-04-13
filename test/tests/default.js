@@ -39,17 +39,19 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
       });
 
       describe('Checking dependencies:', () => {
-        setProcessToDestination();
+        it(chalk.green('Setup settings'), () => {
+          setProcessToDestination();
 
-        const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-        const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
-        const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
+          const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
+          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
-        if (testSettings.expectedFilesContent.hasOwnProperty('styles')) {
-          it(chalk.green('Added all necessary content to Styles:'), () => {
-            testSettings.expectedFilesContent.styles.map(content => yeomanAssert.fileContent(stylesFile, content));
-          });
-        }
+          if (testSettings.expectedFilesContent.hasOwnProperty('styles')) {
+            it(chalk.green('Added all necessary content to Styles:'), () => {
+  
+              testSettings.expectedFilesContent.styles.map(content => yeomanAssert.fileContent(stylesFile, content));
+            });
+          }
+        });
       });
 
 

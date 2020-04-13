@@ -40,23 +40,25 @@ function zurbTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesCo
       });
 
       describe('Checking dependencies:', () => {
-        setProcessToDestination();
+        it(chalk.green('Setup settings'), () => {
+          setProcessToDestination();
 
-        const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-        const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
-        const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
-        const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
+          const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
+          const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
+          const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
+          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
-        it(chalk.green('Library imported into JS:'), () => {
-          testSettings.expectedFilesContent.js.map(content => yeomanAssert.fileContent(jsFile, content));
-        });
+          it(chalk.green('Library imported into JS:'), () => {
+            testSettings.expectedFilesContent.js.map((content) => yeomanAssert.fileContent(jsFile, content));
+          });
 
-        it(chalk.green('Library imported into Styles:'), () => {
-          testSettings.expectedFilesContent.styles.map(content => yeomanAssert.fileContent(stylesFile, content));
-        });
+          it(chalk.green('Library imported into Styles:'), () => {
+            testSettings.expectedFilesContent.styles.map((content) => yeomanAssert.fileContent(stylesFile, content));
+          });
 
-        it(chalk.green('Modules added to package.json:'), () => {
-          testSettings.expectedFilesContent.json.map(content => yeomanAssert.jsonFileContent(newPkgfilePath, content));
+          it(chalk.green('Modules added to package.json:'), () => {
+            testSettings.expectedFilesContent.json.map((content) => yeomanAssert.jsonFileContent(newPkgfilePath, content));
+          });
         });
       });
 

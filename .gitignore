@@ -1,4 +1,4 @@
 node_modules
 package-lock.json
-test/tmp/
+test/tmp/markup/*
 yarn.lock

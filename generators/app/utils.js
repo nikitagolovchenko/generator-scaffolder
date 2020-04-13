@@ -1,3 +1,4 @@
+const {existsSync, mkdir} = require('fs');
 const chalk = require('chalk');
 const {join, resolve} = require('path');
 const {readdir, stat} = require('fs');
@@ -22,7 +23,15 @@ async function getFilesArray(dir, allFiles = []) {
   });
 }
 
-const setProcessToDestination = (dest = PATHS.tempMarkupFolder) => process.chdir(resolve(__dirname, dest));
+const setProcessToDestination = (dest = PATHS.tempMarkupFolder) => {
+  if (!existsSync(dest)) {
+    mkdir('./test/tmp/markup/', {}, () => {
+      process.chdir(resolve(__dirname, dest));
+    })
+  } else {
+    process.chdir(resolve(__dirname, dest));
+  }
+};
 
 const projectTypeMessage = prompts => {
   const message = `
