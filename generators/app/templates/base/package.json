@@ -19,7 +19,7 @@
     "custom-event-polyfill": "^1.0.7",
     "include-media": "^1.4.9",
     "intersection-observer": "^0.7.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {
