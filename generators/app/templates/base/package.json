@@ -18,7 +18,7 @@
     "body-scroll-lock": "^3.0.1",
     "custom-event-polyfill": "^1.0.7",
     "include-media": "^1.4.9",
-    "intersection-observer": "^0.7.0",
+    "intersection-observer": "^0.8.0",
     "jquery": "^3.5.0",
     "normalize.css": "^8.0.1"
   },
