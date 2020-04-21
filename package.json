@@ -19,14 +19,14 @@
     "chai-exec": "^2.0.4",
     "chalk": "^4.0.0",
     "cross-env": "^7.0.2",
-    "husky": "^4.2.3",
-    "lint-staged": "^10.1.2",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.3",
     "lodash.merge": "^4.6.2",
     "mocha": "^7.1.1",
     "prepend-file": "^1.3.1",
     "update-notifier": "^4.1.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-generator": "^4.7.2",
+    "yeoman-generator": "^4.8.2",
     "yeoman-test": "^2.4.1",
     "yosay": "^2.0.2"
   },
@@ -38,7 +38,7 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-prettier": "^3.1.3",
     "prettier": "^2.0.4"
   },
   "scripts": {
