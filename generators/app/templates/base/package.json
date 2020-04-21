@@ -16,7 +16,6 @@
   ],
   "dependencies": {
     "body-scroll-lock": "^3.0.1",
-    "custom-event-polyfill": "^1.0.7",
     "include-media": "^1.4.9",
     "intersection-observer": "^0.7.0",
     "jquery": "^3.4.1",
@@ -33,6 +32,7 @@
     "critters-webpack-plugin": "^2.5.0",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.1",
+    "custom-event-polyfill": "^1.0.7",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",

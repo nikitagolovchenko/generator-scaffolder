@@ -108,7 +108,7 @@ const pluginsConfiguration = {
   },
   MiniCssExtract: {
     filename: getAssetName(config.styles.dest, config.styles.bundle, 'css'),
-    chunkFilename: getAssetName(config.styles.dest, config.entries ? '[name]' : config.styles.bundle, 'css'),
+    chunkFilename: getAssetName(config.styles.dest, '[name]', 'css'),
   },
   ProvidePlugin: {
     $: 'jquery',
