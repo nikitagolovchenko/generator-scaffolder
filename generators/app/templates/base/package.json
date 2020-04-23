@@ -12,6 +12,7 @@
     "> 0.5%",
     "last 2 versions",
     "IE 11",
+    "not ie_mob",
     "not dead"
   ],
   "dependencies": {
