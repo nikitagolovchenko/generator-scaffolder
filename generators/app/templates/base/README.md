@@ -78,14 +78,13 @@ You can see default structure of this file: **`enable/disable` means `true/false
 
 All commands are listed in package.json file in scripts section and described below:
 
-1.  **Generate project: `yo p2h`** - choose project settings you need. (**_if you already has project installed, skip this step_**)
-2.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
-3.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
-4.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets intro `dist` folder
+1.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
+2.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
+3.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets intro `dist` folder
 
 **Additional utility scripts:**
 
 1. **`npm run preview` or `yarn preview`** - run local webserver (to preview builded assets, for example)
-1. **`npm run pretify:html` or `yarn pretify:html`** - uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
+2. **`npm run pretify:html` or `yarn pretify:html`** - uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
 **_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
