@@ -382,9 +382,9 @@ const getModules = () => {
         },
       });
     }
-
-    modules.rules.unshift(getScriptsLoader(config.scripts.extension), getTemplatesLoader(config.templates.extension));
   }
+
+  modules.rules.unshift(getScriptsLoader(config.scripts.extension), getTemplatesLoader(config.templates.extension));
 
   return modules;
 };
