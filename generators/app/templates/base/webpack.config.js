@@ -21,10 +21,7 @@ const SRC = config.src;
 const DEST = config.dest;
 const PROD = 'production';
 const ENV = process.env.NODE_ENV;
-const HOST = config.server.host || process.env.HOST;
-const PORT = config.server.port || process.env.PORT;
-const URL = `http://${HOST}:${PORT}`;
-const IP = `http://${address()}:${PORT}`;
+const HOST = config.server.host || 'localhost';
 const isProduction = ENV === PROD;
 const PUBLIC_PATH = '';
 
@@ -39,18 +36,20 @@ const getAssetName = (dest, name, ext) => {
   return dest === PUBLIC_PATH ? `${name}.${ext}` : join(dest, `${name}.${ext}`);
 };
 
-const getAssetOutput = asset => {
+const getAssetOutput = (asset) => {
   return asset.dest ? normalize(asset.dest) : normalize(asset.src);
 };
 
-const postServerMessage = () => {
+const postServerMessage = (port, host = HOST) => {
+  const URL = `http://${host}:${port}`;
+  const IP = `http://${address()}:${port}`;
   const RED = '\033[0;31m';
   const GREEN = '\033[0;32m';
   const PURPLE = '\033[0;35m';
 
   return console.log(`
     ${RED}---------------------------------------
-    🎉 ${GREEN}Server is running at port ${PORT}:
+    🎉 ${GREEN}Server is running at port ${port}:
 
     ${PURPLE}
     💻 Internal: ${URL}
@@ -89,18 +88,17 @@ const pluginsConfiguration = {
     watchContentBase: true,
     disableHostCheck: true,
     historyApiFallback: true,
-    port: PORT,
-    public: URL,
     liveReload: false,
     overlay: true,
     useLocalIp: true,
     noInfo: true,
     open: config.server.open,
     clientLogLevel: 'silent',
-    after: (app, server, compiler) => {
+    after: (app, {options}, compiler) => {
       const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
+      const {port} = options;
 
-      postServerMessage();
+      postServerMessage(port);
       chokidar.watch(files).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
       });
@@ -142,9 +140,9 @@ const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
   const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
   const templateFiles = readdirSync(getAssetPath(SRC, sitePages));
-  const files = templateFiles.filter(elm => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
+  const files = templateFiles.filter((elm) => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
 
-  return files.map(item => {
+  return files.map((item) => {
     // Split names and extension
     const parts = item.split('.');
     const name = parts[0];
@@ -186,7 +184,7 @@ const htmlPlugins = generateHtmlPlugins().concat([
 ]);
 
 if (isProduction && config.critical_css) {
-  console.log('Critical CSS feature is comming soon...')
+  console.log('Critical CSS feature is comming soon...');
   // htmlPlugins.push(
   //   new Critters({
   //     inlineFonts: true,
@@ -212,11 +210,11 @@ const getPlugins = () => {
   ];
 
   if (!isProduction) {
-    devPlugins.map(item => defaultPlugins.push(item));
+    devPlugins.map((item) => defaultPlugins.push(item));
   }
 
   if (isProduction) {
-    prodPlugins.map(item => defaultPlugins.push(item));
+    prodPlugins.map((item) => defaultPlugins.push(item));
   }
 
   // enable linters only if config.linters === true
@@ -232,7 +230,7 @@ const getPlugins = () => {
   return defaultPlugins.concat(htmlPlugins);
 };
 
-const getTemplatesLoader = templateType => {
+const getTemplatesLoader = (templateType) => {
   const PUG = new RegExp('pug');
   const TWIG = new RegExp('twig');
 
@@ -411,7 +409,7 @@ const getOptimization = () => {
       : {},
     minimizer: [
       new TerserPlugin({
-        chunkFilter: chunk => {
+        chunkFilter: (chunk) => {
           const name = chunk.name;
           // Always include uglification for the `vendor` chunk
           if (name && name.startsWith(cacheGroupName)) {
