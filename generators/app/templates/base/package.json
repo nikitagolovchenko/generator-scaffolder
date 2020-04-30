@@ -15,7 +15,7 @@
     "not dead"
   ],
   "dependencies": {
-    "body-scroll-lock": "^3.0.1",
+    "body-scroll-lock": "^3.0.2",
     "include-media": "^1.4.9",
     "intersection-observer": "^0.10.0",
     "jquery": "^3.5.0",
