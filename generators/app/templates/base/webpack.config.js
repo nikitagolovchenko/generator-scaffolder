@@ -1,6 +1,6 @@
 const {existsSync, readdirSync} = require('fs');
 const {address} = require('ip');
-const {posix, resolve, join, relative} = require('path');
+const {resolve, join, relative, normalize} = require('path');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -30,17 +30,17 @@ const PUBLIC_PATH = '';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
-    return posix.resolve(__dirname, config.src, assetPath);
+    return resolve(__dirname, config.src, assetPath);
   }
-  return posix.resolve(__dirname, config.dest, assetPath);
+  return resolve(__dirname, config.dest, assetPath);
 };
 
 const getAssetName = (dest, name, ext) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : posix.join(dest, `${name}.${ext}`);
+  return dest === PUBLIC_PATH ? `${name}.${ext}` : join(dest, `${name}.${ext}`);
 };
 
 const getAssetOutput = asset => {
-  return asset.dest ? posix.normalize(asset.dest) : posix.normalize(asset.src);
+  return asset.dest ? normalize(asset.dest) : normalize(asset.src);
 };
 
 const postServerMessage = () => {
@@ -337,7 +337,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
+              publicPath: relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
               outputPath: getAssetOutput(config.static.fonts),
               name: '[name].[ext]',
             },
@@ -351,7 +351,7 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               limit: 4096,
-              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
+              publicPath: relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
               outputPath: getAssetOutput(config.static.images),
               name: '[name].[ext]',
             },
@@ -504,7 +504,7 @@ const webpackConfig = {
   stats: isProduction,
   output: {
     publicPath: PUBLIC_PATH,
-    path: posix.resolve(config.dest),
+    path: resolve(config.dest),
     filename: getAssetName(config.scripts.dest, '[name]', 'js'),
     crossOriginLoading: 'anonymous',
   },
