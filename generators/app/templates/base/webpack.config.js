@@ -94,9 +94,9 @@ const pluginsConfiguration = {
     noInfo: true,
     open: config.server.open,
     clientLogLevel: 'silent',
-    after: (app, {options}, compiler) => {
+    after: (app, server, compiler) => {
       const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
-      const {port} = options;
+      const {port} = server.options;
 
       postServerMessage(port);
       chokidar.watch(files).on('change', () => {
