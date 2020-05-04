@@ -65,7 +65,7 @@
     "stylelint": "^13.3.3",
     "stylelint-config-sass-guidelines": "^7.0.0",
     "stylelint-selector-bem-pattern": "^2.1.0",
-    "stylelint-webpack-plugin": "^1.2.3",
+    "stylelint-webpack-plugin": "^2.0.0",
     "terser-webpack-plugin": "^2.3.6",
     "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
