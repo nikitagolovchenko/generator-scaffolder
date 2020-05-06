@@ -23,7 +23,7 @@ Generator is based on `Node JS` and `Yeoman` generator. First of all, you need t
 * [Yeoman](https://yeoman.io/) - `npm install -g yo`
 
 If you already have Node JS, then check version:
-* `node -v` - **should be v8+. If you version is later then v8 - then upgrade your Node JS**
+* `node -v` - **should be v8+. If you version is earlier then v8 - then upgrade your Node JS**
 
 Once you have Node JS and Yeoman installed, you ready to install generator itself.
 
