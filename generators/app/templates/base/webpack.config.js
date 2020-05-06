@@ -249,6 +249,11 @@ const getTemplatesLoader = (templateType) => {
         {
           loader: 'twig-html-loader',
           options: {
+            data: (context) => {
+              const data = resolve(__dirname, 'data.json');
+              context.addDependency(data); // Force webpack to watch file
+              return context.fs.readJsonSync(data, {throws: false}) || {};
+            },
             namespaces: {
               layout: resolve(__dirname, 'src/views/_layout'),
               components: resolve(__dirname, 'src/views/_components'),
