@@ -60,7 +60,6 @@ You can see default structure of this file: **`enable/disable` means `true/false
   "src": "src", // source files folder
   "dest": "dist", // production files folder
   "debug": false, // enable/disable debug mode
-  "critical_css": false, // enable/disable critical CSS styles, that will be inlined into head
   "cache_boost": false, // enable/disable boost for generated CSS/JS bundles
   "minimize": true, // enable/disable CSS/JS minification
   "linters": {
