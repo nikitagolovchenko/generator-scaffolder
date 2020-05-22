@@ -43,7 +43,7 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
           setProcessToDestination();
 
           const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
+          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.scripts.bundle}.${newCfg.styles.extension}`);
 
           if (testSettings.expectedFilesContent.hasOwnProperty('styles')) {
             it(chalk.green('Added all necessary content to Styles:'), () => {
