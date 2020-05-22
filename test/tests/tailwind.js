@@ -47,7 +47,7 @@ function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFil
           const newPkgfilePath = join(PATHS.tempMarkupFolder, 'package.json');
           const postcssConfigFile = join(PATHS.tempMarkupFolder, 'postcss.config.js');
           const jsFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.scripts.src, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
-          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.scripts.bundle}.${newCfg.styles.extension}`);
+          const stylesFile = join(PATHS.tempMarkupFolder, newCfg.src, newCfg.styles.src, `${newCfg.styles.bundle}.${newCfg.styles.extension}`);
 
           it(chalk.green('Library imported into JS:'), () => {
             testSettings.expectedFilesContent.js.map((content) => yeomanAssert.fileContent(jsFile, content));
@@ -87,7 +87,7 @@ function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFil
             setProcessToDestination();
 
             const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-            const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.scripts.bundle}.css`);
+            const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
 
