@@ -1,4 +1,4 @@
-import ready, {BODY, HTML} from 'Utils/global';
+import ready, {BODY, HTML} from './utils/global';
 
 ready(() => {
   BODY.classList.add('test');

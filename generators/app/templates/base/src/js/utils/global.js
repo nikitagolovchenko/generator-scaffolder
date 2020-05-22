@@ -14,7 +14,7 @@ export const BREAKPOINTS = {
   widescreen: 1440,
 };
 
-/* 
+/*
   Breakpoints utility function
   @params: point - {number} - breakpoint to check, e.g. BREAKPOINTS.tablet
   @params: desktopFirst - {boolean} - if you need desktop first
@@ -23,7 +23,7 @@ export const BREAKPOINTS = {
 
   Usage
 
-  import 2 itilities 
+  import 2 itilities
   import {BREAKPOINTS, breakpoint} from 'Utils/global';
 
   window.addEventListener('resize', () => {
@@ -33,7 +33,7 @@ export const BREAKPOINTS = {
       console.log('IS MOBILE')
     }
   })
-*/ 
+*/
 export const breakpoint = (point, desktopFirst = false) => {
   if (desktopFirst) {
     return window.innerWidth < point;
@@ -42,14 +42,14 @@ export const breakpoint = (point, desktopFirst = false) => {
   return window.innerWidth >= point;
 };
 
-/* 
+/*
   Detect touchevents
   @params: {obj} - window
   @return: boolean
 */
 export const isTouch = (obj = window) => touchevents(obj);
 
-/* 
+/*
   "jQuery like" ready function:
   Usage:
 
@@ -139,4 +139,9 @@ export const wrapAll = (nodes, wrapper) => {
 export const ev = (eventName, data, target = document) => {
   const e = new CustomEvent(eventName, {detail: data});
   target.dispatchEvent(e);
+};
+
+/* @return boolean (true=IE) */
+export const isIE = () => {
+  return /*@cc_on!@*/ false || !!document.documentMode;
 };

@@ -1,4 +1,4 @@
-include /utils/mixins
+include /_utils/mixins
 - var pageTitle = 'Project Title'
 
 block variables
@@ -12,8 +12,8 @@ html
 
   body(class=pageClass)
     .wrapper
-      include /includes/header
+      include /_includes/header
       .page-holder
         main.main
           block content
-      include /includes/footer
+      include /_includes/footer

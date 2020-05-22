@@ -10,7 +10,7 @@ const {PROMPTS_VALUES} = require('./globals');
 const addWPHeader = require('./extends/wordpressHeader');
 const notifier = updateNotifier({pkg, updateCheckInterval: 1000 * 60 * 60 * 24});
 
-const yosayPrompts = props => {
+const yosayPrompts = (props) => {
   if (props) {
     return `Update available:
        ${chalk.red(props.current)} → ${chalk.green(props.latest)}.
@@ -26,7 +26,6 @@ class WebpackGenerator extends Generator {
   constructor(args, opts) {
     super(args, opts);
     this.option('babel');
-    this.HTMLFiles = 'markup/src/views/*.html';;
   }
 
   async prompting() {
@@ -54,17 +53,15 @@ class WebpackGenerator extends Generator {
     }
   }
 
-  checkModulesFolder() {
-    return fs.existsSync(this.destinationPath('node_modules'));
-  }
-
   end() {
-    this.log(chalk.green(`
+    this.log(
+      chalk.green(`
   🙌 Installation done! 🙌
-  📦 Dont forget to install node modules
-  💻 For ${chalk.yellow('development mode')} run command ${chalk.red('npm run dev')} OR ${chalk.red('yarn dev')} from ${chalk.yellow('markup')} folder 👊.
+  📦 Dont forget to install node modules: ${chalk.red('npm install')} OR ${chalk.red('yarn')}
+  💻 For ${chalk.yellow('development mode')} run command ${chalk.red('npm run dev')} OR ${chalk.red('yarn dev')} 👊.
   ℹ️  For more info, read ${chalk.yellow('README.md')}
-    `));
+    `)
+    );
   }
 };
 

@@ -1,5 +1,5 @@
-extends /layout/main
-include /utils/mixins
+extends /_layout/main
+include /_utils/mixins
 
 block variables
   -
@@ -23,6 +23,7 @@ block content
         | INDEX2 PAGE
         | INDEX3 PAGE
 
+      a(href="/about.html")
+        | About page
+
       +test(testContent)
-
-

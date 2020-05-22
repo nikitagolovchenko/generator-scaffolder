@@ -23,14 +23,14 @@ Generator is based on `Node JS` and `Yeoman` generator. First of all, you need t
 * [Yeoman](https://yeoman.io/) - `npm install -g yo`
 
 If you already have Node JS, then check version:
-* `node -v` - **should be v8+. If you version is earlier then v8 - then upgrade your Node JS**
+* `node -v` - **should be 10+. If your version is earlier than 10 - upgrade your Node JS**
 
 Once you have Node JS and Yeoman installed, you ready to install generator itself.
 
 Generator is an `npm` module, so you can easily install it using `npm` or `yarn`:
 
-* If you using `NPM` - run `npm i -g generator-p2h`
-* If you using `Yarn` - run `yarn global add generator-p2h`
+* `NPM` - run `npm i -g generator-p2h`
+* `Yarn` - run `yarn global add generator-p2h`
 
 ## What's included
 
@@ -111,7 +111,6 @@ You can see default structure of this file: **`enable/disable` means `true/false
   - Control input/output folders for files; control filenames, folder names etc. Make your own structure of project you need;
   - Control linters with one object (`linters: {}`);
   - Debug mode (`debug: true/false`) - review compiled code to remove/optimize your vendors using [Webpack Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer);
-  - Critical CSS (`critical_css: true/false`) - inline critical CSS into head, using  [Critters](https://www.npmjs.com/package/critters-webpack-plugin). Please note, that this is not mean that first visible content of page will be inlined, this plugin extract critical styles that are most important for First Paint Time in PageSpeedInsights;
   - Cache boost (`cache_boost: true/false`) - if enabled:
     - All JS/CSS/HTML get minified;
     - All JS and CSS files receive unique hash in HTML based on their content. (Enable browser caching for frontend without backend);
@@ -130,12 +129,12 @@ All commands are listed in package.json file in scripts section and described be
 1.  **Generate project: `yo p2h`** - choose project settings you need. (**_if you already has project installed, skip this step_**)
 2.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
 3.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
-4.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets intro `dist` folder
+4.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets inro `dist` folder
 
 **Additional utility scripts:**
 
 1. **`npm run preview` or `yarn preview`** - run local webserver (to preview builded assets, for example)
-1. **`npm run pretify:html` or `yarn pretify:html`** - uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
+1. **`npm run pretify:html` or `yarn pretify:html`** - using Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
 **_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
 

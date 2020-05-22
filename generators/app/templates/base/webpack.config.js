@@ -15,7 +15,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
 const SRC = config.src;

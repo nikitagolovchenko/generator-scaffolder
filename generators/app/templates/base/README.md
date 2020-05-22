@@ -11,7 +11,6 @@ You can see default structure of this file: **`enable/disable` means `true/false
   "src": "src", // source files folder
   "dest": "dist", // production files folder
   "debug": false, // enable/disable debug mode
-  "critical_css": false, // enable/disable critical CSS styles, that will be inlined into head
   "cache_boost": false, // enable/disable boost for generated CSS/JS bundles
   "minimize": true, // enable/disable CSS/JS minification
   "linters": {
@@ -62,7 +61,6 @@ You can see default structure of this file: **`enable/disable` means `true/false
   - Control input/output folders for files; control filenames, folder names etc. Make your own structure of project you need;
   - Control linters with one object (`linters: {}`);
   - Debug mode (`debug: true/false`) - review compiled code to remove/optimize your vendors using [Webpack Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer);
-  - Critical CSS (`critical_css: true/false`) - inline critical CSS into head, using  [Critters](https://www.npmjs.com/package/critters-webpack-plugin). Please note, that this is not mean that first visible content of page will be inlined, this plugin extract critical styles that are most important for First Paint Time in PageSpeedInsights;
   - Cache boost (`cache_boost: true/false`) - if enabled:
     - All JS/CSS/HTML get minified;
     - All JS and CSS files receive unique hash in HTML based on their content. (Enable browser caching for frontend without backend);
