@@ -1,6 +1,7 @@
-const {existsSync, readdirSync} = require('fs');
+const {existsSync} = require('fs');
 const {address} = require('ip');
 const {resolve, join, relative, normalize} = require('path');
+const readdir = require('@jsdevtools/readdir-enhanced');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -94,7 +95,12 @@ const pluginsConfiguration = {
     noInfo: true,
     open: config.server.open,
     clientLogLevel: 'silent',
-    after: (app, server, compiler) => {
+    before(app, {options}) {
+      const PORT = config.server.port || options.port;
+      options.port = PORT;
+      options.public = `localhost:${PORT}`;
+    },
+    after(app, server) {
       const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
       const {port} = server.options;
 
@@ -139,10 +145,16 @@ const pluginsConfiguration = {
 const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
   const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
-  const templateFiles = readdirSync(getAssetPath(SRC, sitePages));
-  const files = templateFiles.filter((elm) => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
+  const templateFiles = readdir.sync(getAssetPath(SRC, sitePages), {
+    deep: true,
+    filter: removeHelpers,
+  });
 
-  return files.map((item) => {
+  function removeHelpers(stats) {
+    return stats.isFile() && stats.path.indexOf('_') === -1;
+  }
+
+  return templateFiles.map((item) => {
     // Split names and extension
     const parts = item.split('.');
     const name = parts[0];
