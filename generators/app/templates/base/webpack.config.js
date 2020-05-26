@@ -140,10 +140,10 @@ const pluginsConfiguration = {
   },
 };
 
+const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
 // creating new instance of plugin for each of the pages that we have
 const generateHtmlPlugins = () => {
   // Read files in template directory and looking only for html files
-  const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
   const templateFiles = readdir.sync(getAssetPath(SRC, sitePages), {
     deep: true,
     filter: removeHelpers,
@@ -262,6 +262,18 @@ const getTemplatesLoader = (templateType) => {
           options: {
             data: (context) => {
               const data = resolve(__dirname, 'data.json');
+              // going throught all twig files, including only _{helpers}
+              const helpers = readdir.sync(getAssetPath(SRC, sitePages), {
+                deep: true,
+                filter: (stats) => stats.isFile() && stats.path.indexOf('_') !== -1,
+              });
+
+              helpers.forEach((file) => {
+                // pushing helper file to context and force plugin to rebuild templates on helpers changes
+                // fixing issue, when path inside helpers was changed, but compiler didn't noticed about those changes to the path
+                context.addDependency(join(config.src, config.templates.src, file));
+              });
+
               context.addDependency(data); // Force webpack to watch file
               return context.fs.readJsonSync(data, {throws: false}) || {};
             },
