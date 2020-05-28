@@ -99,13 +99,17 @@ const pluginsConfiguration = {
       options.port = PORT;
       options.public = `localhost:${PORT}`;
     },
-    after(app, server) {
+    after(app, server, compiler) {
       const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
       const {port} = server.options;
 
-      postServerMessage(port);
       chokidar.watch(files).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
+      });
+
+      compiler.hooks.done.tap('show-server-settings', (stats) => {
+        if (stats.hasErrors()) return;
+        postServerMessage(port);
       });
     },
   },
