@@ -2,34 +2,34 @@ const merge = require('lodash.merge');
 const {PROMPTS_VALUES, PACKAGES, PATHS, CONFIG_REWRITES} = require('./globals');
 const projectConfig = 'markup/config.json';
 const projectPackages = 'markup/package.json';
+const pkg = require('../../package.json');
 
 module.exports = async function writeFiles() {
-  const copyFiles = paths => {
+  const copyFiles = (paths) => {
     this.fs.copy(this.templatePath(paths[0]), this.destinationPath(paths[1]), {
       globOptions: {
         dot: true,
-      }
+      },
     });
   };
 
   const modifyConfig = (settings, config = projectConfig) => {
     this.fs.extendJSON(this.destinationPath(config), settings);
-  }
+  };
 
   const setLinters = () => {
     if (this.props.linters && typeof this.props.linters === 'object') {
-      
       const lintCSS = this.props.linters.includes(PROMPTS_VALUES.linters.css);
       const lintJS = this.props.linters.includes(PROMPTS_VALUES.linters.js);
       const lintersSettings = {
         linters: {
           css: lintCSS,
           js: lintJS,
-        }
-      }
+        },
+      };
 
       copyFiles(['linters/general', PATHS.destination]);
-      modifyConfig(lintersSettings)
+      modifyConfig(lintersSettings);
 
       if (lintCSS) {
         const cssLinterPackages = merge(PACKAGES.linters.general, PACKAGES.linters.css);
@@ -45,7 +45,7 @@ module.exports = async function writeFiles() {
     } else {
       const noLinters = {
         linters: false,
-      }
+      };
 
       modifyConfig(noLinters);
     }
@@ -55,10 +55,10 @@ module.exports = async function writeFiles() {
     if (this.props.cms === PROMPTS_VALUES.cms.wp) {
       modifyConfig(CONFIG_REWRITES.wp);
     }
-  }
+  };
 
   const setFrontendFrameworks = () => {
-    switch(this.props.framework) {
+    switch (this.props.framework) {
       case PROMPTS_VALUES.framework.bootstrap:
         modifyConfig(PACKAGES.frameworks.bootstrap, projectPackages);
         copyFiles(['bootstrap', PATHS.destination]);
@@ -78,7 +78,7 @@ module.exports = async function writeFiles() {
       default:
         return;
     }
-  }
+  };
 
   const setTemplateEngine = () => {
     switch (this.props.templating) {
@@ -97,13 +97,15 @@ module.exports = async function writeFiles() {
         copyFiles(['html', PATHS.destination]);
         break;
     }
-  }
+  };
 
-  await Promise.all([
-    copyFiles(['base', PATHS.destination]),
-    setLinters(),
-    setProjectTypeBasedSettings(),
-    setFrontendFrameworks(),
-    setTemplateEngine(),
-  ]);
+  const setVersion = () => {
+    const v = {
+      version: pkg.version,
+    };
+    
+    modifyConfig(v, projectPackages);
+  };
+
+  await Promise.all([copyFiles(['base', PATHS.destination]), setLinters(), setProjectTypeBasedSettings(), setFrontendFrameworks(), setTemplateEngine(), setVersion(pkg.version)]);
 };

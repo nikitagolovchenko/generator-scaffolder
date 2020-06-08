@@ -59,8 +59,9 @@ class WebpackGenerator extends Generator {
   🙌 Installation done! 🙌
   🛶 Go to markup folder: ${chalk.red('cd markup')}
   📦 Dont forget to install node modules: ${chalk.red('npm install')} OR ${chalk.red('yarn')}
-  💻 For ${chalk.yellow('development mode')} run command ${chalk.red('npm run dev')} OR ${chalk.red('yarn dev')} 👊.
-  ℹ️  For more info, read ${chalk.yellow('README.md')}
+  💻 For ${chalk.yellow('development mode')} run: ${chalk.red('npm run dev')} OR ${chalk.red('yarn dev')}.
+  💻 For ${chalk.cyan('production mode')} run: ${chalk.red('npm run build')} OR ${chalk.red('yarn build')}.
+  ℹ️  For more info, read ${chalk.yellow('README.md')} 👊
     `)
     );
   }
