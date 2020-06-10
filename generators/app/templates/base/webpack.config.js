@@ -23,7 +23,7 @@ const PROD = 'production';
 const ENV = process.env.NODE_ENV;
 const HOST = config.server.host || 'localhost';
 const isProduction = ENV === PROD;
-const PUBLIC_PATH = '';
+const PUBLIC_PATH = '/';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
@@ -361,29 +361,25 @@ const getModules = () => {
         ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              limit: 4096,
-              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.fonts)),
-              outputPath: getAssetOutput(config.static.fonts),
-              name: '[name].[ext]',
+              publicPath: PUBLIC_PATH,
+              name: `${getAssetOutput(config.static.fonts)}/[name].[ext]`,
             },
           },
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
             options: {
-              limit: 4096,
-              publicPath: posix.relative(getAssetOutput(config.styles), getAssetOutput(config.static.images)),
-              outputPath: getAssetOutput(config.static.images),
-              name: '[name].[ext]',
+              publicPath: PUBLIC_PATH,
+              name: `${getAssetOutput(config.static.images)}/[name].[ext]`,
             },
           },
         ],
