@@ -36,10 +36,6 @@ const getAssetName = (dest, name, ext) => {
   return posix.join(dest, `${name}.${ext}`);
 };
 
-const getAssetOutput = (asset) => {
-  return asset.dest ? posix.normalize(asset.dest) : posix.normalize(asset.src);
-};
-
 const postServerMessage = (port, host = HOST) => {
   const URL = `http://${host}:${port}`;
   const IP = `http://${address()}:${port}`;
