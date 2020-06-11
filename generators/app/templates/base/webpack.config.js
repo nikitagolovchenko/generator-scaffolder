@@ -1,6 +1,6 @@
 const {existsSync} = require('fs');
 const {address} = require('ip');
-const {resolve, join, posix} = require('path');
+const {resolve, join, posix, dirname, basename} = require('path');
 const readdir = require('@jsdevtools/readdir-enhanced');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
@@ -88,10 +88,11 @@ const pluginsConfiguration = {
     overlay: true,
     useLocalIp: true,
     noInfo: true,
-    open: config.server.open,
+    // open: config.server.open,
     clientLogLevel: 'silent',
     before(app, {options}) {
       const PORT = config.server.port || options.port;
+
       options.port = PORT;
       options.public = `localhost:${PORT}`;
     },
@@ -172,6 +173,7 @@ const generateHtmlPlugins = () => {
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
+      title: basename(dirname(__dirname)),
       template: getAssetPath(SRC, `${sitePages}/${name}.${config.templates.extension}`),
       filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
       chunks: config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false,
@@ -288,10 +290,7 @@ const getTemplatesLoader = (templateType) => {
     };
   }
 
-  return {
-    test: /\.html$/i,
-    use: 'html-loader',
-  };
+  return {};
 };
 
 const getScriptsLoader = (templateType) => {
