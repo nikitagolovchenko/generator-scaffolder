@@ -294,7 +294,7 @@ const getTemplatesLoader = (templateType) => {
 
   return {
     test: /\.html$/i,
-    use: 'raw-loader',
+    use: 'html-loader',
   };
 };
 
@@ -317,6 +317,15 @@ const getScriptsLoader = (templateType) => {
   };
 };
 
+const getStaticAssetOutput = ({context, resourcePath, assets}) => {
+  const basePath = posix.relative(context, resourcePath);
+  const from = posix.join(config.src, assets.src);
+  const to = assets.dest || assets.src;
+  const assetPath = basePath.replace(from, to);
+
+  return assetPath;
+};
+
 const getModules = () => {
   const modules = {
     rules: [
@@ -327,6 +336,7 @@ const getModules = () => {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: !isProduction,
+              url: false,
               reloadAll: true,
               sourceMap: true,
             },
@@ -366,8 +376,16 @@ const getModules = () => {
           {
             loader: 'file-loader',
             options: {
-              publicPath: PUBLIC_PATH,
-              name: `${getAssetOutput(config.static.fonts)}/[name].[ext]`,
+              name: '[name].[ext]',
+              outputPath: (url, resourcePath, context) => {
+                const assetPath = getStaticAssetOutput({
+                  resourcePath,
+                  context,
+                  assets: config.static.fonts,
+                });
+
+                return assetPath;
+              },
             },
           },
         ],
@@ -378,8 +396,16 @@ const getModules = () => {
           {
             loader: 'file-loader',
             options: {
-              publicPath: PUBLIC_PATH,
-              name: `${getAssetOutput(config.static.images)}/[name].[ext]`,
+              name: '[name].[ext]',
+              outputPath: (url, resourcePath, context) => {
+                const assetPath = getStaticAssetOutput({
+                  resourcePath,
+                  context,
+                  assets: config.static.images,
+                });
+
+                return assetPath;
+              },
             },
           },
         ],
