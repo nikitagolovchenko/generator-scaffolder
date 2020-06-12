@@ -23,6 +23,8 @@ const PROD = 'production';
 const ENV = process.env.NODE_ENV;
 const HOST = config.server.host || 'localhost';
 const isProduction = ENV === PROD;
+const routesPage = config.templates.routes || '__routes';
+const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
 const PUBLIC_PATH = '/';
 
 const getAssetPath = (type, assetPath) => {
@@ -36,9 +38,21 @@ const getAssetName = (dest, name, ext) => {
   return posix.join(dest, `${name}.${ext}`);
 };
 
+const getAllPagesExceptRoutes = () => {
+  let templateFiles = readdir.sync(getAssetPath(SRC, sitePages), {
+    deep: true,
+    filter: function (stats) {
+      return stats.isFile() && stats.path.indexOf('_') === -1;
+    },
+  });
+
+  return templateFiles;
+};
+
 const postServerMessage = (port, host = HOST) => {
   const URL = `http://${host}:${port}`;
   const IP = `http://${address()}:${port}`;
+  const routesPageURL = `${URL}/${routesPage}.html`;
   const RED = '\033[0;31m';
   const GREEN = '\033[0;32m';
   const PURPLE = '\033[0;35m';
@@ -48,6 +62,8 @@ const postServerMessage = (port, host = HOST) => {
     🎉 ${GREEN}Server is running at port ${port}:
 
     ${PURPLE}
+    📄 Routes are available at: ${routesPageURL}
+
     💻 Internal: ${URL}
     🌎 External: ${IP}
     ${RED}---------------------------------------
@@ -88,7 +104,7 @@ const pluginsConfiguration = {
     overlay: true,
     useLocalIp: true,
     noInfo: true,
-    // open: config.server.open,
+    open: config.server.open,
     clientLogLevel: 'silent',
     before(app, {options}) {
       const PORT = config.server.port || options.port;
@@ -113,6 +129,13 @@ const pluginsConfiguration = {
   MiniCssExtract: {
     filename: getAssetName(config.styles.dest, config.styles.bundle, 'css'),
     chunkFilename: getAssetName(config.styles.dest, '[name]', 'css'),
+  },
+  DefinePlugin: {
+    'process.env': {
+      NODE_ENV: JSON.stringify(ENV),
+      ROUTES_PAGE: JSON.stringify(routesPage),
+      ROUTES: JSON.stringify(getAllPagesExceptRoutes()),
+    },
   },
   ProvidePlugin: {
     $: 'jquery',
@@ -141,23 +164,17 @@ const pluginsConfiguration = {
   },
 };
 
-const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
 // creating new instance of plugin for each of the pages that we have
 const generateHtmlPlugins = () => {
-  // Read files in template directory and looking only for html files
-  const templateFiles = readdir.sync(getAssetPath(SRC, sitePages), {
-    deep: true,
-    filter: removeHelpers,
-  });
-
-  function removeHelpers(stats) {
-    return stats.isFile() && stats.path.indexOf('_') === -1;
-  }
+  const templateFiles = getAllPagesExceptRoutes();
 
   return templateFiles.map((item) => {
     // Split names and extension
     const parts = item.split('.');
     const name = parts[0];
+    const template = getAssetPath(SRC, `${join(sitePages, name)}.${config.templates.extension}`);
+    const filename = getAssetPath(DEST, `${join(config.templates.dest, name)}.html`);
+    const chunks = config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false;
 
     const minify = () => {
       if (config.minimize) {
@@ -174,23 +191,36 @@ const generateHtmlPlugins = () => {
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
       title: basename(dirname(__dirname)),
-      template: getAssetPath(SRC, `${sitePages}/${name}.${config.templates.extension}`),
-      filename: getAssetPath(DEST, `${config.templates.dest}/${name}.html`),
-      chunks: config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false,
+      template,
+      filename,
+      chunks,
+      excludeChunks: [routesPage],
       minify: isProduction ? minify() : false,
       hash: isProduction ? config.cache_boost : false,
       scriptLoading: 'defer',
-      optimize: {
-        prefetch: true,
-      },
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+      },
+      optimize: {
+        prefetch: true,
       },
     });
   });
 };
 
 const htmlPlugins = generateHtmlPlugins().concat([
+  // creating new instance of plugin for __routes page separately
+  new HTMLWebpackPlugin({
+    title: basename(dirname(__dirname)),
+    template: getAssetPath(SRC, `${sitePages}/${routesPage}.html`),
+    filename: getAssetPath(DEST, `${config.templates.dest}/${routesPage}.html`),
+    chunks: [routesPage],
+    minify: false,
+    scriptLoading: 'defer',
+    meta: {
+      viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+    },
+  }),
   new ScriptExtHtmlWebpackPlugin({
     defaultAttribute: 'defer',
   }),
@@ -209,7 +239,7 @@ if (isProduction && config.critical_css) {
 }
 
 const getPlugins = () => {
-  let devPlugins = [];
+  let devPlugins = [new webpack.DefinePlugin(pluginsConfiguration.DefinePlugin)];
   let prodPlugins = [new ImageminPlugin(pluginsConfiguration.ImageMin)];
 
   let defaultPlugins = [
@@ -488,6 +518,7 @@ const getOptimization = () => {
 const getEntries = () => {
   // Need this since useBuildins: usage in babel didn't add polyfill for Promise.all() when webpack is bundling
   const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
+  const routesPageEntry = posix.resolve(join(config.src, config.scripts.src, 'utils', `${routesPage}.js`));
 
   // default JS entry {app.js} - used for all pages, if no specific entry is provided
   const entryJsFile = join(config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`);
@@ -499,6 +530,7 @@ const getEntries = () => {
 
   let entries = {
     [config.scripts.bundle]: [...entry, styleAsset],
+    [routesPage]: routesPageEntry,
   };
 
   /*

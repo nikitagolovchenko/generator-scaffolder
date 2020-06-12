@@ -99,13 +99,25 @@ module.exports = async function writeFiles() {
     }
   };
 
+  const copyRoutesTemplate = () => {
+    copyFiles(['__routes', PATHS.destination]);
+  };
+
   const setVersion = () => {
     const v = {
       version: pkg.version,
     };
-    
+
     modifyConfig(v, projectPackages);
   };
 
-  await Promise.all([copyFiles(['base', PATHS.destination]), setLinters(), setProjectTypeBasedSettings(), setFrontendFrameworks(), setTemplateEngine(), setVersion(pkg.version)]);
+  await Promise.all([
+    copyFiles(['base', PATHS.destination]),
+    setLinters(),
+    setProjectTypeBasedSettings(),
+    setFrontendFrameworks(),
+    setTemplateEngine(),
+    copyRoutesTemplate(),
+    setVersion(pkg.version),
+  ]);
 };
