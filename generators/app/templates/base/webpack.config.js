@@ -12,7 +12,6 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./config.json');
@@ -149,18 +148,14 @@ const pluginsConfiguration = {
   ErrorsPlugin: {
     clearConsole: true,
   },
-  CopyPlugin: generateStaticAssets(),
+  CopyPlugin: {
+    patterns: generateStaticAssets(),
+  },
   ImageMin: {
     cacheFolder: resolve(__dirname, 'node_modules/.cache'),
     pngquant: {
       quality: '70-80',
     },
-    plugins: [
-      imageminMozjpeg({
-        quality: 70,
-        progressive: true,
-      }),
-    ],
   },
 };
 
@@ -498,20 +493,11 @@ const getOptimization = () => {
       : {},
     minimizer: [
       new TerserPlugin({
-        chunkFilter: (chunk) => {
-          const name = chunk.name;
-          // Always include uglification for the `vendor` chunk
-          if (name && name.startsWith(cacheGroupName)) {
-            return true;
-          }
-
-          // but based on setting in config for main bundle
-          return config.minimize;
-        },
+        exclude: !config.minimize ? join(config.scripts.src, config.scripts.bundle) : undefined,
+        extractComments: false,
         terserOptions: {
           cache: true,
           parallel: true,
-          extractComments: false,
           compress: {
             inline: false,
             warnings: false,
@@ -552,8 +538,6 @@ const getEntries = () => {
       },
     };
   }
-
-  console.log(entries);
 
   /*
     additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
