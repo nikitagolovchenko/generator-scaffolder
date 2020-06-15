@@ -29,8 +29,13 @@ Once you have Node JS and Yeoman installed, you ready to install generator itsel
 
 Generator is an `npm` module, so you can easily install it using `npm` or `yarn`:
 
-* `NPM` - run `npm i -g generator-p2h`
-* `Yarn` - run `yarn global add generator-p2h`
+```
+#Using npm
+npm i -g generator-p2h
+
+#Using yarn
+yarn global add generator-p2h
+```
 
 ## What's included
 
@@ -125,15 +130,58 @@ You can see default structure of this file: **`enable/disable` means `true/false
 
 All commands are listed in package.json file in scripts section and described below:
 
-1.  **Generate project: `yo p2h`** - choose project settings you need. (**_if you already has project installed, skip this step_**)
-2.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
-3.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
-4.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets inro `dist` folder
+1.  Generate project: `yo p2h` (**_if you already has project installed, skip this step_**). Choose project settings you need.
+
+2.  Install project dependencies: (**_if you already has modules installed, skip this step_**)
+```
+#Using npm
+npm i
+
+#Using yarn
+yarn
+```
+Make sure your location is root of `markup` folder
+
+3.  To run development mode, run:
+```
+#Using npm
+npm run dev
+
+#Using yarn
+yarn dev
+```
+
+4.  To compile all assest into production mode, run:
+```
+#Using npm
+npm run build
+
+#Using yarn
+yarn build
+```
+Build assets intro `dist` folder
 
 **Additional utility scripts:**
 
-1. **`npm run preview` or `yarn preview`** - run local webserver (to preview builded assets, for example)
-1. **`npm run pretify:html` or `yarn pretify:html`** - using Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
+1. Run local webserver
+```
+#Using npm
+npm run preview
+
+#Using yarn
+yarn preview
+```
+To preview builded assets, for example. Used module `serve` under the hood.
+
+2. Prettify HTML after compilation
+```
+#Using npm
+npm run prettify:html
+
+#Using yarn
+yarn prettify:html
+```
+Uses Prettier to prettify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
 **_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
 

@@ -1,5 +1,12 @@
 # Webpack build for optimized load speed
 
+#### Requirements
+
+* [Node JS](https://nodejs.org/) - install latest recommended
+
+If you already have Node JS, then check version:
+* `node -v` - **should be 10+. If your version is earlier than 10 - upgrade your Node JS**
+
 #### Config file ⚙️
 Internal configuration for project folder structure and some major features can be controlled using `config.json`.
 The main idea behind this file is to control webpack behavior without webpack configuration change.
@@ -76,13 +83,55 @@ You can see default structure of this file: **`enable/disable` means `true/false
 
 All commands are listed in package.json file in scripts section and described below:
 
-1.  **Install project dependencies: `npm i` or `yarn`** - make sure your location is root of `markup` folder (**_if you already has modules installed, skip this step_**)
-2.  **To run developmend mode, run: `npm run dev` or `yarn dev`** - running dev server, watching changes
-3.  **To compile all assest into production mode, run: `npm run build` or `yarn build`** - build assets intro `dist` folder
+1.  Install project dependencies: (**_if you already has modules installed, skip this step_**)
+```
+#Using npm
+npm i
+
+#Using yarn
+yarn
+```
+Make sure your location is root of `markup` folder
+
+2.  To run development mode, run:
+```
+#Using npm
+npm run dev
+
+#Using yarn
+yarn dev
+```
+
+3.  To compile all assest into production mode, run:
+```
+#Using npm
+npm run build
+
+#Using yarn
+yarn build
+```
+Build assets intro `dist` folder
 
 **Additional utility scripts:**
 
-1. **`npm run preview` or `yarn preview`** - run local webserver (to preview builded assets, for example)
-2. **`npm run pretify:html` or `yarn pretify:html`** - uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
+1. Run local webserver
+```
+#Using npm
+npm run preview
+
+#Using yarn
+yarn preview
+```
+To preview builded assets, for example. Used module `serve` under the hood.
+
+2. Prettify HTML after compilation
+```
+#Using npm
+npm run prettify:html
+
+#Using yarn
+yarn prettify:html
+```
+Uses Prettier to prettify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
 **_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
