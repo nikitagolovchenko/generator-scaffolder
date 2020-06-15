@@ -208,23 +208,33 @@ const generateHtmlPlugins = () => {
   });
 };
 
-const htmlPlugins = generateHtmlPlugins().concat([
-  // creating new instance of plugin for __routes page separately
-  new HTMLWebpackPlugin({
-    title: basename(dirname(__dirname)),
-    template: getAssetPath(SRC, `${sitePages}/${routesPage}.html`),
-    filename: getAssetPath(DEST, `${config.templates.dest}/${routesPage}.html`),
-    chunks: [routesPage],
-    minify: false,
-    scriptLoading: 'defer',
-    meta: {
-      viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
-    },
-  }),
-  new ScriptExtHtmlWebpackPlugin({
-    defaultAttribute: 'defer',
-  }),
-]);
+const htmlPlugins = () => {
+  let plugins = generateHtmlPlugins();
+
+  if (!isProduction) {
+    plugins.push(
+      new HTMLWebpackPlugin({
+        title: basename(dirname(__dirname)),
+        template: getAssetPath(SRC, `${sitePages}/${routesPage}.html`),
+        filename: getAssetPath(DEST, `${config.templates.dest}/${routesPage}.html`),
+        chunks: [routesPage],
+        minify: false,
+        scriptLoading: 'defer',
+        meta: {
+          viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        },
+      })
+    );
+  }
+
+  plugins.concat([
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer',
+    }),
+  ]);
+
+  return plugins;
+};
 
 if (isProduction && config.critical_css) {
   console.log('Critical CSS feature is comming soon...');
@@ -270,7 +280,7 @@ const getPlugins = () => {
     defaultPlugins.push(new BundleAnalyzerPlugin());
   }
 
-  return defaultPlugins.concat(htmlPlugins);
+  return defaultPlugins.concat(htmlPlugins());
 };
 
 const getTemplatesLoader = (templateType) => {
@@ -501,6 +511,7 @@ const getOptimization = () => {
         terserOptions: {
           cache: true,
           parallel: true,
+          extractComments: false,
           compress: {
             inline: false,
             warnings: false,
@@ -530,8 +541,19 @@ const getEntries = () => {
 
   let entries = {
     [config.scripts.bundle]: [...entry, styleAsset],
-    [routesPage]: routesPageEntry,
+    // [routesPage]: routesPageEntry,
   };
+
+  if (!isProduction) {
+    entries = {
+      ...entries,
+      ...{
+        [routesPage]: routesPageEntry,
+      },
+    };
+  }
+
+  console.log(entries);
 
   /*
     additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
