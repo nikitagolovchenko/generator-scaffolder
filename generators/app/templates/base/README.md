@@ -124,14 +124,14 @@ yarn preview
 ```
 To preview builded assets, for example. Used module `serve` under the hood.
 
-2. Prettify HTML after compilation
+2. Pretify HTML after compilation
 ```
 #Using npm
-npm run prettify:html
+npm run pretify:html
 
 #Using yarn
-yarn prettify:html
+yarn pretify:html
 ```
-Uses Prettier to prettify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
+Uses Prettier to pretify HTML files from `dist` folder (for example, if you don't need minified HTML files after build process and `minify` option set to `true`). Can be used only after compilation process.
 
 **_Dont use `npm` and `yarn` in the same project - this can lead to unnexpected results_**
