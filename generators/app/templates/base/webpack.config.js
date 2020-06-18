@@ -24,7 +24,7 @@ const HOST = config.server.host || 'localhost';
 const isProduction = ENV === PROD;
 const routesPage = config.templates.routes || '__routes';
 const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
-const PUBLIC_PATH = '/';
+const PUBLIC_PATH = '';
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
