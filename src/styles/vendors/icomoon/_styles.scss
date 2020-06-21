@@ -2,8 +2,7 @@
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
-  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?yuzzw2') format('truetype'), url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?yuzzw2') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?yuzzw2##{$icomoon-font-family}') format('svg');
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?yuzzw2') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block;

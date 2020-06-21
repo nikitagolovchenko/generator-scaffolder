@@ -1,44 +1,72 @@
-const fs = require('fs');
-const path = require('path');
+const {existsSync} = require('fs');
+const {address} = require('ip');
+const {resolve, join, posix, dirname, basename} = require('path');
+const readdir = require('@jsdevtools/readdir-enhanced');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const ErrorsPlugin = require('friendly-errors-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const Critters = require('critters-webpack-plugin');
 const config = require('./config.json');
 
 const SRC = config.src;
 const DEST = config.dest;
 const PROD = 'production';
 const ENV = process.env.NODE_ENV;
-const HOST = process.env.HOST || config.server.host;
-const PORT = parseInt(process.env.PORT, 10) || config.server.port;
-const URL = `http://${HOST}:${PORT}`;
+const HOST = config.server.host || 'localhost';
 const isProduction = ENV === PROD;
-const PUBLIC_PATH = isProduction ? './' : '/';
+const routesPage = config.templates.routes || '__routes';
+const sitePages = config.templates.pages ? config.templates.pages : config.templates.src;
 
 const getAssetPath = (type, assetPath) => {
   if (type === SRC) {
-    return path.join(__dirname, config.src, assetPath);
+    return posix.join(__dirname, config.src, assetPath);
   }
-  return path.join(__dirname, config.dest, assetPath);
+  return posix.join(__dirname, config.dest, assetPath);
 };
 
-const getAssetName = (dest, name, ext, shouldBoost = true) => {
-  return dest === PUBLIC_PATH ? `${name}.${ext}` : `${dest}/${name}.${ext}`
-}
+const getAssetName = (dest, name, ext) => {
+  return posix.join(dest, `${name}.${ext}`);
+};
+
+const getAllPagesExceptRoutes = () => {
+  let templateFiles = readdir.sync(getAssetPath(SRC, sitePages), {
+    deep: true,
+    filter: function (stats) {
+      return stats.isFile() && stats.path.indexOf('_') === -1;
+    },
+  });
+
+  return templateFiles;
+};
+
+const postServerMessage = (port, host = HOST) => {
+  const URL = `http://${host}:${port}`;
+  const IP = `http://${address()}:${port}`;
+  const routesPageURL = `${URL}/${routesPage}.html`;
+  const RED = '\033[0;31m';
+  const GREEN = '\033[0;32m';
+  const PURPLE = '\033[0;35m';
+
+  return console.log(`
+    ${RED}---------------------------------------
+    🎉 ${GREEN}Server is running at port ${port}:
+
+    ${PURPLE}
+    📄 Routes are available at: ${routesPageURL}
+
+    💻 Internal: ${URL}
+    🌎 External: ${IP}
+    ${RED}---------------------------------------
+  `);
+};
 
 const generateStaticAssets = () => {
   let assetsArray = [];
@@ -48,7 +76,7 @@ const generateStaticAssets = () => {
     const srcPath = getAssetPath(SRC, assetObject.src);
     const destPath = getAssetPath(DEST, assetObject.dest ? assetObject.dest : assetObject.src);
 
-    const assetFolderExist = fs.existsSync(srcPath);
+    const assetFolderExist = existsSync(srcPath);
 
     if (assetFolderExist) {
       assetsArray.push({
@@ -62,34 +90,50 @@ const generateStaticAssets = () => {
 };
 
 const pluginsConfiguration = {
-  BrowserSync: {
-    ghost: false,
-    open: config.server.open,
-    proxy: {
-      target: URL,
-      ws: true,
-    },
-  },
   DevServer: {
-    contentBase: path.join(__dirname, config.dest),
+    contentBase: posix.relative(__dirname, config.dest),
     hot: true,
+    host: '0.0.0.0',
     compress: true,
     watchContentBase: true,
-    port: PORT,
+    disableHostCheck: true,
+    historyApiFallback: true,
     liveReload: false,
     overlay: true,
+    useLocalIp: true,
     noInfo: true,
-    open: false,
+    open: config.server.open,
     clientLogLevel: 'silent',
-    after: (app, server, compiler) => {
-      getAssetPath(SRC, config.templates.src)
-      chokidar.watch(getAssetPath(SRC, config.templates.src)).on('change', () => {
+    before(app, {options}) {
+      const PORT = config.server.port || options.port;
+
+      options.port = PORT;
+      options.public = `localhost:${PORT}`;
+    },
+    after(app, server, compiler) {
+      const files = [getAssetPath(SRC, config.templates.src), getAssetPath(SRC, config.scripts.src)];
+      const {port} = server.options;
+
+      chokidar.watch(files).on('change', () => {
         server.sockWrite(server.sockets, 'content-changed');
+      });
+
+      compiler.hooks.done.tap('show-server-settings', (stats) => {
+        if (stats.hasErrors()) return;
+        postServerMessage(port);
       });
     },
   },
   MiniCssExtract: {
-    filename: getAssetName(config.styles.dest, '[name]', 'css'),
+    filename: getAssetName(config.styles.dest, config.styles.bundle, 'css'),
+    chunkFilename: getAssetName(config.styles.dest, '[name]', 'css'),
+  },
+  DefinePlugin: {
+    'process.env': {
+      NODE_ENV: JSON.stringify(ENV),
+      ROUTES_PAGE: JSON.stringify(routesPage),
+      ROUTES: JSON.stringify(getAllPagesExceptRoutes()),
+    },
   },
   ProvidePlugin: {
     $: 'jquery',
@@ -103,32 +147,28 @@ const pluginsConfiguration = {
   ErrorsPlugin: {
     clearConsole: true,
   },
-  CopyPlugin: generateStaticAssets(),
+  CopyPlugin: {
+    patterns: generateStaticAssets(),
+  },
   ImageMin: {
-    cacheFolder: path.resolve(__dirname, 'node_modules/.cache'),
+    cacheFolder: resolve(__dirname, 'node_modules/.cache'),
     pngquant: {
       quality: '70-80',
     },
-    plugins: [
-      imageminMozjpeg({
-        quality: 70,
-        progressive: true,
-      }),
-    ],
   },
 };
 
 // creating new instance of plugin for each of the pages that we have
 const generateHtmlPlugins = () => {
-  // Read files in template directory and looking only for html files
-  const templateFiles = fs.readdirSync(getAssetPath(SRC, config.templates.src));
-  const files = templateFiles.filter(elm => elm.match(new RegExp(`.*\.(${config.templates.extension})`, 'ig')));
+  const templateFiles = getAllPagesExceptRoutes();
 
-  return files.map(item => {
+  return templateFiles.map((item) => {
     // Split names and extension
     const parts = item.split('.');
     const name = parts[0];
-    const extension = parts[1];
+    const template = getAssetPath(SRC, `${join(sitePages, name)}.${config.templates.extension}`);
+    const filename = getAssetPath(DEST, `${join(config.templates.dest, name)}.html`);
+    const chunks = config.entries ? (name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name]) : false;
 
     const minify = () => {
       if (config.minimize) {
@@ -136,65 +176,80 @@ const generateHtmlPlugins = () => {
           collapseWhitespace: true,
           html5: true,
           removeRedundantAttributes: false,
-        }
+        };
       }
 
       return config.minimize;
-    }
+    };
 
     // Create new HTMLWebpackPlugin with options
     return new HTMLWebpackPlugin({
-      template: getAssetPath(SRC, `${config.templates.src}/${name}.${extension}`),
-      filename: getAssetPath(DEST, `${config.templates.dest}/${name}.${extension}`),
-      inlineSource: 'runtime.+\\.js',
-      // awaiting for ^4.0 version to be stable
-      // chunks: name === 'index' ? [config.scripts.bundle, config.styles.bundle] : [name],
-      minify: minify(),
-      hash: config.cache_boost,
-      optimize: {
-        prefetch: true,
-      },
+      title: basename(dirname(__dirname)),
+      template,
+      filename,
+      chunks,
+      excludeChunks: [routesPage],
+      minify: isProduction ? minify() : false,
+      hash: isProduction ? config.cache_boost : false,
+      scriptLoading: 'defer',
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+      },
+      optimize: {
+        prefetch: true,
       },
     });
   });
 };
 
-const htmlPlugins = generateHtmlPlugins().concat([
-  new HTMLWebpackInlineSourcePlugin(),
-  new ScriptExtHtmlWebpackPlugin({
-    defaultAttribute: 'defer',
-  }),
-]);
+const htmlPlugins = () => {
+  let plugins = generateHtmlPlugins();
+
+  if (!isProduction) {
+    plugins.push(
+      new HTMLWebpackPlugin({
+        title: basename(dirname(__dirname)),
+        template: getAssetPath(SRC, `${sitePages}/${routesPage}.html`),
+        filename: getAssetPath(DEST, `${config.templates.dest}/${routesPage}.html`),
+        chunks: [routesPage],
+        minify: false,
+        scriptLoading: 'defer',
+        meta: {
+          viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+        },
+      })
+    );
+  }
+
+  plugins.concat([
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer',
+    }),
+  ]);
+
+  return plugins;
+};
 
 if (isProduction && config.critical_css) {
-  htmlPlugins.push(
-    new Critters({
-      inlineFonts: true,
-      pruneSource: config.entries ? true : false,
-      noscriptFallback: true,
-      preload: 'swap',
-    })
-  );
+  console.log('Critical CSS feature is comming soon...');
+  // htmlPlugins.push(
+  //   new Critters({
+  //     inlineFonts: true,
+  //     pruneSource: config.entries ? true : false,
+  //     noscriptFallback: true,
+  //     preload: 'swap',
+  //   })
+  // );
 }
 
 const getPlugins = () => {
-  let devPlugins = [
-    new BrowserSyncPlugin(pluginsConfiguration.BrowserSync, {
-      // prevent BrowserSync from reloading the page
-      // and let Webpack Dev Server take care of this
-      reload: false
-    }),
-  ];
-
+  let devPlugins = [new webpack.DefinePlugin(pluginsConfiguration.DefinePlugin)];
   let prodPlugins = [new ImageminPlugin(pluginsConfiguration.ImageMin)];
 
   let defaultPlugins = [
     new webpack.ProvidePlugin(pluginsConfiguration.ProvidePlugin),
     new ErrorsPlugin(pluginsConfiguration.ErrorsPlugin),
     new CopyWebpackPlugin(pluginsConfiguration.CopyPlugin),
-    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin(pluginsConfiguration.MiniCssExtract),
     new WebpackNotifierPlugin({
       excludeWarnings: true,
@@ -202,11 +257,11 @@ const getPlugins = () => {
   ];
 
   if (!isProduction) {
-    devPlugins.map(item => defaultPlugins.push(item));
+    devPlugins.map((item) => defaultPlugins.push(item));
   }
 
   if (isProduction) {
-    prodPlugins.map(item => defaultPlugins.push(item));
+    prodPlugins.map((item) => defaultPlugins.push(item));
   }
 
   // enable linters only if config.linters === true
@@ -219,26 +274,90 @@ const getPlugins = () => {
     defaultPlugins.push(new BundleAnalyzerPlugin());
   }
 
-  return defaultPlugins.concat(htmlPlugins);
+  return defaultPlugins.concat(htmlPlugins());
 };
 
-const getTemplatesLoader = templateType => {
-  const HTML = /\html$/;
+const getTemplatesLoader = (templateType) => {
+  const PUG = new RegExp('pug');
+  const TWIG = new RegExp('twig');
+
+  if (PUG.test(templateType)) {
+    return {
+      test: PUG,
+      use: ['raw-loader', `pug-html-loader?basedir=${join(config.src, config.templates.src)}`],
+    };
+  }
+
+  if (TWIG.test(templateType)) {
+    return {
+      test: TWIG,
+      use: [
+        'raw-loader',
+        {
+          loader: 'twig-html-loader',
+          options: {
+            data: (context) => {
+              const data = resolve(__dirname, 'data.json');
+              // going throught all twig files, including only _{helpers}
+              const helpers = readdir.sync(getAssetPath(SRC, sitePages), {
+                deep: true,
+                filter: (stats) => stats.isFile() && stats.path.indexOf('_') !== -1,
+              });
+
+              helpers.forEach((file) => {
+                // pushing helper file to context and force plugin to rebuild templates on helpers changes
+                // fixing issue, when path inside helpers was changed, but compiler didn't noticed about those changes to the path
+                context.addDependency(join(config.src, config.templates.src, file));
+              });
+
+              context.addDependency(data); // Force webpack to watch file
+              return context.fs.readJsonSync(data, {throws: false}) || {};
+            },
+            namespaces: {
+              layout: resolve(__dirname, 'src/views/_layout'),
+              components: resolve(__dirname, 'src/views/_components'),
+              includes: resolve(__dirname, 'src/views/_includes'),
+            },
+          },
+        },
+      ],
+    };
+  }
+
+  return {};
+};
+
+const getScriptsLoader = (templateType) => {
+  const TS = new RegExp('ts');
+
+  if (TS.test(templateType)) {
+    return {
+      // /node_modules\/(?!(module_to_include)\/).*/
+      test: /\.tsx?$/,
+      exclude: /node_modules/,
+      loaders: ['awesome-typescript-loader', 'webpack-module-hot-accept'],
+    };
+  }
 
   return {
-    test: HTML,
-    use: 'raw-loader',
+    test: /\.m?js$/,
+    exclude: /node_modules/,
+    loaders: ['babel-loader', 'webpack-module-hot-accept'],
   };
+};
+
+const getStaticAssetOutput = ({context, resourcePath, assets}) => {
+  const basePath = posix.relative(context, resourcePath);
+  const from = posix.join(config.src, assets.src);
+  const to = assets.dest || assets.src;
+  const assetPath = basePath.replace(from, to);
+
+  return assetPath;
 };
 
 const getModules = () => {
   const modules = {
     rules: [
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        loaders: ['babel-loader', 'webpack-module-hot-accept'],
-      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -246,6 +365,7 @@ const getModules = () => {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: !isProduction,
+              url: false,
               reloadAll: true,
               sourceMap: true,
             },
@@ -269,7 +389,7 @@ const getModules = () => {
             },
           },
           {
-            loader: "group-css-media-queries-loader",
+            loader: 'group-css-media-queries-loader',
           },
           {
             loader: 'sass-loader',
@@ -280,25 +400,41 @@ const getModules = () => {
         ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              limit: 4096,
-              name: getAssetName(config.fonts.dest ? config.fonts.dest : config.fonts.src, '[name]', '[ext]', false),
+              name: '[name].[ext]',
+              outputPath: (url, resourcePath, context) => {
+                const assetPath = getStaticAssetOutput({
+                  resourcePath,
+                  context,
+                  assets: config.static.fonts,
+                });
+
+                return assetPath;
+              },
             },
           },
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
             options: {
-              limit: 4096,
-              name: getAssetName(config.static.images.dest ? config.static.images.dest : config.static.images.src, '[name]', '[ext]', false),
+              name: '[name].[ext]',
+              outputPath: (url, resourcePath, context) => {
+                const assetPath = getStaticAssetOutput({
+                  resourcePath,
+                  context,
+                  assets: config.static.images,
+                });
+
+                return assetPath;
+              },
             },
           },
         ],
@@ -306,11 +442,8 @@ const getModules = () => {
     ],
   };
 
-  modules.rules.push(getTemplatesLoader(config.templates.extension));
-
   if (!isProduction && config.linters) {
     modules.rules.push({
-      enforce: 'pre',
       test: /\.jsx?$/,
       loader: 'prettier-loader',
       exclude: /node_modules/,
@@ -326,11 +459,13 @@ const getModules = () => {
         loader: 'eslint-loader',
         exclude: /node_modules/,
         options: {
-          configFile: 'eslintrc.js'
+          configFile: 'eslintrc.js',
         },
-      })
+      });
     }
   }
+
+  modules.rules.unshift(getScriptsLoader(config.scripts.extension), getTemplatesLoader(config.templates.extension));
 
   return modules;
 };
@@ -344,27 +479,21 @@ const getOptimization = () => {
     namedChunks: config.cache_boost,
     moduleIds: config.cache_boost ? 'named' : false,
     chunkIds: config.cache_boost ? 'named' : false,
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        [cacheGroupName]: {
-          chunks: 'all',
-          test: /[\\/]node_modules[\\/]/,
-        },
-      },
-    },
+    runtimeChunk: config.cache_boost ? 'single' : false,
+    splitChunks: config.cache_boost
+      ? {
+          cacheGroups: {
+            [cacheGroupName]: {
+              chunks: 'all',
+              test: /node_modules/,
+            },
+          },
+        }
+      : {},
     minimizer: [
       new TerserPlugin({
-        chunkFilter: (chunk) => {
-          const name = chunk.name;
-          // Always include uglification for the `vendor` chunk
-          if (name && name.startsWith(cacheGroupName)) {
-            return true;
-          }
-
-          // but based on setting in config for main bundle
-          return config.minimize;
-        },
+        exclude: !config.minimize ? join(config.scripts.src, config.scripts.bundle) : undefined,
+        extractComments: false,
         terserOptions: {
           cache: true,
           parallel: true,
@@ -382,22 +511,32 @@ const getOptimization = () => {
   };
 };
 
-const getEntry = entryName => {
+const getEntries = () => {
   // Need this since useBuildins: usage in babel didn't add polyfill for Promise.all() when webpack is bundling
   const iterator = ['core-js/modules/es.array.iterator', 'regenerator-runtime/runtime'];
+  const routesPageEntry = posix.resolve(join(config.src, config.scripts.src, 'utils', `${routesPage}.js`));
 
   // default JS entry {app.js} - used for all pages, if no specific entry is provided
-  const entry = iterator.concat([
-    getAssetPath(SRC, `${config.scripts.src}/${config.scripts.bundle}.${config.scripts.extension}`),
-  ]);
+  const entryJsFile = join(config.scripts.src, `${config.scripts.bundle}.${config.scripts.extension}`);
+  const entry = iterator.concat([getAssetPath(SRC, entryJsFile)]);
 
   // default CSS entry {main.scss} - used for all pages, if no specific entry is provided
-  const styleAsset = getAssetPath(SRC, `${config.styles.src}/${config.styles.bundle}.${config.styles.extension}`);
+  const entryCSSFile = join(config.styles.src, `${config.styles.bundle}.${config.styles.extension}`);
+  const styleAsset = getAssetPath(SRC, entryCSSFile);
 
   let entries = {
-    [config.scripts.bundle]: entry,
-    [config.styles.bundle]: styleAsset,
+    [config.scripts.bundle]: [...entry, styleAsset],
+    // [routesPage]: routesPageEntry,
   };
+
+  if (!isProduction) {
+    entries = {
+      ...entries,
+      ...{
+        [routesPage]: routesPageEntry,
+      },
+    };
+  }
 
   /*
     additional entries, specified in config.json file as [entries]. Awaiting for HTMLWebpackPlugin ^4.0
@@ -420,38 +559,36 @@ const getEntry = entryName => {
       if (JSFileName) {
         const JSFile = getAssetPath(SRC, `${config.scripts.src}/${JSFileName}.${config.scripts.extension}`);
 
-        if (fs.existsSync(JSFile)) {
+        if (existsSync(JSFile)) {
           if (!entries[entryKey]) entries[entryKey] = [];
 
           entries[entryKey].push(...iterator.concat(JSFile));
         }
-
       }
 
       if (CSSFileName) {
         const CSSFile = CSSFileName && getAssetPath(SRC, `${config.styles.src}/${CSSFileName}.${config.styles.extension}`);
 
-        if (fs.existsSync(CSSFile)) {
+        if (existsSync(CSSFile)) {
           if (!entries[entryKey]) entries[entryKey] = [];
 
           entries[entryKey].push(CSSFile);
         }
-
       }
     }
   }
+
   return entries;
 };
 
 const webpackConfig = {
   mode: ENV,
-  entry: getEntry(),
+  entry: getEntries(),
   devtool: isProduction ? false : 'inline-source-map',
   stats: isProduction,
   output: {
-    publicPath: PUBLIC_PATH,
-    path: path.resolve(config.dest),
-    filename: getAssetName(config.scripts.dest, '[name]', config.scripts.extension),
+    path: posix.resolve(config.dest),
+    filename: getAssetName(config.scripts.dest, '[name]', 'js'),
     crossOriginLoading: 'anonymous',
   },
   plugins: getPlugins(),

@@ -13,8 +13,8 @@ $breakpoints: (
   'phone': 520px,
   'tablet': 768px,
   'desktop': 1024px,
-  'laptop': 1280px,
-  'widescreen': 1366px
+  'laptop': 1480px,
+  'widescreen': 1920px
 );
 
 // keywords
@@ -33,6 +33,14 @@ $media-expressions: (
 
 $white: #fff;
 $black: #000;
+
+
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold: 150;
+
+// Customize the light and dark text colors for use in our YIQ color contrast function.
+$yiq-text-dark: $black;
+$yiq-text-light: $white;
 
 // body
 //
@@ -59,7 +67,7 @@ $rounded-circle: 50%;
 $font-family-sans-serif: 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
 $font-family-sans-serif-secondary: $font-family-sans-serif;
 $font-family-base: $font-family-sans-serif;
-$base-font-path: '../fonts';
+$base-font-path: '/fonts';
 
 $line-height-base: 1.5;
 $rem-base: 10px;
@@ -77,11 +85,14 @@ $fluid-min: map-get($breakpoints, 'xs-phone');
 $fluid-max: map-get($breakpoints, 'widescreen');
 
 $font-weight-thin: 100;
+$font-weight-ulight: 200;
+$font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
-$font-weight-heavy: 900;
+$font-weight-heavy: 800;
+$font-weight-black: 900;
 
 
 $font-sizes: (
@@ -121,7 +132,6 @@ $headings-sizes-max: (
 $headings-margin-bottom: 1em;
 $headings-font-weight: inherit;
 $headings-line-height: 1.2;
-
 
 // Paragraphs
 

@@ -19,6 +19,7 @@ body {
   background-color: $body-bg;
   font-family: $font-family-base;
   font-size: map-get($font-sizes, 'base');
+  line-height: $line-height-base;
   font-weight: $font-weight-normal;
 }
 
@@ -27,7 +28,7 @@ body {
   Basic styles for links
 */
 a {
-  @include transition(color $transition-duration-base);
+  @include transition(color);
   color: $link-color;
   text-decoration: $link-decoration;
 
@@ -41,7 +42,7 @@ ul,
 ol,
 dl,
 p {
-  margin-bottom: $paragraph-margin-bottom;
+  margin: 0 0 $paragraph-margin-bottom;
 }
 
 /*
@@ -69,5 +70,7 @@ p {
     $max-value: map-get($headings-sizes-max, $name);
 
     @include fluid-type($value, $max-value);
+    margin: 0 0 $headings-margin-bottom;
+    line-height: $headings-line-height;
   }
 }
