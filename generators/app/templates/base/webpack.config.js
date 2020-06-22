@@ -401,41 +401,12 @@ const getModules = () => {
         ],
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf)$/,
+        test: /\.(woff(2)?|eot|ttf|otf|png|jpe?g|gif|svg)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]',
-              outputPath: (url, resourcePath, context) => {
-                const assetPath = getStaticAssetOutput({
-                  resourcePath,
-                  context,
-                  assets: config.static.fonts,
-                });
-
-                return assetPath;
-              },
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: (url, resourcePath, context) => {
-                const assetPath = getStaticAssetOutput({
-                  resourcePath,
-                  context,
-                  assets: config.static.images,
-                });
-
-                return assetPath;
-              },
+              name: '[path][name].[ext]',
             },
           },
         ],
