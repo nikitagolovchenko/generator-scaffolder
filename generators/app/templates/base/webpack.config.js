@@ -1,6 +1,6 @@
 const {existsSync} = require('fs');
 const {address} = require('ip');
-const {resolve, join, posix, dirname, basename} = require('path');
+const {resolve, join, posix, relative, dirname, basename, parse, format} = require('path');
 const readdir = require('@jsdevtools/readdir-enhanced');
 const webpack = require('webpack');
 const chokidar = require('chokidar');
@@ -407,6 +407,24 @@ const getModules = () => {
             loader: 'file-loader',
             options: {
               name: '[path][name].[ext]',
+              emitFile: false,
+              publicPath: function (url) {
+                const parsedPath = parse(url);
+                const isFonts = url.includes(config.static.fonts.src);
+                const isImages = url.includes(config.static.images.src);
+                const fontsOutput = config.static.fonts.dest ? config.static.fonts.dest : config.static.fonts.src;
+                const imagesOutput = config.static.images.dest ? config.static.images.dest : config.static.images.src;
+
+                if (isFonts) {
+                  parsedPath.dir = relative(config.styles.dest, fontsOutput);
+                  return format(parsedPath);
+                } else if (isImages) {
+                  parsedPath.dir = relative(config.styles.dest, imagesOutput);
+                  return format(parsedPath);
+                } else {
+                  return url;
+                }
+              },
             },
           },
         ],

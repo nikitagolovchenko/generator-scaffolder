@@ -4,10 +4,10 @@ const chai = require('chai');
 const glob = require('glob');
 const helpers = require('yeoman-test');
 const yeomanAssert = require('yeoman-assert');
-const { join } = require('path');
-const { getFilesArray, setProcessToDestination, projectTypeMessage } = require(`${process.env.PWD}/generators/app/utils`);
-const { chaiExecAsync } = require('chai-exec');
-const { PATHS, SCRIPTS, GENERAL_TEST_SETTINGS } = require(`${process.env.PWD}/generators/app/globals`);
+const {join, resolve} = require('path');
+const {getFilesArray, setProcessToDestination, projectTypeMessage} = require(`${process.env.PWD}/generators/app/utils`);
+const {chaiExecAsync} = require('chai-exec');
+const {PATHS, SCRIPTS, GENERAL_TEST_SETTINGS} = require(`${process.env.PWD}/generators/app/globals`);
 const {cleanUpFolder} = require('./utils');
 
 const ONLY_FILES_TEST = process.env.FILES_ONLY;
@@ -16,7 +16,7 @@ const assert = chai.assert;
 chai.use(chaiExecAsync);
 
 function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
-  GENERAL_TEST_SETTINGS.forEach(async prompts => {
+  GENERAL_TEST_SETTINGS.forEach(async (prompts) => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
     describe(projectTypeMessage(testSettings), () => {
@@ -24,7 +24,6 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
         await cleanUpFolder();
         return helpers.run(PATHS.appFolder).cd(PATHS.tempFolder).withPrompts(testSettings);
       });
-
 
       describe('Generating files:', () => {
         it(chalk.green('Create expected files'), async () => {
@@ -47,13 +46,11 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
 
           if (testSettings.expectedFilesContent.hasOwnProperty('styles')) {
             it(chalk.green('Added all necessary content to Styles:'), () => {
-  
-              testSettings.expectedFilesContent.styles.map(content => yeomanAssert.fileContent(stylesFile, content));
+              testSettings.expectedFilesContent.styles.map((content) => yeomanAssert.fileContent(stylesFile, content));
             });
           }
         });
       });
-
 
       if (!ONLY_FILES_TEST) {
         describe('Installing dependencies:', () => {
@@ -73,9 +70,16 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
         describe('Building correct files:', () => {
           it(chalk.green('Generate all files based on project config'), async () => {
             setProcessToDestination();
-
             const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-            const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
+            const getStyleFile = () => {
+              if (newCfg.cache_boost) {
+                return join(newCfg.dest, newCfg.styles.dest, `${newCfg.scripts.bundle}.css`);
+              }
+
+              return join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
+            };
+
+            const stylesFile = getStyleFile();
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
 
@@ -84,13 +88,12 @@ function defaultTest({staticExpectedFiles = [], templatesFilesPath, expectedFile
             glob(HTMLFiles, {}, async (err, files) => {
               expectedCompilation.push(...files);
               yeomanAssert.file(expectedCompilation);
-            })
+            });
           });
         });
       }
     });
-  })
+  });
 }
 
 module.exports = defaultTest;
-

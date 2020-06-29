@@ -4,10 +4,10 @@ const chai = require('chai');
 const glob = require('glob');
 const helpers = require('yeoman-test');
 const yeomanAssert = require('yeoman-assert');
-const { join } = require('path');
-const { getFilesArray, setProcessToDestination, projectTypeMessage } = require(`${process.env.PWD}/generators/app/utils`);
-const { chaiExecAsync } = require('chai-exec');
-const { PROMPTS_VALUES, PATHS, SCRIPTS, GENERAL_TEST_SETTINGS } = require(`${process.env.PWD}/generators/app/globals`);
+const {join} = require('path');
+const {getFilesArray, setProcessToDestination, projectTypeMessage} = require(`${process.env.PWD}/generators/app/utils`);
+const {chaiExecAsync} = require('chai-exec');
+const {PROMPTS_VALUES, PATHS, SCRIPTS, GENERAL_TEST_SETTINGS} = require(`${process.env.PWD}/generators/app/globals`);
 const {cleanUpFolder} = require('./utils');
 
 const ONLY_FILES_TEST = process.env.FILES_ONLY;
@@ -16,7 +16,7 @@ const assert = chai.assert;
 chai.use(chaiExecAsync);
 
 function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFilesContent = {}, generalSettings = {}}) {
-  GENERAL_TEST_SETTINGS.forEach(prompts => {
+  GENERAL_TEST_SETTINGS.forEach((prompts) => {
     const testSettings = {...prompts, ...generalSettings, expectedFilesContent, staticExpectedFiles};
 
     describe(projectTypeMessage(testSettings), async () => {
@@ -85,9 +85,16 @@ function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFil
         describe('Building correct files:', () => {
           it(chalk.green('Generate all files based on project config'), async () => {
             setProcessToDestination();
-
             const newCfg = JSON.parse(fs.readFileSync(join(PATHS.tempMarkupFolder, 'config.json')));
-            const stylesFile = join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
+            const getStyleFile = () => {
+              if (newCfg.cache_boost) {
+                return join(newCfg.dest, newCfg.styles.dest, `${newCfg.scripts.bundle}.css`);
+              }
+
+              return join(newCfg.dest, newCfg.styles.dest, `${newCfg.styles.bundle}.css`);
+            };
+
+            const stylesFile = getStyleFile();
             const jsFile = join(newCfg.dest, newCfg.scripts.dest, `${newCfg.scripts.bundle}.${newCfg.scripts.extension}`);
             const HTMLFiles = join(newCfg.dest, newCfg.templates.dest, `*.${newCfg.templates.extension}`);
 
@@ -105,7 +112,3 @@ function tailwindTest({staticExpectedFiles = [], templatesFilesPath, expectedFil
 }
 
 module.exports = tailwindTest;
-
-
-
-
