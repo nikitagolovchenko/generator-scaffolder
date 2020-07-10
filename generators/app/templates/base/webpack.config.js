@@ -416,11 +416,11 @@ const getModules = () => {
                 const imagesOutput = config.static.images.dest ? config.static.images.dest : config.static.images.src;
 
                 if (isFonts) {
-                  parsedPath.dir = relative(config.styles.dest, fontsOutput);
-                  return format(parsedPath);
+                  parsedPath.dir = posix.relative(config.styles.dest, fontsOutput);
+                  return posix.format(parsedPath);
                 } else if (isImages) {
-                  parsedPath.dir = relative(config.styles.dest, imagesOutput);
-                  return format(parsedPath);
+                  parsedPath.dir = posix.relative(config.styles.dest, imagesOutput);
+                  return posix.format(parsedPath);
                 } else {
                   return url;
                 }
